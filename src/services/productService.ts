@@ -14,8 +14,8 @@ export type Product = {
 
 export async function getProducts(): Promise<Product[]> {
   try {
-    if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
-      console.log("Firebase project ID not found, skipping Firestore fetch.");
+    if (!db) {
+      console.log("Firebase is not configured, so no products can be fetched.");
       return [];
     }
     const productsCol = collection(db, 'products');
