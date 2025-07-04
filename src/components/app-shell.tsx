@@ -96,9 +96,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <DropdownMenuContent side="right" align="start" className="w-56">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="focus:bg-transparent cursor-default">
-                  <Coins className="mr-2 h-4 w-4 text-primary" />
-                  <span>{userProfile?.tokens ?? 0} Tokens</span>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="p-0">
+                  <Link href="https://facelyz.store" target="_blank" rel="noopener noreferrer" className="flex items-center w-full px-2 py-1.5 cursor-pointer">
+                    <Coins className="mr-2 h-4 w-4 text-primary" />
+                    <span>{userProfile?.tokens ?? 0} Tokens</span>
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                   <div className="flex items-center justify-between w-full">
@@ -127,11 +129,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <SidebarTrigger className="md:hidden" />
             <h1 className="text-xl font-semibold capitalize font-headline">{pathname.substring(1) || 'Dashboard'}</h1>
             <div className="ml-auto flex items-center gap-4">
-                <Button variant="outline" size="sm" className="gap-1.5">
-                    <Coins className="h-4 w-4 text-primary" />
-                    <span className="font-semibold">{userProfile?.tokens ?? 0}</span>
-                    <span className="hidden sm:inline text-muted-foreground">Tokens</span>
-                </Button>
+                <Link href="https://facelyz.store" target="_blank" rel="noopener noreferrer">
+                    <Button variant="outline" size="sm" className="gap-1.5">
+                        <Coins className="h-4 w-4 text-primary" />
+                        <span className="font-semibold">{userProfile?.tokens ?? 0}</span>
+                        <span className="hidden sm:inline text-muted-foreground">Tokens</span>
+                    </Button>
+                </Link>
             </div>
         </header>
         <main className="flex-1 p-4 lg:p-6 overflow-auto">
