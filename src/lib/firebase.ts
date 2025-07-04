@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
-import { getFirestore, type Firestore } from "firebase/firestore";
+import { getDatabase, type Database } from "firebase/database";
 import { getAuth, type Auth } from "firebase/auth";
 
 const firebaseConfig = {
@@ -12,7 +12,7 @@ const firebaseConfig = {
 };
 
 let app: FirebaseApp | null = null;
-let db: Firestore | null = null;
+let rtdb: Database | null = null;
 let auth: Auth | null = null;
 
 const isConfigured = firebaseConfig.apiKey && firebaseConfig.projectId;
@@ -20,13 +20,13 @@ const isConfigured = firebaseConfig.apiKey && firebaseConfig.projectId;
 if (isConfigured) {
   try {
     app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-    db = getFirestore(app);
+    rtdb = getDatabase(app);
     auth = getAuth(app);
   } catch (e) {
     console.error("Could not initialize Firebase. Please check your configuration.", e);
     // Fallback to null if initialization fails
     app = null;
-    db = null;
+    rtdb = null;
     auth = null;
   }
 } else {
@@ -34,4 +34,4 @@ if (isConfigured) {
 }
 
 
-export { app, db, auth };
+export { app, rtdb, auth };

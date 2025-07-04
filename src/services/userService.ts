@@ -1,7 +1,7 @@
 'use server';
 
-import { db } from '@/lib/firebase';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { rtdb } from '@/lib/firebase';
+import { ref, get, set } from 'firebase/database';
 import type { User } from 'firebase/auth';
 
 export type UserProfile = {
@@ -15,20 +15,20 @@ export type UserProfile = {
 const INITIAL_TOKENS = 10;
 
 /**
- * Gets or creates a user profile in Firestore.
+ * Gets or creates a user profile in Firebase Realtime Database.
  * If the user is new, they are created with an initial token balance.
  * @param user The Firebase Auth user object.
- * @returns The user's profile from Firestore.
+ * @returns The user's profile from the Realtime Database.
  */
 export async function getOrCreateUser(user: User): Promise<UserProfile> {
-  if (!db) {
+  if (!rtdb) {
     throw new Error('Firebase is not configured.');
   }
-  const userRef = doc(db, 'users', user.uid);
-  const userSnap = await getDoc(userRef);
+  const userRef = ref(rtdb, 'users/' + user.uid);
+  const snapshot = await get(userRef);
 
-  if (userSnap.exists()) {
-    return userSnap.data() as UserProfile;
+  if (snapshot.exists()) {
+    return snapshot.val() as UserProfile;
   } else {
     const newUserProfile: UserProfile = {
       uid: user.uid,
@@ -37,7 +37,7 @@ export async function getOrCreateUser(user: User): Promise<UserProfile> {
       photoURL: user.photoURL,
       tokens: INITIAL_TOKENS,
     };
-    await setDoc(userRef, newUserProfile);
+    await set(userRef, newUserProfile);
     return newUserProfile;
   }
 }
