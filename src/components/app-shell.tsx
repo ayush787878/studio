@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   SidebarProvider,
   Sidebar,
@@ -20,9 +20,18 @@ import { Logo } from "@/components/logo";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { LayoutDashboard, History, LogOut, Wand, ShoppingCart } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { useAuth } from '@/hooks/use-auth';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, logout, loading } = useAuth();
+
+  React.useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
 
   const navItems = [
     { href: "/dashboard", label: "Dashboard", icon: <LayoutDashboard /> },
@@ -30,6 +39,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     { href: "/advisory", label: "Advisory", icon: <Wand /> },
     { href: "/store", label: "Store", icon: <ShoppingCart /> },
   ];
+
+  if (loading || !user) {
+      return (
+        <div className="flex h-screen w-full items-center justify-center">
+            {/* The AuthProvider will show a global loader, this is a fallback */}
+            <p>Loading session...</p>
+        </div>
+      );
+  }
 
   return (
     <SidebarProvider>
@@ -59,12 +77,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <DropdownMenuTrigger asChild>
                 <div className="flex items-center gap-2 p-2 rounded-md hover:bg-sidebar-accent cursor-pointer">
                     <Avatar className="h-8 w-8">
-                        <AvatarImage src="https://placehold.co/40x40.png" alt="User" />
-                        <AvatarFallback>U</AvatarFallback>
+                        <AvatarImage src={user.photoURL || 'https://placehold.co/40x40.png'} alt={user.displayName || 'User'} />
+                        <AvatarFallback>{user.displayName?.charAt(0).toUpperCase() || 'U'}</AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col text-left group-data-[collapsible=icon]:hidden">
-                        <span className="text-sm font-medium">User</span>
-                        <span className="text-xs text-muted-foreground">user@example.com</span>
+                        <span className="text-sm font-medium">{user.displayName || 'User'}</span>
+                        <span className="text-xs text-muted-foreground">{user.email || 'user@example.com'}</span>
                     </div>
                 </div>
             </DropdownMenuTrigger>
@@ -74,12 +92,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <DropdownMenuItem>Profile</DropdownMenuItem>
                 <DropdownMenuItem>Settings</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <Link href="/login">
-                  <DropdownMenuItem>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Log out</span>
-                  </DropdownMenuItem>
-                </Link>
+                <DropdownMenuItem onClick={logout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </SidebarFooter>

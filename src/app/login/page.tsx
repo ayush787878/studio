@@ -1,7 +1,12 @@
+"use client";
+
+import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Logo } from '@/components/logo';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 // Dummy Google SVG icon
 const GoogleIcon = () => (
@@ -15,6 +20,15 @@ const GoogleIcon = () => (
 
 
 export default function LoginPage() {
+  const { user, signInWithGoogle } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      router.push('/dashboard');
+    }
+  }, [user, router]);
+  
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <Card className="w-full max-w-sm">
@@ -22,17 +36,15 @@ export default function LoginPage() {
           <div className="mx-auto mb-4">
             <Logo />
           </div>
-          <CardTitle className="text-2xl font-bold font-headline">Welcome Back</CardTitle>
-          <CardDescription>Sign in to continue to FaceForward.</CardDescription>
+          <CardTitle className="text-2xl font-bold font-headline">Welcome to FaceForward</CardTitle>
+          <CardDescription>Sign in to continue.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <Link href="/dashboard" className="w-full">
-              <Button variant="outline" className="w-full">
-                <GoogleIcon />
-                Sign in with Google
-              </Button>
-            </Link>
+            <Button variant="outline" className="w-full" onClick={signInWithGoogle}>
+              <GoogleIcon />
+              Sign in with Google
+            </Button>
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{' '}
               <Link href="#" className="underline underline-offset-4 hover:text-primary">
