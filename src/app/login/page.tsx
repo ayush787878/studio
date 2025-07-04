@@ -36,8 +36,8 @@ export default function LoginPage() {
           <div className="mx-auto mb-4">
             <Logo />
           </div>
-          <CardTitle className="text-2xl font-bold font-headline">Welcome to Aura</CardTitle>
-          <CardDescription>Sign in to discover your radiance.</CardDescription>
+          <CardTitle className="text-2xl font-bold font-headline">Welcome to FaceForward</CardTitle>
+          <CardDescription>Sign in to view your account.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
