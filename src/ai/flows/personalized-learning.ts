@@ -18,6 +18,11 @@ const PersonalizedLearningInputSchema = z.object({
 });
 export type PersonalizedLearningInput = z.infer<typeof PersonalizedLearningInputSchema>;
 
+// Internal schema for the prompt, using a string for feature analysis
+const PersonalizedLearningPromptInputSchema = PersonalizedLearningInputSchema.extend({
+    featureAnalysis: z.string().describe('Detailed analysis of facial features as a formatted string.'),
+});
+
 const PersonalizedLearningOutputSchema = z.object({
   skincareRecommendations: z.array(z.string()).describe('Personalized skincare recommendations.'),
   makeupTechniques: z.array(z.string()).describe('Makeup techniques tailored to enhance features.'),
@@ -32,13 +37,10 @@ export async function personalizedLearning(input: PersonalizedLearningInput): Pr
 
 const prompt = ai.definePrompt({
   name: 'personalizedLearningPrompt',
-  input: {schema: PersonalizedLearningInputSchema},
+  input: {schema: PersonalizedLearningPromptInputSchema}, // Use the internal schema
   output: {schema: PersonalizedLearningOutputSchema},
   prompt: `Based on the user's aesthetic score of {{aestheticScore}} and the following facial feature analysis:
-  
-  {{#each featureAnalysis}}
-    {{@key}}: {{this}}
-  {{/each}}
+  {{featureAnalysis}}
 
   {{#if userPreferences}}Considering the user's preferences: {{userPreferences}}{{/if}}
 
@@ -51,11 +53,22 @@ const prompt = ai.definePrompt({
 const personalizedLearningFlow = ai.defineFlow(
   {
     name: 'personalizedLearningFlow',
-    inputSchema: PersonalizedLearningInputSchema,
+    inputSchema: PersonalizedLearningInputSchema, // Flow uses the public schema
     outputSchema: PersonalizedLearningOutputSchema,
   },
-  async input => {
-    const {output} = await prompt(input);
+  async (input) => {
+    // Convert the feature analysis object into a simple string to avoid Handlebars issues.
+    const featureAnalysisString = Object.entries(input.featureAnalysis)
+      .map(([feature, analysis]) => `- ${feature}: ${analysis}`)
+      .join('\n');
+
+    const promptInput = {
+      aestheticScore: input.aestheticScore,
+      featureAnalysis: featureAnalysisString,
+      userPreferences: input.userPreferences,
+    };
+
+    const {output} = await prompt(promptInput);
     return output!;
   }
 );
