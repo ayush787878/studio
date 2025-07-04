@@ -66,7 +66,7 @@ export default function DashboardPage() {
         setFeatureAnalysis(features);
 
         const featureAnalysisMap = features.featureAnalysis.reduce((acc, feature) => {
-          acc[feature.featureName] = `Score: ${feature.score}/10. Feedback: ${feature.feedback}`;
+          acc[feature.featureName] = `Score: ${feature.score}/100. Feedback: ${feature.feedback}`;
           return acc;
         }, {} as Record<string, string>);
 
@@ -120,9 +120,9 @@ export default function DashboardPage() {
                   <CardContent className="space-y-4">
                     <div className="flex items-baseline gap-2">
                       <span className="text-6xl font-bold text-primary">{aestheticScore?.aestheticScore.toFixed(1)}</span>
-                      <span className="text-2xl text-muted-foreground">/ 10</span>
+                      <span className="text-2xl text-muted-foreground">/ 100</span>
                     </div>
-                    <Progress value={(aestheticScore?.aestheticScore || 0) * 10} className="h-3" />
+                    <Progress value={aestheticScore?.aestheticScore || 0} className="h-3" />
                     <p className="text-muted-foreground">{aestheticScore?.reason}</p>
                   </CardContent>
                 </Card>
@@ -140,8 +140,8 @@ export default function DashboardPage() {
                                 <div className="flex justify-between items-center w-full pr-4">
                                     <span>{feature.featureName}</span>
                                     <div className="flex items-center gap-2">
-                                        <span className="text-sm font-bold text-primary">{feature.score}/10</span>
-                                        <Progress value={feature.score * 10} className="w-24 h-2" />
+                                        <span className="text-sm font-bold text-primary">{feature.score}/100</span>
+                                        <Progress value={feature.score} className="w-24 h-2" />
                                     </div>
                                 </div>
                             </AccordionTrigger>

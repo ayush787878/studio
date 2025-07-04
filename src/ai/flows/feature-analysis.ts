@@ -27,8 +27,8 @@ const AnalyzeFacialFeaturesOutputSchema = z.object({
       score: z
         .number()
         .min(0)
-        .max(10)
-        .describe('A score (0-10) indicating how well the feature aligns with beauty standards.'),
+        .max(100)
+        .describe('A score (0-100) indicating how well the feature aligns with beauty standards.'),
       feedback: z.string().describe('Detailed feedback on the facial feature.'),
     })
   ).describe('An array of feature analysis results.'),
@@ -45,7 +45,7 @@ const prompt = ai.definePrompt({
   output: {schema: AnalyzeFacialFeaturesOutputSchema},
   prompt: `You are an AI aesthetician providing detailed feedback on facial features based on generally accepted beauty standards.
 
-  Analyze the following facial features in the photo. Provide a score from 0-10 on each feature, and detailed feedback.
+  Analyze the following facial features in the photo. Provide a score from 0-100 on each feature, and detailed feedback.
 
   Facial Features:
   - Forehead

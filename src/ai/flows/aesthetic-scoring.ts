@@ -24,7 +24,7 @@ const AestheticScoreOutputSchema = z.object({
   aestheticScore: z
     .number()
     .describe(
-      'An overall aesthetic score for the photo, on a scale of 1 to 10, where 1 is the least aesthetic and 10 is the most aesthetic.'
+      'An overall aesthetic score for the photo, on a scale of 1 to 100, where 1 is the least aesthetic and 100 is the most aesthetic.'
     ),
   reason: z
     .string()
@@ -46,7 +46,7 @@ const prompt = ai.definePrompt({
   output: {schema: AestheticScoreOutputSchema},
   prompt: `You are an AI aesthetician that scores the aesthetic appeal of photos.
 
-You will use this information to assign an aesthetic score, on a scale of 1 to 10, where 1 is the least aesthetic and 10 is the most aesthetic. You will also explain why the photo received the score.
+You will use this information to assign an aesthetic score, on a scale of 1 to 100, where 1 is the least aesthetic and 100 is the most aesthetic. You will also explain why the photo received the score.
 
 Photo: {{media url=photoDataUri}}`,
 });

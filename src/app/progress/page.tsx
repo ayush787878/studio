@@ -23,7 +23,7 @@ const mockProgressData: AnalysisRecord[] = [
     imageUrl: 'https://placehold.co/400x400.png',
     notes: 'First analysis after starting a new skincare routine. Feeling optimistic!',
     aestheticScore: {
-      score: 7.8,
+      score: 78,
       reason: 'Good skin clarity and balanced facial proportions. Slight asymmetry in the jawline.',
     },
   },
@@ -33,7 +33,7 @@ const mockProgressData: AnalysisRecord[] = [
     imageUrl: 'https://placehold.co/400x400.png',
     notes: 'Trying out new contouring techniques. Wanted to see if it made a difference.',
     aestheticScore: {
-      score: 7.5,
+      score: 75,
       reason: 'Well-defined cheekbones, but the lighting is slightly uneven, affecting symmetry perception.',
     },
   },
@@ -43,7 +43,7 @@ const mockProgressData: AnalysisRecord[] = [
     imageUrl: 'https://placehold.co/400x400.png',
     notes: 'Baseline photo before making any changes. Curious to see the starting point.',
     aestheticScore: {
-      score: 7.2,
+      score: 72,
       reason: 'Harmonious features overall. Skin appears slightly dehydrated.',
     },
   },
@@ -74,7 +74,7 @@ export default function ProgressPage() {
                     </div>
                      <Badge variant="secondary" className="flex items-center gap-1.5">
                         <Star className="w-3.5 h-3.5 text-primary" />
-                        Score: {record.aestheticScore.score.toFixed(1)}
+                        Score: {record.aestheticScore.score.toFixed(0)}
                       </Badge>
                   </div>
                 </CardHeader>
