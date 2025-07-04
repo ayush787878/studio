@@ -16,6 +16,7 @@ const AnalyzeFaceInputSchema = z.object({
     .describe(
       "A photo of a person's face, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
     ),
+  aestheticGoal: z.string().optional().describe("An optional description of the user's desired aesthetic goal (e.g., 'a sharper jawline', 'brighter skin')."),
 });
 export type AnalyzeFaceInput = z.infer<typeof AnalyzeFaceInputSchema>;
 
@@ -34,6 +35,10 @@ const AnalyzeFaceOutputSchema = z.object({
         recommendation: z.string().describe("A specific skincare recommendation (e.g., 'Incorporate a hydrating serum with hyaluronic acid')."),
         reason: z.string().describe("A detailed, multi-sentence explanation for this recommendation based on the visual analysis of the photo. Explain the potential benefits and what signs in the photo led to this suggestion."),
     })).describe("A list of detailed, personalized skincare recommendations. Each recommendation should be actionable and well-explained."),
+    personalizedPlan: z.array(z.object({
+        step: z.string().describe("A single, actionable step title (e.g., 'Facial Massage for Jawline Definition')."),
+        description: z.string().describe("A detailed, multi-sentence explanation of how to perform this step and why it helps achieve the user's goal."),
+    })).optional().describe("A step-by-step plan to achieve the user's aesthetic goal. This should only be generated if the user provides a goal."),
 });
 export type AnalyzeFaceOutput = z.infer<typeof AnalyzeFaceOutputSchema>;
 
@@ -52,6 +57,10 @@ Analyze the provided photo. Identify key facial features, and provide personaliz
 - For the 'overallImpression', provide both a textual summary in the 'text' field and a separate numerical 'rating' out of 100 that reflects the general positive impression.
 - For each item in 'featureAnalysis', you must provide a numerical 'rating' from 0 to 100 for that specific feature, in addition to the textual analysis.
 - For 'skincareRecommendations', provide at least 3 detailed and actionable recommendations. For each one, the 'reason' should be a comprehensive, multi-sentence explanation. Connect the recommendation directly to specific observations from the user's photo (e.g., 'Due to the observed dryness around the cheeks, a hydrating serum is recommended to...').
+
+{{#if aestheticGoal}}
+- The user has specified an aesthetic goal: "{{aestheticGoal}}". Based on your analysis of their photo, generate a 'personalizedPlan'. This plan must be a series of actionable, step-by-step instructions to help them work towards their goal. The steps should be safe, realistic, and constructive, potentially including skincare routines, facial exercises, or lifestyle suggestions. For each step, provide a clear 'step' title and a detailed 'description' explaining how to do it and why it helps.
+{{/if}}
 
 Your analysis MUST be respectful, positive, and avoid any harsh or negative language. The tone should be that of a helpful professional providing expert advice.
 

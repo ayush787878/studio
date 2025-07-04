@@ -8,7 +8,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Progress } from '@/components/ui/progress';
 import { useAuth } from '@/hooks/use-auth';
 import { getAnalysisHistory, type AnalysisHistoryItem } from '@/services/userService';
-import { Loader2, History, Frown } from 'lucide-react';
+import { Loader2, History, Frown, Target } from 'lucide-react';
 
 export default function HistoryPage() {
   const { userProfile } = useAuth();
@@ -127,6 +127,26 @@ export default function HistoryPage() {
                             </AccordionItem>
                         ))}
                     </Accordion>
+
+                    {item.analysis.personalizedPlan && item.analysis.personalizedPlan.length > 0 && (
+                        <Card className="border-primary/50 bg-primary/5">
+                            <CardHeader>
+                                <CardTitle className="font-headline flex items-center gap-2">
+                                    <Target className="h-6 w-6 text-primary" />
+                                    Your Personalized Plan
+                                </CardTitle>
+                                <CardDescription>A step-by-step guide based on your aesthetic goal for this analysis.</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                                {item.analysis.personalizedPlan.map((plan, index) => (
+                                    <div key={index} className="p-4 bg-background rounded-md shadow-sm">
+                                        <h4 className="font-semibold text-primary">{`${index + 1}. ${plan.step}`}</h4>
+                                        <p className="text-sm text-muted-foreground">{plan.description}</p>
+                                    </div>
+                                ))}
+                            </CardContent>
+                        </Card>
+                    )}
 
                     <Card className="bg-accent/50">
                         <CardHeader>

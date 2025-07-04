@@ -8,11 +8,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Progress } from '@/components/ui/progress';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { updateUserTokens, saveAnalysis } from '@/services/userService';
 import { analyzeFace, type AnalyzeFaceOutput } from '@/ai/flows/feature-analysis';
-import { UploadCloud, Sparkles, Loader2, RefreshCw } from 'lucide-react';
+import { UploadCloud, Sparkles, Loader2, RefreshCw, Target } from 'lucide-react';
 
 export default function DashboardPage() {
   const { userProfile } = useAuth();
@@ -21,6 +23,7 @@ export default function DashboardPage() {
 
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [aestheticGoal, setAestheticGoal] = useState('');
   const [analysisResult, setAnalysisResult] = useState<AnalyzeFaceOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -67,7 +70,7 @@ export default function DashboardPage() {
       try {
         const base64data = reader.result as string;
         
-        const result = await analyzeFace({ photoDataUri: base64data });
+        const result = await analyzeFace({ photoDataUri: base64data, aestheticGoal });
         setAnalysisResult(result);
 
         if (userProfile?.uid) {
@@ -99,6 +102,7 @@ export default function DashboardPage() {
     setImageFile(null);
     setImagePreview(null);
     setAnalysisResult(null);
+    setAestheticGoal('');
     if(fileInputRef.current) {
         fileInputRef.current.value = "";
     }
@@ -116,7 +120,7 @@ export default function DashboardPage() {
                 <Sparkles /> AI Face Analysis
                 </CardTitle>
                 <CardDescription>
-                Upload a clear, front-facing photo to begin. Your results will be saved to your history.
+                Upload a clear, front-facing photo to begin. Optionally, describe your goals.
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -142,6 +146,17 @@ export default function DashboardPage() {
                         </div>
                         )}
                     </div>
+                </div>
+                 <div className="space-y-2 pt-4 max-w-sm mx-auto">
+                    <Label htmlFor="aesthetic-goal" className="font-semibold">What is your aesthetic goal? (Optional)</Label>
+                    <Textarea
+                        id="aesthetic-goal"
+                        placeholder="e.g., I'd like to have a more defined jawline and clearer skin."
+                        value={aestheticGoal}
+                        onChange={(e) => setAestheticGoal(e.target.value)}
+                        className="resize-none"
+                        disabled={isLoading}
+                    />
                 </div>
                  <div className="flex flex-col items-center gap-2 pt-4">
                     <Button
@@ -243,6 +258,26 @@ export default function DashboardPage() {
                             </AccordionItem>
                         ))}
                     </Accordion>
+                    
+                    {analysisResult.personalizedPlan && analysisResult.personalizedPlan.length > 0 && (
+                        <Card className="border-primary/50 bg-primary/5">
+                            <CardHeader>
+                                <CardTitle className="font-headline flex items-center gap-2">
+                                    <Target className="h-6 w-6 text-primary" />
+                                    Your Personalized Plan
+                                </CardTitle>
+                                <CardDescription>A step-by-step guide based on your aesthetic goal.</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                                {analysisResult.personalizedPlan.map((plan, index) => (
+                                    <div key={index} className="p-4 bg-background rounded-md shadow-sm">
+                                        <h4 className="font-semibold text-primary">{`${index + 1}. ${plan.step}`}</h4>
+                                        <p className="text-sm text-muted-foreground">{plan.description}</p>
+                                    </div>
+                                ))}
+                            </CardContent>
+                        </Card>
+                    )}
 
                     <Card className="bg-accent/50">
                         <CardHeader>
