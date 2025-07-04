@@ -11,7 +11,6 @@ import { useToast } from '@/hooks/use-toast';
 import { getOrCreateUser, type UserProfile } from '@/services/userService';
 
 interface AuthContextType {
-  user: User | null;
   userProfile: UserProfile | null;
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
@@ -49,7 +48,6 @@ const MissingFirebaseConfig = () => (
 );
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -62,7 +60,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        setUser(user);
         try {
           const profile = await getOrCreateUser(user);
           setUserProfile(profile);
@@ -75,7 +72,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           });
         }
       } else {
-        setUser(null);
         setUserProfile(null);
       }
       setLoading(false);
@@ -165,7 +161,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, userProfile, loading, signInWithGoogle, logout }}>
+    <AuthContext.Provider value={{ userProfile, loading, signInWithGoogle, logout }}>
       {children}
     </AuthContext.Provider>
   );

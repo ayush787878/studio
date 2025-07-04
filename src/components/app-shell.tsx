@@ -25,19 +25,19 @@ import { useAuth } from '@/hooks/use-auth';
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, userProfile, logout, loading } = useAuth();
+  const { userProfile, logout, loading } = useAuth();
 
   React.useEffect(() => {
-    if (!loading && !user) {
+    if (!loading && !userProfile) {
       router.push('/login');
     }
-  }, [user, loading, router]);
+  }, [userProfile, loading, router]);
 
   const navItems = [
     { href: "/dashboard", label: "Dashboard", icon: <LayoutDashboard /> },
   ];
 
-  if (loading || !user) {
+  if (loading || !userProfile) {
       return (
         <div className="flex h-screen w-full items-center justify-center">
             {/* The AuthProvider will show a global loader, this is a fallback */}
@@ -74,12 +74,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <DropdownMenuTrigger asChild>
                 <div className="flex items-center gap-2 p-2 rounded-md hover:bg-accent cursor-pointer">
                     <Avatar className="h-8 w-8">
-                        <AvatarImage src={user.photoURL || 'https://placehold.co/40x40.png'} alt={user.displayName || 'User'} />
-                        <AvatarFallback>{user.displayName?.charAt(0).toUpperCase() || 'U'}</AvatarFallback>
+                        <AvatarImage src={userProfile.photoURL || 'https://placehold.co/40x40.png'} alt={userProfile.displayName || 'User'} />
+                        <AvatarFallback>{userProfile.displayName?.charAt(0).toUpperCase() || 'U'}</AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col text-left group-data-[collapsible=icon]:hidden">
-                        <span className="text-sm font-medium">{user.displayName || 'User'}</span>
-                        <span className="text-xs text-muted-foreground">{user.email || 'user@example.com'}</span>
+                        <span className="text-sm font-medium">{userProfile.displayName || 'User'}</span>
+                        <span className="text-xs text-muted-foreground">{userProfile.email || 'user@example.com'}</span>
                     </div>
                 </div>
             </DropdownMenuTrigger>

@@ -20,14 +20,14 @@ const GoogleIcon = () => (
 
 
 export default function LoginPage() {
-  const { user, signInWithGoogle } = useAuth();
+  const { userProfile, signInWithGoogle } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (user) {
+    if (userProfile) {
       router.push('/dashboard');
     }
-  }, [user, router]);
+  }, [userProfile, router]);
   
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
