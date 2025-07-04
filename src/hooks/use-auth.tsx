@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { Logo } from '@/components/logo';
 import { AlertTriangle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { useToast } from '@/hooks/use-toast';
 
 interface AuthContextType {
   user: User | null;
@@ -49,6 +50,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!auth) {
@@ -65,14 +67,47 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signInWithGoogle = async () => {
     if (!auth) {
         console.error("Firebase is not configured. Cannot sign in.");
+        toast({
+            title: "Firebase Not Configured",
+            description: "The application is not connected to Firebase. Please check the setup.",
+            variant: "destructive"
+        });
         return;
     }
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
       router.push('/dashboard');
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error signing in with Google", error);
+      let description = "An unknown error occurred. Please try again.";
+      if (error.code) {
+        switch (error.code) {
+          case 'auth/popup-closed-by-user':
+            description = 'Sign-in popup closed by user. Please try again.';
+            break;
+          case 'auth/popup-blocked':
+            description = 'Sign-in popup was blocked by the browser. Please allow popups for this site.';
+            break;
+          case 'auth/operation-not-allowed':
+            description = 'Google Sign-in is not enabled in the Firebase console.';
+            break;
+          case 'auth/unauthorized-domain':
+             description = 'This domain is not authorized for OAuth operations. Please check your Firebase console settings.';
+             break;
+          case 'auth/api-key-not-valid':
+             description = 'The provided Firebase API key is not valid. Please check your configuration.';
+             break;
+          default:
+            description = error.message;
+            break;
+        }
+      }
+      toast({
+          title: "Login Failed",
+          description,
+          variant: "destructive"
+      });
     }
   };
 
@@ -84,9 +119,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       await signOut(auth);
       router.push('/login');
-    } catch (error)
-    {
+    } catch (error) {
       console.error("Error signing out", error);
+       toast({
+          title: "Logout Failed",
+          description: "An error occurred while signing out. Please try again.",
+          variant: "destructive"
+      });
     }
   };
 
