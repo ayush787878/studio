@@ -36,13 +36,13 @@ const prompt = ai.definePrompt({
   output: {schema: PersonalizedLearningOutputSchema},
   prompt: `Based on the user's aesthetic score of {{aestheticScore}} and the following facial feature analysis:
   
-  {{#each (toArray featureAnalysis)}}
+  {{#each featureAnalysis}}
     {{@key}}: {{this}}
   {{/each}}
 
-  {% if userPreferences %} Considering the user's preferences: {{userPreferences}} {% endif %}
+  {{#if userPreferences}}Considering the user's preferences: {{userPreferences}}{{/if}}
 
-  Provide personalized recommendations and educational content on skincare, makeup techniques, and lifestyle adjustments to help the user improve their looks.
+  Provide personalized recommendations and educational content on skincare, makeup, and lifestyle adjustments to help the user improve their looks.
 
   Format the output as a JSON object with 'skincareRecommendations', 'makeupTechniques', and 'lifestyleAdjustments' keys, each containing an array of strings.  Include an optional 'additionalResources' key with links to external resources as needed.
   `,
