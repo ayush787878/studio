@@ -60,15 +60,17 @@ export default function DashboardPage() {
         const result = await analyzeFace({ photoDataUri: base64data });
         setAnalysisResult(result);
 
-        const newTokens = userProfile.tokens - 1;
-        await updateUserTokens(userProfile.uid, newTokens);
+        if (userProfile?.uid) {
+            const newTokens = userProfile.tokens - 1;
+            await updateUserTokens(userProfile.uid, newTokens);
 
-        toast({
-          title: "Analysis Complete",
-          description: "Your results are ready. 1 token has been deducted.",
-        });
-        // A full page refresh is a simple way to update token count everywhere.
-        router.refresh(); 
+            toast({
+                title: "Analysis Complete",
+                description: "Your results are ready. 1 token has been deducted.",
+            });
+            // A full page refresh is a simple way to update token count everywhere.
+            router.refresh(); 
+        }
       };
     } catch (error) {
       console.error("Analysis failed:", error);
@@ -217,8 +219,15 @@ export default function DashboardPage() {
                         {analysisResult.featureAnalysis.map((feature, index) => (
                             <AccordionItem value={`item-${index}`} key={index}>
                                 <AccordionTrigger className="text-lg font-semibold">{feature.feature}</AccordionTrigger>
-                                <AccordionContent className="text-base text-muted-foreground">
-                                    {feature.analysis}
+                                <AccordionContent className="text-base text-muted-foreground space-y-4 pt-4">
+                                    <div className="flex items-center gap-4">
+                                        <p className="text-3xl font-bold text-primary">{feature.rating}</p>
+                                        <div className="w-full">
+                                            <Progress value={feature.rating} className="h-2" />
+                                            <p className="text-xs text-right text-muted-foreground mt-1">/ 100</p>
+                                        </div>
+                                    </div>
+                                    <p>{feature.analysis}</p>
                                 </AccordionContent>
                             </AccordionItem>
                         ))}

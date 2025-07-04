@@ -28,7 +28,8 @@ const AnalyzeFaceOutputSchema = z.object({
     featureAnalysis: z.array(z.object({
         feature: z.string().describe("The facial feature being analyzed (e.g., Eyes, Nose, Lips, Jawline)."),
         analysis: z.string().describe("A detailed analysis of this specific feature."),
-    })).describe("An array of analyses for key facial features."),
+        rating: z.number().min(0).max(100).describe("A numerical rating from 0 to 100 for this specific feature's harmony and balance."),
+    })).describe("An array of analyses for key facial features, each with its own rating."),
     skincareRecommendations: z.array(z.object({
         recommendation: z.string().describe("A specific skincare recommendation (e.g., 'Use a gentle cleanser')."),
         reason: z.string().describe("The reason for this recommendation based on the visual analysis of the photo."),
@@ -49,6 +50,7 @@ const prompt = ai.definePrompt({
 Analyze the provided photo. Identify key facial features, and provide personalized skincare recommendations.
 - Provide an 'aestheticScore' from 0 to 100 based on overall facial harmony, balance, and clarity of the skin. Be objective and professional.
 - For the 'overallImpression', provide both a textual summary in the 'text' field and a separate numerical 'rating' out of 100 that reflects the general positive impression.
+- For each item in 'featureAnalysis', you must provide a numerical 'rating' from 0 to 100 for that specific feature, in addition to the textual analysis.
 
 Your analysis MUST be respectful, positive, and avoid any harsh or negative language. The tone should be that of a helpful professional providing expert advice.
 
