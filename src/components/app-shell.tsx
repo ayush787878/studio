@@ -103,6 +103,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6 sticky top-0 z-30">
             <SidebarTrigger className="md:hidden" />
             <h1 className="text-xl font-semibold capitalize font-headline">{pathname.substring(1) || 'Dashboard'}</h1>
+            <div className="ml-auto flex items-center gap-4">
+                <Button variant="outline" size="sm" className="gap-1.5">
+                    <Coins className="h-4 w-4 text-primary" />
+                    <span className="font-semibold">{userProfile?.tokens ?? 0}</span>
+                    <span className="hidden sm:inline text-muted-foreground">Tokens</span>
+                </Button>
+            </div>
         </header>
         <main className="flex-1 p-4 lg:p-6 overflow-auto">
           {children}

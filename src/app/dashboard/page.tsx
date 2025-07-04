@@ -7,11 +7,12 @@ import { AppShell } from '@/components/app-shell';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Progress } from '@/components/ui/progress';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { updateUserTokens } from '@/services/userService';
 import { analyzeFace, type AnalyzeFaceOutput } from '@/ai/flows/feature-analysis';
-import { Coins, User, UploadCloud, Sparkles, Loader2, RefreshCw } from 'lucide-react';
+import { User, UploadCloud, Sparkles, Loader2, RefreshCw } from 'lucide-react';
 
 export default function DashboardPage() {
   const { userProfile } = useAuth();
@@ -65,6 +66,8 @@ export default function DashboardPage() {
           title: "Analysis Complete",
           description: "Your results are ready below. 1 token has been deducted.",
         });
+        // We need to manually trigger a re-render of auth context to get new token count
+        // A full page refresh is a simple way to do this.
         router.refresh(); 
       };
     } catch (error) {
@@ -99,25 +102,9 @@ export default function DashboardPage() {
               <User /> Welcome, {userProfile?.displayName || 'User'}!
             </CardTitle>
             <CardDescription>
-              This is your main hub. All your information is shown here.
+              Ready for your analysis? Upload a clear, front-facing photo below to begin.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <Card className="bg-accent/50">
-              <CardHeader>
-                <CardTitle className="text-xl font-headline flex items-center gap-3">
-                  <Coins className="text-primary" />
-                  Your Token Balance
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-4xl font-bold">{tokens}</p>
-                <p className="text-sm text-muted-foreground">
-                  New users start with 10 tokens. Each analysis costs 1 token.
-                </p>
-              </CardContent>
-            </Card>
-          </CardContent>
         </Card>
 
         <Card>
@@ -125,7 +112,7 @@ export default function DashboardPage() {
             <CardTitle className="text-2xl font-headline flex items-center gap-2">
               <Sparkles /> AI Face Analysis
             </CardTitle>
-            <CardDescription>Upload a clear, front-facing photo to get your personalized analysis.</CardDescription>
+            <CardDescription>Each analysis costs 1 token. You have {tokens} {tokens === 1 ? 'token' : 'tokens'} remaining.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             {!analysisResult && !isLoading && (
@@ -179,6 +166,20 @@ export default function DashboardPage() {
             
             {analysisResult && (
                 <div className="space-y-6 animate-in fade-in-0 duration-500">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Aesthetic Score</CardTitle>
+                            <CardDescription>An overall score based on facial harmony, balance, and skin clarity.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="flex items-center gap-4">
+                            <p className="text-5xl font-bold text-primary">{analysisResult.aestheticScore}</p>
+                            <div className="w-full">
+                                <Progress value={analysisResult.aestheticScore} className="h-4" />
+                                <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
+                            </div>
+                        </CardContent>
+                    </Card>
+
                     <Card className="bg-background/50">
                         <CardHeader>
                             <CardTitle>Overall Impression</CardTitle>
@@ -187,6 +188,7 @@ export default function DashboardPage() {
                             <p className="text-muted-foreground">{analysisResult.overallImpression}</p>
                         </CardContent>
                     </Card>
+
                     <Accordion type="single" collapsible className="w-full" defaultValue="item-0">
                         {analysisResult.featureAnalysis.map((feature, index) => (
                             <AccordionItem value={`item-${index}`} key={index}>
