@@ -5,7 +5,7 @@ import { AuthProvider } from '@/hooks/use-auth';
 import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
-  title: 'FaceForward',
+  title: 'Facelyz',
   description: 'Understand your facial features.',
 };
 
