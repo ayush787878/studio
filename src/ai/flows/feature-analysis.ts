@@ -21,7 +21,10 @@ export type AnalyzeFaceInput = z.infer<typeof AnalyzeFaceInputSchema>;
 
 const AnalyzeFaceOutputSchema = z.object({
     aestheticScore: z.number().min(0).max(100).describe("A numerical score from 0 to 100 representing the overall facial aesthetic harmony and balance."),
-    overallImpression: z.string().describe("Provide a brief, positive and encouraging overall impression of the user's facial aesthetics."),
+    overallImpression: z.object({
+        text: z.string().describe("Provide a brief, positive and encouraging textual summary of the user's facial aesthetics."),
+        rating: z.number().min(0).max(100).describe("A numerical rating from 0 to 100 for the overall impression. This score is based on the general positive qualities you observe."),
+    }),
     featureAnalysis: z.array(z.object({
         feature: z.string().describe("The facial feature being analyzed (e.g., Eyes, Nose, Lips, Jawline)."),
         analysis: z.string().describe("A detailed analysis of this specific feature."),
@@ -43,7 +46,9 @@ const prompt = ai.definePrompt({
   output: {schema: AnalyzeFaceOutputSchema},
   prompt: `You are an expert virtual aesthetician. Your goal is to provide a positive, constructive, and helpful analysis of a user's face based on a photograph. Be encouraging and focus on providing useful advice.
 
-Analyze the provided photo. Identify key facial features, and provide personalized skincare recommendations. Finally, provide an 'aestheticScore' from 0 to 100 based on overall facial harmony, balance, and clarity of the skin. Be objective and professional.
+Analyze the provided photo. Identify key facial features, and provide personalized skincare recommendations.
+- Provide an 'aestheticScore' from 0 to 100 based on overall facial harmony, balance, and clarity of the skin. Be objective and professional.
+- For the 'overallImpression', provide both a textual summary in the 'text' field and a separate numerical 'rating' out of 100 that reflects the general positive impression.
 
 Your analysis MUST be respectful, positive, and avoid any harsh or negative language. The tone should be that of a helpful professional providing expert advice.
 

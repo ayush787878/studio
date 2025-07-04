@@ -201,8 +201,15 @@ export default function DashboardPage() {
                         <CardHeader>
                             <CardTitle>Overall Impression</CardTitle>
                         </CardHeader>
-                        <CardContent>
-                            <p className="text-muted-foreground">{analysisResult.overallImpression}</p>
+                        <CardContent className="space-y-4">
+                            <div className="flex items-center gap-4">
+                                <p className="text-5xl font-bold text-primary">{analysisResult.overallImpression.rating}</p>
+                                <div className="w-full">
+                                    <Progress value={analysisResult.overallImpression.rating} className="h-4" />
+                                    <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
+                                </div>
+                            </div>
+                            <p className="text-muted-foreground pt-2">{analysisResult.overallImpression.text}</p>
                         </CardContent>
                     </Card>
 
