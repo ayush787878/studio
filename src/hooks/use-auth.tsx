@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { onAuthStateChanged, User, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
@@ -16,7 +16,6 @@ interface AuthContextType {
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
-  refreshUserProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -55,17 +54,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { toast } = useToast();
-
-  const refreshUserProfile = useCallback(async () => {
-    if (auth?.currentUser) {
-      try {
-        const profile = await getOrCreateUser(auth.currentUser);
-        setUserProfile(profile);
-      } catch (error) {
-        console.error("Failed to refresh user profile:", error);
-      }
-    }
-  }, []);
 
   useEffect(() => {
     if (!auth) {
@@ -165,8 +153,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return <MissingFirebaseConfig />;
   }
 
-  // The loading check inside the AuthProvider will prevent children from rendering
-  // before the auth state is resolved. This is a good place for a global loading screen.
   if (loading) {
       return (
         <div className="flex h-screen w-full items-center justify-center bg-background">
@@ -179,7 +165,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, userProfile, loading, signInWithGoogle, logout, refreshUserProfile }}>
+    <AuthContext.Provider value={{ user, userProfile, loading, signInWithGoogle, logout }}>
       {children}
     </AuthContext.Provider>
   );

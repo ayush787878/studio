@@ -18,7 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { LayoutDashboard, History, LogOut, Wand, ShoppingCart, Coins } from 'lucide-react';
+import { LayoutDashboard, LogOut, Coins } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/use-auth';
 
@@ -35,9 +35,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   const navItems = [
     { href: "/dashboard", label: "Dashboard", icon: <LayoutDashboard /> },
-    { href: "/progress", label: "Progress", icon: <History /> },
-    { href: "/advisory", label: "Advisory", icon: <Wand /> },
-    { href: "/store", label: "Store", icon: <ShoppingCart /> },
   ];
 
   if (loading || !user) {
@@ -93,8 +90,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   <Coins className="mr-2 h-4 w-4 text-primary" />
                   <span>{userProfile?.tokens ?? 0} Tokens</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={logout}>
                   <LogOut className="mr-2 h-4 w-4" />
@@ -108,11 +103,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6 sticky top-0 z-30">
             <SidebarTrigger className="md:hidden" />
             <h1 className="text-xl font-semibold capitalize font-headline">{pathname.substring(1) || 'Dashboard'}</h1>
-            <div className="ml-auto">
-              <Link href="/dashboard">
-                <Button>New Analysis</Button>
-              </Link>
-            </div>
         </header>
         <main className="flex-1 p-4 lg:p-6 overflow-auto">
           {children}
