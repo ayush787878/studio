@@ -1,5 +1,3 @@
-'use server';
-
 import { rtdb } from '@/lib/firebase';
 import { ref, get, set } from 'firebase/database';
 
