@@ -4,16 +4,27 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ShoppingCart, ExternalLink } from 'lucide-react';
+import { ShoppingCart, ExternalLink, AlertTriangle } from 'lucide-react';
+
+const firestoreRulesExample = `rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow read access to the products collection for everyone
+    match /products/{productId} {
+      allow read;
+    }
+    // Make sure your other rules for users, etc. are below
+  }
+}`;
 
 async function StorePage() {
   let products: Product[] = [];
   let error: string | null = null;
   try {
     products = await getProducts();
-  } catch (e) {
+  } catch (e: any) {
     console.error(e);
-    error = "There was an error loading products. Please ensure your Firebase configuration is correct.";
+    error = e.message || "An unexpected error occurred while loading products.";
   }
 
   return (
@@ -24,10 +35,27 @@ async function StorePage() {
       </div>
 
       {error && (
-        <Card>
-            <CardContent className="pt-6 text-center text-destructive">
-                <p>{error}</p>
-            </CardContent>
+        <Card className="border-destructive">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-3 text-destructive font-headline">
+              <AlertTriangle className="h-6 w-6" />
+              Store Unavailable: Permission Denied
+            </CardTitle>
+            <CardDescription>
+              We couldn't load products from the database. This is likely due to Firestore security rules.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm">
+              To fix this, go to your Firebase project's Firestore Database section and update your Security Rules to allow read access to the `products` collection.
+            </p>
+            <div>
+                <p className="text-sm font-medium mb-2">Example Rule:</p>
+                <pre className="bg-muted p-4 rounded-md text-xs font-mono overflow-x-auto">
+                    <code>{firestoreRulesExample}</code>
+                </pre>
+            </div>
+          </CardContent>
         </Card>
       )}
 
@@ -37,8 +65,7 @@ async function StorePage() {
               <div className="text-center text-muted-foreground py-12">
                 <ShoppingCart className="mx-auto h-12 w-12" />
                 <h3 className="mt-4 text-lg font-semibold font-headline">No Products Yet</h3>
-                <p>There are no products in the store.</p>
-                <p className="text-xs mt-2">Admins can add products to the 'products' collection in Firestore.</p>
+                <p>Once products are added to your Firestore 'products' collection, they will appear here.</p>
               </div>
             </CardContent>
         </Card>

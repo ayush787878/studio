@@ -28,8 +28,8 @@ export async function getProducts(): Promise<Product[]> {
     return productList;
   } catch (error) {
     console.error("Error fetching products from Firestore:", error);
-    // This can happen if Firebase config is missing or rules are not set up.
-    // We return an empty array to avoid crashing the page.
-    return [];
+    // Re-throw a more specific error to be handled by the UI component.
+    // This is often due to Firestore security rules not being configured.
+    throw new Error("Could not retrieve products from the database. Please check your Firestore security rules to ensure the 'products' collection is readable.");
   }
 }
