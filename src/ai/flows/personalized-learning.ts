@@ -11,14 +11,14 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const PersonalizedLearningInputSchema = z.object({
+const PersonalizedLearningInputSchema = z.object({
   aestheticScore: z.number().describe('The overall aesthetic score of the user.'),
   featureAnalysis: z.record(z.string(), z.string()).describe('Detailed analysis of facial features.'),
   userPreferences: z.string().optional().describe('Optional user preferences or specific concerns.'),
 });
 export type PersonalizedLearningInput = z.infer<typeof PersonalizedLearningInputSchema>;
 
-export const PersonalizedLearningOutputSchema = z.object({
+const PersonalizedLearningOutputSchema = z.object({
   skincareRecommendations: z.array(z.string()).describe('Personalized skincare recommendations.'),
   makeupTechniques: z.array(z.string()).describe('Makeup techniques tailored to enhance features.'),
   lifestyleAdjustments: z.array(z.string()).describe('Lifestyle adjustments for improved appearance.'),
