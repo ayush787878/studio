@@ -3,6 +3,7 @@
 import * as React from 'react';
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 import {
   SidebarProvider,
   Sidebar,
@@ -18,14 +19,22 @@ import {
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { LayoutDashboard, LogOut, Coins } from 'lucide-react';
+import { LayoutDashboard, LogOut, Coins, Moon, Sun } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/use-auth';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const { userProfile, logout, loading } = useAuth();
+  const { theme, setTheme } = useTheme();
+  const [isMounted, setIsMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   React.useEffect(() => {
     if (!loading && !userProfile) {
@@ -37,10 +46,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     { href: "/dashboard", label: "Dashboard", icon: <LayoutDashboard /> },
   ];
 
-  if (loading || !userProfile) {
+  if (loading || !userProfile || !isMounted) {
       return (
         <div className="flex h-screen w-full items-center justify-center">
-            {/* The AuthProvider will show a global loader, this is a fallback */}
             <p>Loading session...</p>
         </div>
       );
@@ -89,6 +97,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <DropdownMenuItem className="focus:bg-transparent cursor-default">
                   <Coins className="mr-2 h-4 w-4 text-primary" />
                   <span>{userProfile?.tokens ?? 0} Tokens</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                  <div className="flex items-center justify-between w-full">
+                    <Label htmlFor="dark-mode-toggle" className="flex items-center gap-2 font-normal cursor-pointer">
+                        {theme === 'dark' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+                        <span>Dark Mode</span>
+                    </Label>
+                    <Switch
+                        id="dark-mode-toggle"
+                        checked={theme === 'dark'}
+                        onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')}
+                    />
+                  </div>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={logout}>
