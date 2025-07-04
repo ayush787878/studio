@@ -1,1 +1,6 @@
-// Flows will be imported for their side effects in this file.
+import { config } from 'dotenv';
+config();
+
+import '@/ai/flows/feature-analysis.ts';
+import '@/ai/flows/personalized-learning.ts';
+import '@/ai/flows/aesthetic-scoring.ts';
