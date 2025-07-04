@@ -40,9 +40,9 @@ const prompt = ai.definePrompt({
   input: {schema: PersonalizedLearningPromptInputSchema}, // Use the internal schema
   output: {schema: PersonalizedLearningOutputSchema},
   prompt: `Based on the user's aesthetic score of {{aestheticScore}} and the following facial feature analysis:
-  {{featureAnalysis}}
+  {{{featureAnalysis}}}
 
-  {{#if userPreferences}}Considering the user's preferences: {{userPreferences}}{{/if}}
+  {{#if userPreferences}}Considering the user's preferences: {{{userPreferences}}}{{/if}}
 
   Provide personalized recommendations and educational content on skincare, makeup, and lifestyle adjustments to help the user improve their looks.
 
