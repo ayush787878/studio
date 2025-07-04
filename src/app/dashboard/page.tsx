@@ -38,7 +38,7 @@ export default function DashboardPage() {
     }
   };
 
-  const handleAnalyzeClick = async () => {
+  const handleAnalyzeClick = () => {
     if (!imageFile || !userProfile || userProfile.tokens < 1) {
       toast({
         title: "Analysis Failed",
@@ -51,10 +51,20 @@ export default function DashboardPage() {
     setIsLoading(true);
     setAnalysisResult(null);
 
-    try {
-      const reader = new FileReader();
-      reader.readAsDataURL(imageFile);
-      reader.onloadend = async () => {
+    const reader = new FileReader();
+    reader.readAsDataURL(imageFile);
+
+    reader.onerror = () => {
+      setIsLoading(false);
+      toast({
+        title: "File Error",
+        description: "Could not read the image file. Please try a different one.",
+        variant: "destructive",
+      });
+    };
+
+    reader.onloadend = async () => {
+      try {
         const base64data = reader.result as string;
         
         const result = await analyzeFace({ photoDataUri: base64data });
@@ -71,17 +81,17 @@ export default function DashboardPage() {
             // A full page refresh is a simple way to update token count everywhere.
             router.refresh(); 
         }
-      };
-    } catch (error) {
-      console.error("Analysis failed:", error);
-      toast({
-        title: "Analysis Failed",
-        description: "Something went wrong. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+      } catch (error) {
+        console.error("Analysis failed:", error);
+        toast({
+          title: "Analysis Failed",
+          description: "Something went wrong. Please try again.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
   };
 
   const handleReset = () => {
