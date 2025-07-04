@@ -18,7 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { LayoutDashboard, History, LogOut } from 'lucide-react';
+import { LayoutDashboard, History, LogOut, Wand } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -27,6 +27,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const navItems = [
     { href: "/dashboard", label: "Dashboard", icon: <LayoutDashboard /> },
     { href: "/progress", label: "Progress", icon: <History /> },
+    { href: "/advisory", label: "Advisory", icon: <Wand /> },
   ];
 
   return (
@@ -87,7 +88,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <SidebarTrigger className="md:hidden" />
             <h1 className="text-xl font-semibold capitalize font-headline">{pathname.substring(1) || 'Dashboard'}</h1>
             <div className="ml-auto">
+              <Link href="/dashboard">
                 <Button>New Analysis</Button>
+              </Link>
             </div>
         </header>
         <main className="flex-1 p-4 lg:p-6 overflow-auto">
