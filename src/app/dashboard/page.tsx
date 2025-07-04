@@ -77,7 +77,7 @@ export default function DashboardPage() {
         });
         setRecommendations(personalPlan);
 
-        toast({ title: "Analysis Complete", description: "Your results are ready." });
+        toast({ title: "Analysis Complete", description: "Your Aura report is ready." });
       } catch (error) {
         console.error("Analysis failed:", error);
         toast({ title: "Analysis Failed", description: "Something went wrong. Please try again.", variant: "destructive" });
@@ -104,10 +104,10 @@ export default function DashboardPage() {
           <Sparkles className="w-4 h-4 mr-2" /> Personalized Plan
         </TabsTrigger>
       </TabsList>
-      <TabsContent value="report">
+      <TabsContent value="report" className="animate-in fade-in-0 duration-500">
         <Card>
           <CardHeader>
-            <CardTitle>Your Analysis Report</CardTitle>
+            <CardTitle className="font-headline">Your Analysis Report</CardTitle>
             <CardDescription>A detailed breakdown of your facial aesthetics.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -115,11 +115,11 @@ export default function DashboardPage() {
                 {imagePreview && <Image src={imagePreview} alt="Analyzed" width={400} height={400} className="rounded-lg object-cover aspect-square" />}
                 <Card>
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2"><Star className="text-primary"/>Overall Aesthetic Score</CardTitle>
+                    <CardTitle className="flex items-center gap-2 font-headline"><Star className="text-primary"/>Overall Aesthetic Score</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex items-baseline gap-2">
-                      <span className="text-6xl font-bold text-primary">{aestheticScore?.aestheticScore.toFixed(1)}</span>
+                      <span className="text-6xl font-bold text-primary font-headline">{aestheticScore?.aestheticScore.toFixed(0)}</span>
                       <span className="text-2xl text-muted-foreground">/ 100</span>
                     </div>
                     <Progress value={aestheticScore?.aestheticScore || 0} className="h-3" />
@@ -130,13 +130,13 @@ export default function DashboardPage() {
             
             <Card>
                 <CardHeader>
-                    <CardTitle>Detailed Feature Analysis</CardTitle>
+                    <CardTitle className="font-headline">Detailed Feature Analysis</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <Accordion type="single" collapsible className="w-full">
                         {featureAnalysis?.featureAnalysis.map(feature => (
                         <AccordionItem value={feature.featureName} key={feature.featureName}>
-                            <AccordionTrigger>
+                            <AccordionTrigger className="font-headline text-lg">
                                 <div className="flex justify-between items-center w-full pr-4">
                                     <span>{feature.featureName}</span>
                                     <div className="flex items-center gap-2">
@@ -157,7 +157,7 @@ export default function DashboardPage() {
             {notes && (
                 <Card>
                     <CardHeader>
-                        <CardTitle>Your Personal Notes</CardTitle>
+                        <CardTitle className="font-headline">Your Personal Notes</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <p className="text-muted-foreground italic">{notes}</p>
@@ -166,16 +166,16 @@ export default function DashboardPage() {
             )}
 
             <div className="flex gap-4 pt-4">
-              <Button onClick={() => navigator.clipboard.writeText("My FaceForward analysis is ready! Check it out.")}><Share2 className="mr-2 h-4 w-4"/>Share</Button>
+              <Button onClick={() => navigator.clipboard.writeText("My Aura analysis is ready! Check it out.")}><Share2 className="mr-2 h-4 w-4"/>Share</Button>
               <Button variant="outline" onClick={resetState}> <CornerDownLeft className="mr-2 h-4 w-4" /> Start New Analysis</Button>
             </div>
           </CardContent>
         </Card>
       </TabsContent>
-      <TabsContent value="plan">
+      <TabsContent value="plan" className="animate-in fade-in-0 duration-500">
         <Card>
           <CardHeader>
-            <CardTitle>Your Personalized Plan</CardTitle>
+            <CardTitle className="font-headline">Your Personalized Plan</CardTitle>
             <CardDescription>AI-generated recommendations to enhance your look.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -183,7 +183,7 @@ export default function DashboardPage() {
             <RecommendationCard icon={<SprayCan/>} title="Makeup Techniques" items={recommendations?.makeupTechniques} />
             <RecommendationCard icon={<Footprints/>} title="Lifestyle Adjustments" items={recommendations?.lifestyleAdjustments} />
              <div className="flex gap-4 pt-4">
-              <Button onClick={() => navigator.clipboard.writeText("My FaceForward analysis is ready! Check it out.")}><Share2 className="mr-2 h-4 w-4"/>Share</Button>
+              <Button onClick={() => navigator.clipboard.writeText("My Aura analysis is ready! Check it out.")}><Share2 className="mr-2 h-4 w-4"/>Share</Button>
               <Button variant="outline" onClick={resetState}> <CornerDownLeft className="mr-2 h-4 w-4" /> Start New Analysis</Button>
             </div>
           </CardContent>
@@ -195,7 +195,7 @@ export default function DashboardPage() {
   const RecommendationCard = ({ icon, title, items }: { icon: React.ReactNode, title: string, items?: string[] }) => (
     <Card>
         <CardHeader>
-            <CardTitle className="flex items-center gap-2">{icon}{title}</CardTitle>
+            <CardTitle className="flex items-center gap-2 font-headline">{icon}{title}</CardTitle>
         </CardHeader>
         <CardContent>
             <ul className="space-y-2">
@@ -211,11 +211,11 @@ export default function DashboardPage() {
   )
 
   const renderUploadAndAnalyze = () => (
-     <div className="max-w-4xl mx-auto grid gap-8">
+     <div className="max-w-4xl mx-auto grid gap-8 animate-in fade-in-0 duration-500">
         <Card>
             <CardHeader>
             <CardTitle className="text-2xl font-headline">Upload Your Photo</CardTitle>
-            <CardDescription>Select a clear, well-lit photo of your face for the most accurate analysis.</CardDescription>
+            <CardDescription>Select a clear, well-lit photo for the most accurate analysis.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
                 <div className="flex items-center justify-center w-full">
@@ -237,7 +237,7 @@ export default function DashboardPage() {
 
         <Card>
             <CardHeader>
-                <CardTitle>Personal Notes (Optional)</CardTitle>
+                <CardTitle className="font-headline">Personal Notes (Optional)</CardTitle>
                 <CardDescription>Add any context or specific concerns you'd like the AI to consider.</CardDescription>
             </CardHeader>
             <CardContent>
@@ -253,7 +253,7 @@ export default function DashboardPage() {
         <div className="flex justify-end">
           <Button size="lg" onClick={handleAnalyze} disabled={!imagePreview || isPending}>
             {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
-            {isPending ? 'Analyzing...' : 'Analyze My Face'}
+            {isPending ? 'Analyzing...' : 'Generate Analysis'}
           </Button>
         </div>
       </div>

@@ -52,7 +52,7 @@ const mockProgressData: AnalysisRecord[] = [
 export default function ProgressPage() {
   return (
     <AppShell>
-      <div className="space-y-8">
+      <div className="space-y-8 animate-in fade-in-0 duration-500">
         <div>
           <h1 className="text-3xl font-bold font-headline">Your Progress Timeline</h1>
           <p className="text-muted-foreground">Review your past analyses and track your aesthetic journey.</p>
@@ -66,13 +66,13 @@ export default function ProgressPage() {
                 <CardHeader>
                   <div className="flex justify-between items-start">
                     <div>
-                      <CardTitle className="flex items-center gap-2">
+                      <CardTitle className="flex items-center gap-2 font-headline">
                         <Calendar className="w-5 h-5 text-muted-foreground" />
                         Analysis from {new Date(record.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                       </CardTitle>
                       <CardDescription>Entry #{mockProgressData.length - index}</CardDescription>
                     </div>
-                     <Badge variant="secondary" className="flex items-center gap-1.5">
+                     <Badge variant="secondary" className="flex items-center gap-1.5 text-base py-1 px-3">
                         <Star className="w-3.5 h-3.5 text-primary" />
                         Score: {record.aestheticScore.score.toFixed(0)}
                       </Badge>
@@ -91,11 +91,11 @@ export default function ProgressPage() {
                   </div>
                   <div className="md:col-span-2 space-y-4">
                      <div className="space-y-2">
-                        <h3 className="font-semibold flex items-center gap-2"><Star className="w-4 h-4"/>AI Score Rationale</h3>
+                        <h3 className="font-semibold flex items-center gap-2 text-lg font-headline"><Star className="w-4 h-4 text-primary"/>AI Score Rationale</h3>
                         <p className="text-sm text-muted-foreground">{record.aestheticScore.reason}</p>
                      </div>
                      <div className="space-y-2">
-                        <h3 className="font-semibold flex items-center gap-2"><NotebookText className="w-4 h-4"/>Your Notes</h3>
+                        <h3 className="font-semibold flex items-center gap-2 text-lg font-headline"><NotebookText className="w-4 h-4 text-primary"/>Your Notes</h3>
                         <p className="text-sm text-muted-foreground italic">{`"${record.notes}"`}</p>
                      </div>
                   </div>

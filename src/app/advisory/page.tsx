@@ -18,7 +18,7 @@ export default function AdvisoryPage() {
 
   const handleGenerate = () => {
     if (!goal.trim()) {
-      toast({ title: "Goal is empty", description: "Please describe how you'd like to change your look.", variant: "destructive" });
+      toast({ title: "Goal is empty", description: "Please describe your beauty goal.", variant: "destructive" });
       return;
     }
 
@@ -36,7 +36,7 @@ export default function AdvisoryPage() {
   };
 
   const renderForm = () => (
-    <div className="max-w-4xl mx-auto grid gap-8">
+    <div className="max-w-4xl mx-auto grid gap-8 animate-in fade-in-0 duration-500">
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl font-headline flex items-center gap-2"><Wand /> Your Beauty Goal</CardTitle>
@@ -44,7 +44,7 @@ export default function AdvisoryPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <Textarea
-            placeholder="e.g., 'I want to get rid of dark circles and have a brighter complexion.' or 'How can I make my face look more symmetrical?'"
+            placeholder="e.g., 'I want to achieve a glowing, dewy skin look.' or 'How can I make my eyes appear larger?'"
             value={goal}
             onChange={(e) => setGoal(e.target.value)}
             rows={6}
@@ -61,23 +61,23 @@ export default function AdvisoryPage() {
   );
 
   const renderAdvisory = () => (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in-0 duration-500">
        <Card>
         <CardHeader>
-          <CardTitle>Your Goal</CardTitle>
+          <CardTitle className="font-headline">Your Goal</CardTitle>
           <CardDescription className="italic">"{goal}"</CardDescription>
         </CardHeader>
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle>Your Step-by-Step Advisory</CardTitle>
+          <CardTitle className="font-headline">Your Step-by-Step Advisory</CardTitle>
           <CardDescription>Follow these AI-generated steps to achieve your desired look.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {advisory?.steps.map((step, index) => (
              <Card key={index} className="bg-accent/50">
                 <CardHeader>
-                   <CardTitle className="flex items-center gap-3">
+                   <CardTitle className="flex items-center gap-3 font-headline text-2xl">
                        <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold text-lg flex-shrink-0">{index + 1}</span>
                        {step.title}
                    </CardTitle>

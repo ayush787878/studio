@@ -75,7 +75,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <SidebarFooter>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <div className="flex items-center gap-2 p-2 rounded-md hover:bg-sidebar-accent cursor-pointer">
+                <div className="flex items-center gap-2 p-2 rounded-md hover:bg-accent cursor-pointer">
                     <Avatar className="h-8 w-8">
                         <AvatarImage src={user.photoURL || 'https://placehold.co/40x40.png'} alt={user.displayName || 'User'} />
                         <AvatarFallback>{user.displayName?.charAt(0).toUpperCase() || 'U'}</AvatarFallback>

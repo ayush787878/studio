@@ -18,9 +18,9 @@ async function StorePage() {
 
   return (
     <AppShell>
-      <div className="space-y-2 mb-8">
-        <h1 className="text-3xl font-bold font-headline">Recommended Products</h1>
-        <p className="text-muted-foreground">Curated products to help you achieve your beauty goals.</p>
+      <div className="space-y-2 mb-8 animate-in fade-in-0 duration-500">
+        <h1 className="text-3xl font-bold font-headline">Curated Store</h1>
+        <p className="text-muted-foreground">Products recommended by our AI to help you achieve your beauty goals.</p>
       </div>
 
       {error && (
@@ -34,20 +34,20 @@ async function StorePage() {
       {!error && products.length === 0 && (
          <Card>
             <CardContent className="pt-6">
-              <div className="text-center text-muted-foreground">
+              <div className="text-center text-muted-foreground py-12">
                 <ShoppingCart className="mx-auto h-12 w-12" />
-                <h3 className="mt-4 text-lg font-semibold">No Products Yet</h3>
-                <p>There are no products in the store. Please add products to your Firestore 'products' collection.</p>
-                <p className="text-xs mt-2">Make sure your Firestore security rules allow reads on the 'products' collection.</p>
+                <h3 className="mt-4 text-lg font-semibold font-headline">No Products Yet</h3>
+                <p>There are no products in the store.</p>
+                <p className="text-xs mt-2">Admins can add products to the 'products' collection in Firestore.</p>
               </div>
             </CardContent>
         </Card>
       )}
       
       {!error && products.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {products.map((product) => (
-            <Card key={product.id} className="flex flex-col overflow-hidden hover:shadow-lg transition-shadow">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-in fade-in-0 duration-500">
+          {products.map((product, i) => (
+            <Card key={product.id} className="flex flex-col overflow-hidden hover:shadow-lg transition-shadow" style={{animationDelay: `${i * 100}ms`, animationFillMode: 'backwards'}}>
               <div className="relative aspect-square">
                 <Image
                   src={product.imageUrl || 'https://placehold.co/400x400.png'}
@@ -58,7 +58,7 @@ async function StorePage() {
                 />
               </div>
               <CardHeader>
-                <CardTitle className="text-lg">{product.name}</CardTitle>
+                <CardTitle className="text-lg font-headline">{product.name}</CardTitle>
               </CardHeader>
               <CardContent className="flex-grow">
                 <p className="text-sm text-muted-foreground">{product.description}</p>
@@ -67,7 +67,7 @@ async function StorePage() {
                 <span className="text-xl font-bold text-primary">${product.price ? product.price.toFixed(2) : '0.00'}</span>
                 <Button asChild>
                   <Link href={product.link || '#'} target="_blank" rel="noopener noreferrer">
-                    Buy Now <ExternalLink className="ml-2" />
+                    Buy Now <ExternalLink className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
               </CardFooter>

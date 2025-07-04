@@ -25,7 +25,7 @@ const MissingFirebaseConfig = () => (
             <div className="mx-auto mb-4 text-destructive">
                 <AlertTriangle className="h-12 w-12" />
             </div>
-            <CardTitle className="text-2xl font-bold text-destructive">Firebase Configuration Missing</CardTitle>
+            <CardTitle className="text-2xl font-bold text-destructive font-headline">Firebase Configuration Missing</CardTitle>
             <CardDescription>
                 Your app is not configured to connect to Firebase.
             </CardDescription>
@@ -140,7 +140,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         <div className="flex h-screen w-full items-center justify-center bg-background">
           <div className="flex flex-col items-center gap-4">
             <Logo />
-            <p className="text-muted-foreground">Loading...</p>
+            <p className="text-muted-foreground animate-pulse">Loading Your Experience...</p>
           </div>
         </div>
       );
