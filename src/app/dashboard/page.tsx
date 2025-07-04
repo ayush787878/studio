@@ -178,7 +178,7 @@ export default function DashboardPage() {
                 <Card>
                     <CardContent className="flex flex-col items-center justify-center gap-4 text-center p-8 min-h-[400px]">
                         <Loader2 className="h-16 w-16 animate-spin text-primary" />
-                        <p className="text-lg font-semibold">Our AI is analyzing your photo...</p>
+                        <p className="text-lg font-semibold font-headline">Our AI is analyzing your photo...</p>
                         <p className="text-muted-foreground">This may take a moment. Please don't close this page.</p>
                     </CardContent>
                 </Card>
@@ -188,7 +188,7 @@ export default function DashboardPage() {
                 <Card>
                     <CardContent className="flex flex-col items-center justify-center gap-4 text-center p-8 min-h-[400px]">
                         <Sparkles className="h-16 w-16 text-muted-foreground/30"/>
-                        <p className="text-lg font-semibold text-muted-foreground">Your analysis results will appear here</p>
+                        <p className="text-lg font-semibold text-muted-foreground font-headline">Your analysis results will appear here</p>
                     </CardContent>
                 </Card>
             )}
@@ -197,27 +197,27 @@ export default function DashboardPage() {
                 <div className="space-y-6 animate-in fade-in-0 duration-500">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Aesthetic Score</CardTitle>
+                            <CardTitle className="font-headline">Aesthetic Score</CardTitle>
                             <CardDescription>An overall score based on facial harmony, balance, and skin clarity.</CardDescription>
                         </CardHeader>
                         <CardContent className="flex items-center gap-4">
-                            <p className="text-5xl font-bold text-primary">{analysisResult.aestheticScore}</p>
+                            <p className="text-5xl font-bold text-primary font-headline">{analysisResult.aestheticScore}</p>
                             <div className="w-full">
-                                <Progress value={analysisResult.aestheticScore} className="h-4" />
+                                <Progress value={analysisResult.aestheticScore} className="h-3" />
                                 <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
                             </div>
                         </CardContent>
                     </Card>
 
-                    <Card className="bg-background/50">
+                    <Card className="bg-accent/50">
                         <CardHeader>
-                            <CardTitle>Overall Impression</CardTitle>
+                            <CardTitle className="font-headline">Overall Impression</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="flex items-center gap-4">
-                                <p className="text-5xl font-bold text-primary">{analysisResult.overallImpression.rating}</p>
+                                <p className="text-5xl font-bold text-primary font-headline">{analysisResult.overallImpression.rating}</p>
                                 <div className="w-full">
-                                    <Progress value={analysisResult.overallImpression.rating} className="h-4" />
+                                    <Progress value={analysisResult.overallImpression.rating} className="h-3" />
                                     <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
                                 </div>
                             </div>
@@ -228,10 +228,10 @@ export default function DashboardPage() {
                     <Accordion type="single" collapsible className="w-full" defaultValue="item-0">
                         {analysisResult.featureAnalysis.map((feature, index) => (
                             <AccordionItem value={`item-${index}`} key={index}>
-                                <AccordionTrigger className="text-lg font-semibold">{feature.feature}</AccordionTrigger>
+                                <AccordionTrigger className="text-lg font-semibold font-headline">{feature.feature}</AccordionTrigger>
                                 <AccordionContent className="text-base text-muted-foreground space-y-4 pt-4">
                                     <div className="flex items-center gap-4">
-                                        <p className="text-3xl font-bold text-primary">{feature.rating}</p>
+                                        <p className="text-3xl font-bold text-primary font-headline">{feature.rating}</p>
                                         <div className="w-full">
                                             <Progress value={feature.rating} className="h-2" />
                                             <p className="text-xs text-right text-muted-foreground mt-1">/ 100</p>
@@ -243,9 +243,9 @@ export default function DashboardPage() {
                         ))}
                     </Accordion>
 
-                    <Card className="bg-accent/20">
+                    <Card className="bg-accent/50">
                         <CardHeader>
-                            <CardTitle>Skincare Recommendations</CardTitle>
+                            <CardTitle className="font-headline">Skincare Recommendations</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             {analysisResult.skincareRecommendations.map((rec, index) => (
