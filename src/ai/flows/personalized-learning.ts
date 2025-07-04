@@ -11,19 +11,14 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-const PersonalizedLearningInputSchema = z.object({
+export const PersonalizedLearningInputSchema = z.object({
   aestheticScore: z.number().describe('The overall aesthetic score of the user.'),
   featureAnalysis: z.record(z.string(), z.string()).describe('Detailed analysis of facial features.'),
   userPreferences: z.string().optional().describe('Optional user preferences or specific concerns.'),
 });
 export type PersonalizedLearningInput = z.infer<typeof PersonalizedLearningInputSchema>;
 
-// Internal schema for the prompt, using a string for feature analysis
-const PersonalizedLearningPromptInputSchema = PersonalizedLearningInputSchema.extend({
-    featureAnalysis: z.string().describe('Detailed analysis of facial features as a formatted string.'),
-});
-
-const PersonalizedLearningOutputSchema = z.object({
+export const PersonalizedLearningOutputSchema = z.object({
   skincareRecommendations: z.array(z.string()).describe('Personalized skincare recommendations.'),
   makeupTechniques: z.array(z.string()).describe('Makeup techniques tailored to enhance features.'),
   lifestyleAdjustments: z.array(z.string()).describe('Lifestyle adjustments for improved appearance.'),
@@ -35,40 +30,44 @@ export async function personalizedLearning(input: PersonalizedLearningInput): Pr
   return personalizedLearningFlow(input);
 }
 
+// A new, simpler schema for the prompt itself. It takes one pre-compiled string.
+const FinalPromptInputSchema = z.object({
+    fullPrompt: z.string(),
+});
+
 const prompt = ai.definePrompt({
   name: 'personalizedLearningPrompt',
-  input: {schema: PersonalizedLearningPromptInputSchema}, // Use the internal schema
+  input: {schema: FinalPromptInputSchema},
   output: {schema: PersonalizedLearningOutputSchema},
-  prompt: `Based on the user's aesthetic score of {{aestheticScore}} and the following facial feature analysis:
-  {{{featureAnalysis}}}
-
-  {{#if userPreferences}}Considering the user's preferences: {{{userPreferences}}}{{/if}}
-
-  Provide personalized recommendations and educational content on skincare, makeup, and lifestyle adjustments to help the user improve their looks.
-
-  Format the output as a JSON object with 'skincareRecommendations', 'makeupTechniques', and 'lifestyleAdjustments' keys, each containing an array of strings.  Include an optional 'additionalResources' key with links to external resources as needed.
-  `,
+  prompt: `{{{fullPrompt}}}`, // Safely inject the pre-built prompt string.
 });
 
 const personalizedLearningFlow = ai.defineFlow(
   {
     name: 'personalizedLearningFlow',
-    inputSchema: PersonalizedLearningInputSchema, // Flow uses the public schema
+    inputSchema: PersonalizedLearningInputSchema,
     outputSchema: PersonalizedLearningOutputSchema,
   },
   async (input) => {
-    // Convert the feature analysis object into a simple string to avoid Handlebars issues.
+    // Manually construct the full prompt string in TypeScript. This is much safer than
+    // using a complex Handlebars template with potentially unsafe user/AI-generated content.
     const featureAnalysisString = Object.entries(input.featureAnalysis)
       .map(([feature, analysis]) => `- ${feature}: ${analysis}`)
       .join('\n');
 
-    const promptInput = {
-      aestheticScore: input.aestheticScore,
-      featureAnalysis: featureAnalysisString,
-      userPreferences: input.userPreferences,
-    };
+    let fullPrompt = `Based on the user's aesthetic score of ${input.aestheticScore} and the following facial feature analysis:\n${featureAnalysisString}\n`;
 
-    const {output} = await prompt(promptInput);
+    if (input.userPreferences) {
+      fullPrompt += `\nConsidering the user's preferences: ${input.userPreferences}\n`;
+    }
+
+    fullPrompt += `
+Provide personalized recommendations and educational content on skincare, makeup, and lifestyle adjustments to help the user improve their looks.
+
+Format the output as a JSON object with 'skincareRecommendations', 'makeupTechniques', and 'lifestyleAdjustments' keys, each containing an array of strings. Include an optional 'additionalResources' key with links to external resources as needed.`;
+
+    // Call the prompt with the safely constructed string.
+    const {output} = await prompt({ fullPrompt });
     return output!;
   }
 );
