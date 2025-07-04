@@ -31,9 +31,9 @@ const AnalyzeFaceOutputSchema = z.object({
         rating: z.number().min(0).max(100).describe("A numerical rating from 0 to 100 for this specific feature's harmony and balance."),
     })).describe("An array of analyses for key facial features, each with its own rating."),
     skincareRecommendations: z.array(z.object({
-        recommendation: z.string().describe("A specific skincare recommendation (e.g., 'Use a gentle cleanser')."),
-        reason: z.string().describe("The reason for this recommendation based on the visual analysis of the photo."),
-    })).describe("A list of personalized skincare recommendations."),
+        recommendation: z.string().describe("A specific skincare recommendation (e.g., 'Incorporate a hydrating serum with hyaluronic acid')."),
+        reason: z.string().describe("A detailed, multi-sentence explanation for this recommendation based on the visual analysis of the photo. Explain the potential benefits and what signs in the photo led to this suggestion."),
+    })).describe("A list of detailed, personalized skincare recommendations. Each recommendation should be actionable and well-explained."),
 });
 export type AnalyzeFaceOutput = z.infer<typeof AnalyzeFaceOutputSchema>;
 
@@ -51,6 +51,7 @@ Analyze the provided photo. Identify key facial features, and provide personaliz
 - Provide an 'aestheticScore' from 0 to 100 based on overall facial harmony, balance, and clarity of the skin. Be objective and professional.
 - For the 'overallImpression', provide both a textual summary in the 'text' field and a separate numerical 'rating' out of 100 that reflects the general positive impression.
 - For each item in 'featureAnalysis', you must provide a numerical 'rating' from 0 to 100 for that specific feature, in addition to the textual analysis.
+- For 'skincareRecommendations', provide at least 3 detailed and actionable recommendations. For each one, the 'reason' should be a comprehensive, multi-sentence explanation. Connect the recommendation directly to specific observations from the user's photo (e.g., 'Due to the observed dryness around the cheeks, a hydrating serum is recommended to...').
 
 Your analysis MUST be respectful, positive, and avoid any harsh or negative language. The tone should be that of a helpful professional providing expert advice.
 
