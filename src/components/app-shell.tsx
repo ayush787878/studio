@@ -18,7 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { LayoutDashboard, History, LogOut, Wand } from 'lucide-react';
+import { LayoutDashboard, History, LogOut, Wand, ShoppingCart } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -28,6 +28,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     { href: "/dashboard", label: "Dashboard", icon: <LayoutDashboard /> },
     { href: "/progress", label: "Progress", icon: <History /> },
     { href: "/advisory", label: "Advisory", icon: <Wand /> },
+    { href: "/store", label: "Store", icon: <ShoppingCart /> },
   ];
 
   return (
