@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react';
 import { onAuthStateChanged, User, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
@@ -8,12 +8,15 @@ import { Logo } from '@/components/logo';
 import { AlertTriangle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import { getOrCreateUser, type UserProfile } from '@/services/userService';
 
 interface AuthContextType {
   user: User | null;
+  userProfile: UserProfile | null;
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
+  refreshUserProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -48,21 +51,49 @@ const MissingFirebaseConfig = () => (
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { toast } = useToast();
+
+  const refreshUserProfile = useCallback(async () => {
+    if (auth?.currentUser) {
+      try {
+        const profile = await getOrCreateUser(auth.currentUser);
+        setUserProfile(profile);
+      } catch (error) {
+        console.error("Failed to refresh user profile:", error);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (!auth) {
       setLoading(false);
       return;
     }
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        setUser(user);
+        try {
+          const profile = await getOrCreateUser(user);
+          setUserProfile(profile);
+        } catch (error) {
+          console.error("Error getting or creating user profile:", error);
+          toast({
+            title: "Account Error",
+            description: "Couldn't retrieve your account details. Please try refreshing.",
+            variant: "destructive",
+          });
+        }
+      } else {
+        setUser(null);
+        setUserProfile(null);
+      }
       setLoading(false);
     });
     return () => unsubscribe();
-  }, []);
+  }, [toast]);
 
   const signInWithGoogle = async () => {
     if (!auth) {
@@ -77,6 +108,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
+      // The onAuthStateChanged listener will handle creating the user profile and routing.
       router.push('/dashboard');
     } catch (error: any) {
       console.error("Error signing in with Google", error);
@@ -147,7 +179,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, signInWithGoogle, logout }}>
+    <AuthContext.Provider value={{ user, userProfile, loading, signInWithGoogle, logout, refreshUserProfile }}>
       {children}
     </AuthContext.Provider>
   );

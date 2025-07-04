@@ -15,6 +15,8 @@ import { personalizedLearning, type PersonalizedLearningOutput } from '@/ai/flow
 import { Upload, Bot, Sparkles, Droplets, SprayCan, Footprints, Share2, Star, Loader2, ChevronRight, CornerDownLeft } from 'lucide-react';
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from '@/components/ui/skeleton';
+import { useAuth } from '@/hooks/use-auth';
+import { deductToken } from '@/services/userService';
 
 export default function DashboardPage() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -27,6 +29,8 @@ export default function DashboardPage() {
   const [recommendations, setRecommendations] = useState<PersonalizedLearningOutput | null>(null);
   
   const { toast } = useToast();
+  const { user, userProfile, refreshUserProfile } = useAuth();
+  const hasTokens = userProfile && userProfile.tokens > 0;
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -55,6 +59,15 @@ export default function DashboardPage() {
       toast({ title: "No Image", description: "Please upload an image first.", variant: "destructive" });
       return;
     }
+    if (!user || !userProfile) {
+      toast({ title: "Not Signed In", description: "You must be signed in to perform an analysis.", variant: "destructive" });
+      return;
+    }
+    if (userProfile.tokens < 1) {
+      toast({ title: "No Tokens Left", description: "You need at least 1 token to generate an analysis.", variant: "destructive" });
+      return;
+    }
+
 
     startTransition(async () => {
       try {
@@ -77,10 +90,18 @@ export default function DashboardPage() {
         });
         setRecommendations(personalPlan);
 
-        toast({ title: "Analysis Complete", description: "Your Aura report is ready." });
-      } catch (error) {
+        // Deduct token after a successful analysis
+        await deductToken(user.uid);
+        await refreshUserProfile(); // Refresh profile to get new token count
+
+        toast({ title: "Analysis Complete", description: "Your Aura report is ready. 1 token has been used." });
+      } catch (error: any) {
         console.error("Analysis failed:", error);
-        toast({ title: "Analysis Failed", description: "Something went wrong. Please try again.", variant: "destructive" });
+        if (error.message?.includes("Insufficient tokens")) {
+          toast({ title: "Analysis Failed", description: "You do not have enough tokens.", variant: "destructive" });
+        } else {
+          toast({ title: "Analysis Failed", description: "Something went wrong. Please try again.", variant: "destructive" });
+        }
       }
     });
   };
@@ -250,11 +271,14 @@ export default function DashboardPage() {
             </CardContent>
         </Card>
         
-        <div className="flex justify-end">
-          <Button size="lg" onClick={handleAnalyze} disabled={!imagePreview || isPending}>
+        <div className="flex flex-col items-end">
+          <Button size="lg" onClick={handleAnalyze} disabled={!imagePreview || isPending || !hasTokens}>
             {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
-            {isPending ? 'Analyzing...' : 'Generate Analysis'}
+            {isPending ? 'Analyzing...' : `Generate Analysis (${userProfile?.tokens ?? 0} left)`}
           </Button>
+          {!hasTokens && userProfile && (
+            <p className="text-sm text-destructive text-center mt-2">You have no tokens left. Come back later for more ways to get tokens.</p>
+          )}
         </div>
       </div>
   );

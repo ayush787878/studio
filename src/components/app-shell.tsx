@@ -18,14 +18,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { LayoutDashboard, History, LogOut, Wand, ShoppingCart } from 'lucide-react';
+import { LayoutDashboard, History, LogOut, Wand, ShoppingCart, Coins } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/use-auth';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, logout, loading } = useAuth();
+  const { user, userProfile, logout, loading } = useAuth();
 
   React.useEffect(() => {
     if (!loading && !user) {
@@ -89,6 +89,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <DropdownMenuContent side="right" align="start" className="w-56">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                <DropdownMenuItem className="focus:bg-transparent cursor-default">
+                  <Coins className="mr-2 h-4 w-4 text-primary" />
+                  <span>{userProfile?.tokens ?? 0} Tokens</span>
+                </DropdownMenuItem>
                 <DropdownMenuItem>Profile</DropdownMenuItem>
                 <DropdownMenuItem>Settings</DropdownMenuItem>
                 <DropdownMenuSeparator />

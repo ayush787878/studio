@@ -9,11 +9,19 @@ import { ShoppingCart, ExternalLink, AlertTriangle } from 'lucide-react';
 const firestoreRulesExample = `rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow read access to the products collection for everyone
-    match /products/{productId} {
-      allow read;
+
+    // Allow users to create their profile and only read/update their own data.
+    match /users/{userId} {
+      allow read, update: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null;
     }
-    // Make sure your other rules for users, etc. are below
+    
+    // Allow public read access to products, but no client-side writes.
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
   }
 }`;
 
@@ -47,10 +55,10 @@ async function StorePage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-sm">
-              To fix this, go to your Firebase project's Firestore Database section and update your Security Rules to allow read access to the `products` collection.
+              To fix this, go to your Firebase project's Firestore Database section and update your Security Rules to allow read access to the `products` collection and create/update access for user profiles.
             </p>
             <div>
-                <p className="text-sm font-medium mb-2">Example Rule:</p>
+                <p className="text-sm font-medium mb-2">Required Rules:</p>
                 <pre className="bg-muted p-4 rounded-md text-xs font-mono overflow-x-auto">
                     <code>{firestoreRulesExample}</code>
                 </pre>
