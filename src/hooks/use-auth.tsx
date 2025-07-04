@@ -8,7 +8,7 @@ import { Logo } from '@/components/logo';
 import { AlertTriangle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { getOrCreateUser, type UserProfile } from '@/services/userService';
+import { getOrCreateUser, type UserProfile, type AuthUser } from '@/services/userService';
 
 interface AuthContextType {
   userProfile: UserProfile | null;
@@ -61,7 +61,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
-          const profile = await getOrCreateUser(user);
+          // Immediately create a plain object to prevent passing the complex
+          // Firebase User object with circular references down the chain.
+          const authUser: AuthUser = {
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+          };
+          const profile = await getOrCreateUser(authUser);
           setUserProfile(profile);
         } catch (error) {
           console.error("Error getting or creating user profile:", error);

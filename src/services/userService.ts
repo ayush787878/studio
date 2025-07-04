@@ -2,7 +2,14 @@
 
 import { rtdb } from '@/lib/firebase';
 import { ref, get, set } from 'firebase/database';
-import type { User } from 'firebase/auth';
+
+// A simple interface for the properties we need from the Firebase Auth user.
+export type AuthUser = {
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+  photoURL: string | null;
+};
 
 export type UserProfile = {
   uid: string;
@@ -17,10 +24,10 @@ const INITIAL_TOKENS = 10;
 /**
  * Gets or creates a user profile in Firebase Realtime Database.
  * If the user is new, they are created with an initial token balance.
- * @param user The Firebase Auth user object.
+ * @param user The simplified AuthUser object.
  * @returns The user's profile from the Realtime Database.
  */
-export async function getOrCreateUser(user: User): Promise<UserProfile> {
+export async function getOrCreateUser(user: AuthUser): Promise<UserProfile> {
   if (!rtdb) {
     throw new Error('Firebase is not configured.');
   }
