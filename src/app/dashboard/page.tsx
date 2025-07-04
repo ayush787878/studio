@@ -10,7 +10,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Progress } from '@/components/ui/progress';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
-import { updateUserTokens } from '@/services/userService';
+import { updateUserTokens, saveAnalysis } from '@/services/userService';
 import { analyzeFace, type AnalyzeFaceOutput } from '@/ai/flows/feature-analysis';
 import { UploadCloud, Sparkles, Loader2, RefreshCw } from 'lucide-react';
 
@@ -73,10 +73,11 @@ export default function DashboardPage() {
         if (userProfile?.uid) {
             const newTokens = userProfile.tokens - 1;
             await updateUserTokens(userProfile.uid, newTokens);
+            await saveAnalysis(userProfile.uid, base64data, result);
 
             toast({
-                title: "Analysis Complete",
-                description: "Your results are ready. 1 token has been deducted.",
+                title: "Analysis Complete & Saved",
+                description: "Your results are ready and saved to your history. 1 token has been deducted.",
             });
             // A full page refresh is a simple way to update token count everywhere.
             router.refresh(); 
@@ -115,7 +116,7 @@ export default function DashboardPage() {
                 <Sparkles /> AI Face Analysis
                 </CardTitle>
                 <CardDescription>
-                Upload a clear, front-facing photo to begin.
+                Upload a clear, front-facing photo to begin. Your results will be saved to your history.
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">

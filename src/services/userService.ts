@@ -1,5 +1,6 @@
 import { rtdb } from '@/lib/firebase';
-import { ref, get, set, update } from 'firebase/database';
+import { ref, get, set, update, push } from 'firebase/database';
+import { type AnalyzeFaceOutput } from '@/ai/flows/feature-analysis';
 
 // A simple interface for the properties we need from the Firebase Auth user.
 export type AuthUser = {
@@ -16,6 +17,16 @@ export type UserProfile = {
   photoURL: string | null;
   tokens: number;
 };
+
+export interface AnalysisResult {
+    timestamp: number;
+    photoDataUri: string;
+    analysis: AnalyzeFaceOutput;
+}
+  
+export interface AnalysisHistoryItem extends AnalysisResult {
+    id: string;
+}
 
 const INITIAL_TOKENS = 10;
 
@@ -58,4 +69,47 @@ export async function updateUserTokens(uid: string, newTokens: number): Promise<
     }
     const userRef = ref(rtdb, 'users/' + uid);
     await update(userRef, { tokens: newTokens });
+}
+
+/**
+ * Saves a new analysis result to the user's history.
+ * @param uid The user's ID.
+ * @param photoDataUri The data URI of the analyzed photo.
+ * @param analysis The result from the AI analysis.
+ */
+export async function saveAnalysis(uid: string, photoDataUri: string, analysis: AnalyzeFaceOutput): Promise<void> {
+    if (!rtdb) {
+      throw new Error('Firebase is not configured.');
+    }
+    const historyRef = ref(rtdb, `users/${uid}/history`);
+    const newAnalysisRef = push(historyRef); // `push` creates a unique ID
+    await set(newAnalysisRef, {
+      timestamp: Date.now(),
+      photoDataUri,
+      analysis,
+    });
+}
+  
+/**
+ * Retrieves all analysis results for a given user.
+ * @param uid The user's ID.
+ * @returns A sorted array of analysis history items.
+ */
+export async function getAnalysisHistory(uid: string): Promise<AnalysisHistoryItem[]> {
+    if (!rtdb) {
+        throw new Error('Firebase is not configured.');
+    }
+    const historyRef = ref(rtdb, `users/${uid}/history`);
+    const snapshot = await get(historyRef);
+
+    if (snapshot.exists()) {
+        const historyData = snapshot.val();
+        // Convert the object of objects into an array of objects
+        return Object.entries(historyData).map(([id, data]) => ({
+            id,
+            ...(data as AnalysisResult),
+        })).sort((a, b) => b.timestamp - a.timestamp); // Sort by most recent first
+    }
+    
+    return [];
 }
