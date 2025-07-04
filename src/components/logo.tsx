@@ -9,31 +9,9 @@ export function Logo() {
         xmlns="http://www.w3.org/2000/svg"
         className="h-6 w-6 text-primary"
       >
-        <circle
-          cx="12"
-          cy="12"
-          r="10"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeOpacity="0.5"
-        />
         <path
-          d="M8 14C8.44444 15.3333 10 17 12 17C14 17 15.5556 15.3333 16 14"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-        />
-        <path
-          d="M9 9.5H9.01"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-        <path
-          d="M15 9.5H15.01"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
+          d="M13.5 3H6.5C4.567 3 3 4.567 3 6.5V17.5C3 19.433 4.567 21 6.5 21H10.5V13H15.5C17.433 13 19 11.433 19 9.5V6.5C19 4.567 17.433 3 15.5 3H13.5ZM10.5 5H13.5V8H15.5C16.3284 8 17 8.67157 17 9.5C17 10.3284 16.3284 11 15.5 11H10.5V5Z"
+          fill="currentColor"
         />
       </svg>
       <span className="font-bold text-lg text-foreground font-headline">
