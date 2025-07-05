@@ -43,7 +43,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }, [userProfile, loading, router]);
 
   const navItems = [
-    { href: "/dashboard", label: "Dashboard", icon: <LayoutDashboard /> },
+    { href: "/", label: "Dashboard", icon: <LayoutDashboard /> },
     { href: "/history", label: "History", icon: <History /> },
     { href: "/advisory", label: "Advisory", icon: <BookOpen /> },
   ];
