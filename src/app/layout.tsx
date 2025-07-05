@@ -6,22 +6,22 @@ import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Facelyz',
-    default: 'Facelyz - AI Face Analysis & Aesthetic Scoring',
+    template: '%s | Facelyze',
+    default: 'Facelyze - AI Face Analysis & Aesthetic Scoring',
   },
-  description: "Get a detailed AI analysis of your facial aesthetics. Facelyz provides personalized scores, feature breakdowns, and actionable skincare recommendations to help you achieve your goals.",
+  description: "Get a detailed AI analysis of your facial aesthetics. Facelyze provides personalized scores, feature breakdowns, and actionable skincare recommendations to help you achieve your goals.",
   keywords: ['face analysis', 'facial aesthetics', 'aesthetic score', 'lookmaxxing', 'beauty ai', 'skincare recommendations', 'self-improvement'],
   openGraph: {
-    title: 'Facelyz - AI Face Analysis & Aesthetic Scoring',
+    title: 'Facelyze - AI Face Analysis & Aesthetic Scoring',
     description: 'Get a detailed AI analysis of your facial aesthetics, personalized scores, and skincare recommendations.',
-    url: 'https://www.facelyz.com',
-    siteName: 'Facelyz',
+    url: 'https://www.facelyze.com',
+    siteName: 'Facelyze',
     images: [
       {
         url: 'https://placehold.co/1200x630.png',
         width: 1200,
         height: 630,
-        alt: 'Facelyz AI Face Analysis',
+        alt: 'Facelyze AI Face Analysis',
       },
     ],
     locale: 'en_US',
@@ -29,11 +29,11 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Facelyz - AI Face Analysis & Aesthetic Scoring',
+    title: 'Facelyze - AI Face Analysis & Aesthetic Scoring',
     description: 'Get a detailed AI analysis of your facial aesthetics, personalized scores, and skincare recommendations.',
     images: ['https://placehold.co/1200x630.png'],
   },
-  metadataBase: new URL('https://www.facelyz.com'),
+  metadataBase: new URL('https://www.facelyze.com'),
 };
 
 export default function RootLayout({

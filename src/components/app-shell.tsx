@@ -97,7 +97,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="p-0">
-                  <Link href="https://facelyz.store" target="_blank" rel="noopener noreferrer" className="flex items-center w-full px-2 py-1.5 cursor-pointer">
+                  <Link href="https://facelyze.com" target="_blank" rel="noopener noreferrer" className="flex items-center w-full px-2 py-1.5 cursor-pointer">
                     <Coins className="mr-2 h-4 w-4 text-primary" />
                     <span>{userProfile?.tokens ?? 0} Tokens</span>
                   </Link>
@@ -129,7 +129,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <SidebarTrigger className="md:hidden" />
             <h1 className="text-xl font-semibold capitalize font-headline">{pathname.substring(1) || 'Dashboard'}</h1>
             <div className="ml-auto flex items-center gap-4">
-                <Link href="https://facelyz.store" target="_blank" rel="noopener noreferrer">
+                <Link href="https://facelyze.com" target="_blank" rel="noopener noreferrer">
                     <Button variant="outline" size="sm" className="gap-1.5">
                         <Coins className="h-4 w-4 text-primary" />
                         <span className="font-semibold">{userProfile?.tokens ?? 0}</span>

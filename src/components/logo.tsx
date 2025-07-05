@@ -15,7 +15,7 @@ export function Logo() {
         />
       </svg>
       <span className="font-bold text-lg text-foreground font-headline">
-        Facelyz
+        Facelyze
       </span>
     </div>
   );
