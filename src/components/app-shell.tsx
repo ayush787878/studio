@@ -24,6 +24,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { useAuth } from '@/hooks/use-auth';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { Footer } from './footer';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -138,9 +139,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 </Link>
             </div>
         </header>
-        <main className="flex-1 p-4 lg:p-6 overflow-auto">
+        <div className="flex-1 p-4 lg:p-6 overflow-auto">
           {children}
-        </main>
+        </div>
+        <Footer />
       </SidebarInset>
     </SidebarProvider>
   );

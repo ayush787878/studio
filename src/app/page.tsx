@@ -15,8 +15,9 @@ import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { updateUserTokens, saveAnalysis } from '@/services/userService';
 import { analyzeFace, type AnalyzeFaceOutput } from '@/ai/flows/feature-analysis';
-import { UploadCloud, Sparkles, Loader2, RefreshCw, Target, Lock, Twitter, Instagram, Facebook } from 'lucide-react';
+import { UploadCloud, Sparkles, Loader2, RefreshCw, Target, Lock } from 'lucide-react';
 import { Logo } from '@/components/logo';
+import { Footer } from '@/components/footer';
 
 const GuestHeader = () => (
     <header className="px-4 lg:px-6 h-14 flex items-center bg-background/80 backdrop-blur-sm fixed top-0 left-0 right-0 z-50 border-b border-border/20">
@@ -35,61 +36,6 @@ const GuestHeader = () => (
         </Link>
       </nav>
     </header>
-);
-
-const GuestFooter = () => (
-    <footer className="bg-accent/20 border-t">
-      <div className="container py-12">
-        <div className="grid gap-10 md:grid-cols-12">
-          <div className="space-y-4 md:col-span-4">
-            <Link href="/" className="flex items-center" prefetch={false}>
-              <Logo />
-            </Link>
-            <p className="text-muted-foreground text-sm max-w-xs">
-              Unlock your aesthetic potential with AI-driven face analysis and personalized guidance.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:col-span-8">
-              <div className="space-y-4">
-                  <h4 className="font-semibold text-foreground">Company</h4>
-                  <nav className="flex flex-col gap-2">
-                      <Link href="#" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>About Us</Link>
-                      <Link href="#" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>Contact</Link>
-                      <Link href="#" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>Blog</Link>
-                  </nav>
-              </div>
-              <div className="space-y-4">
-                  <h4 className="font-semibold text-foreground">Legal</h4>
-                  <nav className="flex flex-col gap-2">
-                      <Link href="#" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>Terms of Service</Link>
-                      <Link href="#" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>Privacy Policy</Link>
-                      <Link href="#" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>Cookie Policy</Link>
-                  </nav>
-              </div>
-              <div className="space-y-4">
-                  <h4 className="font-semibold text-foreground">Connect</h4>
-                  <div className="flex items-center gap-4">
-                      <Link href="#" aria-label="Twitter" className="text-muted-foreground hover:text-primary" prefetch={false}>
-                          <Twitter className="h-5 w-5" />
-                      </Link>
-                      <Link href="#" aria-label="Instagram" className="text-muted-foreground hover:text-primary" prefetch={false}>
-                          <Instagram className="h-5 w-5" />
-                      </Link>
-                      <Link href="#" aria-label="Facebook" className="text-muted-foreground hover:text-primary" prefetch={false}>
-                          <Facebook className="h-5 w-5" />
-                      </Link>
-                  </div>
-              </div>
-          </div>
-        </div>
-      </div>
-      <div className="border-t bg-background">
-        <div className="container flex flex-col items-center justify-between gap-2 py-4 sm:flex-row">
-            <p className="text-sm text-muted-foreground">&copy; 2024 Facelyze.com. All rights reserved.</p>
-            <p className="text-sm text-muted-foreground">A project by AI enthusiasts.</p>
-        </div>
-      </div>
-    </footer>
 );
 
 const LockedContent = ({ signIn }: { signIn: () => Promise<void> }) => (
@@ -462,7 +408,7 @@ export default function HomePage() {
                     <DashboardContent />
                 </div>
             </main>
-            <GuestFooter />
+            <Footer />
         </div>
     );
 }
