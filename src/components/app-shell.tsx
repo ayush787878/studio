@@ -128,7 +128,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <SidebarInset>
         <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6 sticky top-0 z-30">
             <SidebarTrigger className="md:hidden" />
-            <h1 className="text-xl font-semibold capitalize font-headline">{pathname.substring(1) || 'Dashboard'}</h1>
+            <h1 className="text-xl font-semibold capitalize">{pathname.substring(1) || 'Dashboard'}</h1>
             <div className="ml-auto flex items-center gap-4">
                 <Link href="https://facelyze.com" target="_blank" rel="noopener noreferrer">
                     <Button variant="outline" size="sm" className="gap-1.5">

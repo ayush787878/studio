@@ -41,7 +41,7 @@ export default function HistoryPage() {
         <AppShell>
             <div className="flex flex-col items-center justify-center gap-4 text-center p-8 min-h-[400px]">
                 <Loader2 className="h-16 w-16 animate-spin text-primary" />
-                <p className="text-lg font-semibold font-headline">Loading your history...</p>
+                <p className="text-lg font-semibold">Loading your history...</p>
             </div>
         </AppShell>
     );
@@ -53,7 +53,7 @@ export default function HistoryPage() {
         <div className="flex items-center gap-4">
             <History className="h-8 w-8 text-primary" />
             <div>
-                <h1 className="text-3xl font-bold font-headline">Analysis History</h1>
+                <h1 className="text-3xl font-bold">Analysis History</h1>
                 <p className="text-muted-foreground">Review your past analysis results.</p>
             </div>
         </div>
@@ -62,7 +62,7 @@ export default function HistoryPage() {
           <Card>
             <CardContent className="flex flex-col items-center justify-center gap-4 text-center p-8 min-h-[400px]">
               <Frown className="h-16 w-16 text-muted-foreground/30" />
-              <p className="text-lg font-semibold text-muted-foreground font-headline">No History Found</p>
+              <p className="text-lg font-semibold text-muted-foreground">No History Found</p>
               <p className="text-muted-foreground">Perform an analysis on the dashboard to see your results here.</p>
             </CardContent>
           </Card>
@@ -71,7 +71,7 @@ export default function HistoryPage() {
             {history.map((item) => (
               <Card key={item.id} className="overflow-hidden">
                 <CardHeader>
-                    <CardTitle className="font-headline text-xl">
+                    <CardTitle className="text-xl">
                         Analysis from {new Date(item.timestamp).toLocaleString()}
                     </CardTitle>
                 </CardHeader>
@@ -82,11 +82,11 @@ export default function HistoryPage() {
                   <div className="space-y-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle className="font-headline">Aesthetic Score</CardTitle>
+                            <CardTitle>Aesthetic Score</CardTitle>
                             <CardDescription>An overall score based on facial harmony, balance, and skin clarity.</CardDescription>
                         </CardHeader>
                         <CardContent className="flex items-center gap-4">
-                            <p className="text-5xl font-bold text-primary font-headline">{item.analysis.aestheticScore}</p>
+                            <p className="text-5xl font-bold text-primary">{item.analysis.aestheticScore}</p>
                             <div className="w-full">
                                 <Progress value={item.analysis.aestheticScore} className="h-3" />
                                 <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
@@ -96,11 +96,11 @@ export default function HistoryPage() {
 
                     <Card className="bg-accent/50">
                         <CardHeader>
-                            <CardTitle className="font-headline">Overall Impression</CardTitle>
+                            <CardTitle>Overall Impression</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="flex items-center gap-4">
-                                <p className="text-5xl font-bold text-primary font-headline">{item.analysis.overallImpression.rating}</p>
+                                <p className="text-5xl font-bold text-primary">{item.analysis.overallImpression.rating}</p>
                                 <div className="w-full">
                                     <Progress value={item.analysis.overallImpression.rating} className="h-3" />
                                     <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
@@ -113,10 +113,10 @@ export default function HistoryPage() {
                     <Accordion type="single" collapsible className="w-full">
                         {item.analysis.featureAnalysis.map((feature, index) => (
                             <AccordionItem value={`item-${index}`} key={index}>
-                                <AccordionTrigger className="text-lg font-semibold font-headline">{feature.feature}</AccordionTrigger>
+                                <AccordionTrigger className="text-lg font-semibold">{feature.feature}</AccordionTrigger>
                                 <AccordionContent className="text-base text-muted-foreground space-y-4 pt-4">
                                     <div className="flex items-center gap-4">
-                                        <p className="text-3xl font-bold text-primary font-headline">{feature.rating}</p>
+                                        <p className="text-3xl font-bold text-primary">{feature.rating}</p>
                                         <div className="w-full">
                                             <Progress value={feature.rating} className="h-2" />
                                             <p className="text-xs text-right text-muted-foreground mt-1">/ 100</p>
@@ -131,7 +131,7 @@ export default function HistoryPage() {
                     {item.analysis.personalizedPlan && item.analysis.personalizedPlan.length > 0 && (
                         <Card className="border-primary/50 bg-primary/5">
                             <CardHeader>
-                                <CardTitle className="font-headline flex items-center gap-2">
+                                <CardTitle className="flex items-center gap-2">
                                     <Target className="h-6 w-6 text-primary" />
                                     Your Personalized Plan
                                 </CardTitle>
@@ -150,7 +150,7 @@ export default function HistoryPage() {
 
                     <Card className="bg-accent/50">
                         <CardHeader>
-                            <CardTitle className="font-headline">Skincare Recommendations</CardTitle>
+                            <CardTitle>Skincare Recommendations</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             {item.analysis.skincareRecommendations.map((rec, index) => (

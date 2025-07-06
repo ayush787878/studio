@@ -36,7 +36,7 @@ export default function LoginPage() {
           <div className="mx-auto mb-4">
             <Logo />
           </div>
-          <CardTitle className="text-2xl font-bold font-headline">Welcome to Facelyze</CardTitle>
+          <CardTitle className="text-2xl font-bold">Welcome to Facelyze</CardTitle>
           <CardDescription>Sign in to view your account.</CardDescription>
         </CardHeader>
         <CardContent>

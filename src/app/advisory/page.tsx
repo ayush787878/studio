@@ -35,7 +35,7 @@ export default function AdvisoryPage() {
         <div className="flex items-center gap-4">
             <BookOpen className="h-8 w-8 text-primary" />
             <div>
-                <h1 className="text-3xl font-bold font-headline">Advisory & Learning</h1>
+                <h1 className="text-3xl font-bold">Advisory & Learning</h1>
                 <p className="text-muted-foreground">AI-curated principles and resources for aesthetic improvement.</p>
             </div>
         </div>
@@ -44,7 +44,7 @@ export default function AdvisoryPage() {
             <Card>
                 <CardContent className="flex flex-col items-center justify-center gap-4 text-center p-8 min-h-[400px]">
                     <Loader2 className="h-16 w-16 animate-spin text-primary" />
-                    <p className="text-lg font-semibold font-headline">Generating your personalized advisory...</p>
+                    <p className="text-lg font-semibold">Generating your personalized advisory...</p>
                     <p className="text-muted-foreground">This may take a moment.</p>
                 </CardContent>
             </Card>
@@ -54,7 +54,7 @@ export default function AdvisoryPage() {
              <Card>
                 <CardContent className="flex flex-col items-center justify-center gap-4 text-center p-8 min-h-[400px] text-destructive">
                     <AlertTriangle className="h-16 w-16" />
-                    <p className="text-lg font-semibold font-headline">Error</p>
+                    <p className="text-lg font-semibold">Error</p>
                     <p>{error}</p>
                 </CardContent>
             </Card>
@@ -64,7 +64,7 @@ export default function AdvisoryPage() {
           <div className="space-y-8">
             <Card className="bg-accent/50">
               <CardHeader>
-                <CardTitle className="font-headline text-2xl">Principles of Facial Aesthetics</CardTitle>
+                <CardTitle className="text-2xl">Principles of Facial Aesthetics</CardTitle>
                 <CardDescription>Core concepts for enhancing and maintaining your appearance, focusing on health and well-being.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -78,7 +78,7 @@ export default function AdvisoryPage() {
             </Card>
 
             <div>
-              <h2 className="text-2xl font-bold font-headline mb-4">Recommended Reading</h2>
+              <h2 className="text-2xl font-bold mb-4">Recommended Reading</h2>
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {content.bookRecommendations.map((book, index) => (
                   <Card key={index} className="flex flex-col">
@@ -93,7 +93,7 @@ export default function AdvisoryPage() {
                         />
                     </CardHeader>
                     <CardContent className="flex-grow flex flex-col">
-                      <CardTitle className="font-headline text-lg">{book.title}</CardTitle>
+                      <CardTitle className="text-lg">{book.title}</CardTitle>
                       <CardDescription className="text-sm mt-1">by {book.author}</CardDescription>
                       <p className="text-muted-foreground text-sm mt-4 flex-grow">{book.summary}</p>
                     </CardContent>
