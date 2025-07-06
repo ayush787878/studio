@@ -6,7 +6,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Facelyze',
+    template: '%s | Facelyze.com',
     default: 'Facelyze - AI Face Analysis & Aesthetic Scoring',
   },
   description: "Get a detailed AI analysis of your facial aesthetics. Facelyze provides personalized scores, feature breakdowns, and actionable skincare recommendations to help you achieve your goals.",
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     title: 'Facelyze - AI Face Analysis & Aesthetic Scoring',
     description: 'Get a detailed AI analysis of your facial aesthetics, personalized scores, and skincare recommendations.',
     url: 'https://www.facelyze.com',
-    siteName: 'Facelyze',
+    siteName: 'Facelyze.com',
     images: [
       {
         url: 'https://placehold.co/1200x630.png',
