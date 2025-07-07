@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/history/', '/progress/', '/store/'],
       },
     ],
-    sitemap: 'https://www.facelyze.com/sitemap.xml',
+    sitemap: 'https://facelyze.com/sitemap.xml',
   };
 }
