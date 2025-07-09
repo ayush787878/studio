@@ -1,8 +1,8 @@
+
 "use client";
 
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { AppShell } from '@/components/app-shell';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,25 +18,7 @@ import { analyzeFace, type AnalyzeFaceOutput } from '@/ai/flows/feature-analysis
 import { UploadCloud, Sparkles, Loader2, RefreshCw, Target, Lock } from 'lucide-react';
 import { Logo } from '@/components/logo';
 import { Footer } from '@/components/footer';
-
-const GuestHeader = () => (
-    <header className="px-4 lg:px-6 h-14 flex items-center bg-background/80 backdrop-blur-sm fixed top-0 left-0 right-0 z-50 border-b border-border/20">
-      <Link href="/" className="flex items-center justify-center" prefetch={false}>
-        <Logo />
-        <span className="sr-only">Facelyze</span>
-      </Link>
-      <nav className="ml-auto flex gap-4 sm:gap-6">
-        <Link href="/login" prefetch={false}>
-          <Button variant="ghost">
-            Login
-          </Button>
-        </Link>
-        <Link href="/login" prefetch={false}>
-            <Button>Get Started</Button>
-        </Link>
-      </nav>
-    </header>
-);
+import { PublicHeader } from '@/components/public-header';
 
 const LockedContent = ({ signIn }: { signIn: () => Promise<void> }) => (
     <div className="relative mt-6">
@@ -402,9 +384,9 @@ export default function HomePage() {
 
     return (
         <div className="flex flex-col min-h-screen bg-background">
-            <GuestHeader />
+            <PublicHeader />
             <main className="flex-1 pt-14">
-                <div className="p-4 lg:p-6">
+                <div className="container py-8">
                     <DashboardContent />
                 </div>
             </main>

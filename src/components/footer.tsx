@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import { Logo } from '@/components/logo';
 import { Twitter, Instagram, Facebook } from 'lucide-react';
@@ -18,9 +19,9 @@ export const Footer = () => (
               <div className="space-y-4">
                   <h4 className="font-semibold text-foreground">Company</h4>
                   <nav className="flex flex-col gap-2">
-                      <Link href="#" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>About Us</Link>
-                      <Link href="#" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>Contact</Link>
-                      <Link href="#" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>Blog</Link>
+                      <Link href="/about" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>About Us</Link>
+                      <Link href="/contact" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>Contact</Link>
+                      <Link href="/blog" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>Blog</Link>
                   </nav>
               </div>
               <div className="space-y-4">
