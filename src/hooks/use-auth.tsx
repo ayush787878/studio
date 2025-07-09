@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react';
 import { onAuthStateChanged, User, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
@@ -15,6 +15,7 @@ interface AuthContextType {
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
+  refreshUserProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -52,6 +53,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { toast } = useToast();
+
+  const refreshUserProfile = useCallback(async () => {
+    if (!auth?.currentUser) {
+        return;
+    }
+    try {
+        const authUser: AuthUser = {
+            uid: auth.currentUser.uid,
+            email: auth.currentUser.email,
+            displayName: auth.currentUser.displayName,
+            photoURL: auth.currentUser.photoURL,
+        };
+        const profile = await getOrCreateUser(authUser);
+        setUserProfile(profile);
+    } catch (error) {
+        console.error("Error refreshing user profile:", error);
+        toast({
+            title: "Account Sync Error",
+            description: "Could not refresh your account details.",
+            variant: "destructive",
+        });
+    }
+  }, [toast]);
 
   useEffect(() => {
     if (!auth) {
@@ -169,7 +193,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ userProfile, loading, signInWithGoogle, logout }}>
+    <AuthContext.Provider value={{ userProfile, loading, signInWithGoogle, logout, refreshUserProfile }}>
       {children}
     </AuthContext.Provider>
   );

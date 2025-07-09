@@ -59,8 +59,7 @@ const LockedContent = ({ signIn }: { signIn: () => Promise<void> }) => (
 );
 
 const DashboardContent = () => {
-    const { userProfile, signInWithGoogle } = useAuth();
-    const router = useRouter();
+    const { userProfile, signInWithGoogle, refreshUserProfile } = useAuth();
     const { toast } = useToast();
 
     const [imageFile, setImageFile] = useState<File | null>(null);
@@ -90,12 +89,12 @@ const DashboardContent = () => {
               await saveAnalysis(userProfile.uid, imagePreview!, analysisResult);
               const newTokens = userProfile.tokens - 1;
               await updateUserTokens(userProfile.uid, newTokens);
+              await refreshUserProfile();
               
               toast({
                 title: "Analysis Unlocked & Saved!",
                 description: "Your full results are now available.",
               });
-              router.refresh();
             } catch (error) {
               console.error("Failed to save analysis on login:", error);
               toast({ title: "Error", description: "Could not save the analysis.", variant: "destructive" });
@@ -105,7 +104,7 @@ const DashboardContent = () => {
           };
           saveOnLogin();
         }
-    }, [userProfile, analysisResult, isResultPendingSave, imagePreview, router, toast]);
+    }, [userProfile, analysisResult, isResultPendingSave, imagePreview, toast, refreshUserProfile]);
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -151,8 +150,8 @@ const DashboardContent = () => {
                     await saveAnalysis(userProfile.uid, base64data, result);
                     const newTokens = userProfile.tokens - 1;
                     await updateUserTokens(userProfile.uid, newTokens);
+                    await refreshUserProfile();
                     toast({ title: "Analysis Complete & Saved", description: "1 token has been deducted." });
-                    router.refresh();
                 } else { // Guest user flow
                     setIsResultPendingSave(true);
                     toast({ title: "Preview Generated!", description: "Log in to unlock your full detailed analysis." });
