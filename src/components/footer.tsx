@@ -21,7 +21,6 @@ export const Footer = () => (
                   <nav className="flex flex-col gap-2">
                       <Link href="/about" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>About Us</Link>
                       <Link href="/contact" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>Contact</Link>
-                      <Link href="/blog" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>Blog</Link>
                   </nav>
               </div>
               <div className="space-y-4">

@@ -47,10 +47,10 @@ export default function ContactPage() {
                         </CardHeader>
                         <CardContent>
                             <p className="text-muted-foreground">
-                                Many common questions are already answered in our blog posts and guides.
+                                Many common questions are answered in our Advisory & Learning section.
                             </p>
                             <Button asChild variant="link" className="px-0">
-                                <Link href="/blog">Explore our Blog</Link>
+                                <Link href="/advisory">Explore our Guides</Link>
                             </Button>
                         </CardContent>
                     </Card>
