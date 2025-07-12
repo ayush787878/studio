@@ -180,185 +180,189 @@ const DashboardContent = () => {
     const isGuest = !userProfile;
   
     return (
-        <div className="grid lg:grid-cols-2 gap-12 animate-in fade-in-0 duration-500">
-            {/* Left Column: Uploader */}
-            <Card className="lg:sticky lg:top-24 h-fit">
-                <CardHeader>
-                    <CardTitle className="text-3xl flex items-center gap-2">
-                    <Sparkles /> AI Face Analysis
-                    </CardTitle>
-                    <CardDescription>
-                    Upload a clear, front-facing photo to begin. Optionally, describe your goals.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <div className="space-y-4 text-center">
-                        <input
-                            type="file"
-                            ref={fileInputRef}
-                            onChange={handleImageChange}
-                            accept="image/png, image/jpeg"
-                            className="hidden"
-                        />
-                        <div
-                            onClick={() => !isLoading && fileInputRef.current?.click()}
-                            className={`group aspect-square max-w-xs mx-auto border-2 border-dashed border-muted-foreground/50 rounded-lg flex items-center justify-center transition-colors ${!isLoading ? 'cursor-pointer hover:border-primary' : 'cursor-not-allowed'}`}
-                        >
-                            {imagePreview ? (
-                            <Image src={imagePreview} alt="Selected face" width={400} height={400} className="rounded-lg object-cover aspect-square" />
-                            ) : (
-                            <div className="flex flex-col items-center gap-2 text-muted-foreground">
-                                <UploadCloud className="h-12 w-12" />
-                                <p>Click to upload a photo</p>
-                                <p className="text-xs">PNG or JPG</p>
+        <div className="animate-in fade-in-0 duration-500 space-y-8">
+            <div className="grid lg:grid-cols-2 gap-12">
+                {/* Left Column: Uploader */}
+                <Card className="lg:sticky lg:top-24 h-fit">
+                    <CardHeader>
+                        <CardTitle className="text-3xl flex items-center gap-2">
+                        <Sparkles /> AI Face Analysis
+                        </CardTitle>
+                        <CardDescription>
+                        Upload a clear, front-facing photo to begin. Optionally, describe your goals.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="space-y-4 text-center">
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                onChange={handleImageChange}
+                                accept="image/png, image/jpeg"
+                                className="hidden"
+                            />
+                            <div
+                                onClick={() => !isLoading && fileInputRef.current?.click()}
+                                className={`group aspect-square max-w-xs mx-auto border-2 border-dashed border-muted-foreground/50 rounded-lg flex items-center justify-center transition-colors ${!isLoading ? 'cursor-pointer hover:border-primary' : 'cursor-not-allowed'}`}
+                            >
+                                {imagePreview ? (
+                                <Image src={imagePreview} alt="Selected face" width={400} height={400} className="rounded-lg object-cover aspect-square" />
+                                ) : (
+                                <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                                    <UploadCloud className="h-12 w-12" />
+                                    <p>Click to upload a photo</p>
+                                    <p className="text-xs">PNG or JPG</p>
+                                </div>
+                                )}
                             </div>
+                        </div>
+                        <div className="space-y-2 pt-4 max-w-xs mx-auto">
+                            <Label htmlFor="aesthetic-goal" className="font-semibold">What is your aesthetic goal? (Optional)</Label>
+                            <Textarea
+                                id="aesthetic-goal"
+                                placeholder="e.g., I'd like to have a more defined jawline and clearer skin."
+                                value={aestheticGoal}
+                                onChange={(e) => setAestheticGoal(e.target.value)}
+                                className="resize-none"
+                                disabled={isLoading}
+                            />
+                        </div>
+                        <div className="flex flex-col items-center gap-2 pt-4">
+                            <Button
+                                onClick={handleAnalyzeClick}
+                                disabled={!imageFile || isLoading || (!isGuest && tokens < 3)}
+                                size="lg"
+                                className="w-full max-w-xs"
+                            >
+                                {isLoading ? (<><Loader2 className="mr-2 h-5 w-5 animate-spin" />Analyzing...</>) 
+                                : isGuest ? ('Analyze Face (Free Preview)') 
+                                : (`Analyze Face (3 Tokens)`)}
+                            </Button>
+                            {imagePreview && (
+                                <Button onClick={handleReset} variant="outline" size="lg" className="w-full max-w-xs">
+                                    <RefreshCw className="mr-2 h-5 w-5" />
+                                    Clear Photo
+                                </Button>
+                            )}
+                            {!isGuest && (
+                                <>
+                                    <p className="text-sm text-muted-foreground pt-2">
+                                        You have {tokens} {tokens === 1 ? 'token' : 'tokens'} remaining.
+                                    </p>
+                                    {tokens < 3 && !isLoading && <p className="text-destructive text-sm">You don't have enough tokens left.</p>}
+                                </>
                             )}
                         </div>
-                    </div>
-                     <div className="space-y-2 pt-4 max-w-xs mx-auto">
-                        <Label htmlFor="aesthetic-goal" className="font-semibold">What is your aesthetic goal? (Optional)</Label>
-                        <Textarea
-                            id="aesthetic-goal"
-                            placeholder="e.g., I'd like to have a more defined jawline and clearer skin."
-                            value={aestheticGoal}
-                            onChange={(e) => setAestheticGoal(e.target.value)}
-                            className="resize-none"
-                            disabled={isLoading}
-                        />
-                    </div>
-                     <div className="flex flex-col items-center gap-2 pt-4">
-                        <Button
-                            onClick={handleAnalyzeClick}
-                            disabled={!imageFile || isLoading || (!isGuest && tokens < 3)}
-                            size="lg"
-                            className="w-full max-w-xs"
-                        >
-                            {isLoading ? (<><Loader2 className="mr-2 h-5 w-5 animate-spin" />Analyzing...</>) 
-                            : isGuest ? ('Analyze Face (Free Preview)') 
-                            : (`Analyze Face (3 Tokens)`)}
-                        </Button>
-                        {imagePreview && (
-                            <Button onClick={handleReset} variant="outline" size="lg" className="w-full max-w-xs">
-                                <RefreshCw className="mr-2 h-5 w-5" />
-                                Clear Photo
-                            </Button>
-                        )}
-                        {!isGuest && (
-                            <>
-                                <p className="text-sm text-muted-foreground pt-2">
-                                    You have {tokens} {tokens === 1 ? 'token' : 'tokens'} remaining.
-                                </p>
-                                {tokens < 3 && !isLoading && <p className="text-destructive text-sm">You don't have enough tokens left.</p>}
-                            </>
-                        )}
-                    </div>
-                </CardContent>
-            </Card>
-    
-            {/* Right Column: Results */}
-            <div className="space-y-6">
-                {isLoading && (
-                    <Card>
-                        <CardContent className="flex flex-col items-center justify-center gap-4 text-center p-8 min-h-[400px]">
-                            <Loader2 className="h-16 w-16 animate-spin text-primary" />
-                            <p className="text-lg font-semibold">Our AI is analyzing your photo...</p>
-                            <p className="text-muted-foreground">This may take a moment. Please don't close this page.</p>
-                        </CardContent>
-                    </Card>
-                )}
-                
-                {!isLoading && !analysisResult && (
-                    <Card>
-                        <CardContent className="flex flex-col items-center justify-center gap-4 text-center p-8 min-h-[400px]">
-                            <Sparkles className="h-16 w-16 text-muted-foreground/30"/>
-                            <p className="text-lg font-semibold text-muted-foreground">Your analysis results will appear here</p>
-                        </CardContent>
-                    </Card>
-                )}
-    
-                {analysisResult && (
-                    <div className="space-y-6 animate-in fade-in-0 duration-500">
-                        <Card className="animate-in fade-in-0 duration-500">
-                            <CardHeader>
-                                <CardTitle>Aesthetic Score</CardTitle>
-                                <CardDescription>An overall score based on facial harmony, balance, and skin clarity.</CardDescription>
-                            </CardHeader>
-                            <CardContent className="flex items-center gap-4">
-                                <p className="text-5xl font-bold text-primary">{analysisResult.aestheticScore}</p>
-                                <div className="w-full">
-                                    <Progress value={analysisResult.aestheticScore} className="h-3" />
-                                    <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
-                                </div>
+                    </CardContent>
+                </Card>
+        
+                {/* Right Column: Results */}
+                <div className="space-y-6">
+                    {isLoading && (
+                        <Card>
+                            <CardContent className="flex flex-col items-center justify-center gap-4 text-center p-8 min-h-[400px]">
+                                <Loader2 className="h-16 w-16 animate-spin text-primary" />
+                                <p className="text-lg font-semibold">Our AI is analyzing your photo...</p>
+                                <p className="text-muted-foreground">This may take a moment. Please don't close this page.</p>
                             </CardContent>
                         </Card>
-    
-                        {isGuest ? <LockedContent signIn={signInWithGoogle} /> : (
-                            <>
-                                <Card className="bg-accent/50 animate-in fade-in-0 duration-500 delay-100">
-                                    <CardHeader><CardTitle>Overall Impression</CardTitle></CardHeader>
-                                    <CardContent className="space-y-4">
-                                        <div className="flex items-center gap-4">
-                                            <p className="text-5xl font-bold text-primary">{analysisResult.overallImpression.rating}</p>
-                                            <div className="w-full">
-                                                <Progress value={analysisResult.overallImpression.rating} className="h-3" />
-                                                <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
-                                            </div>
-                                        </div>
-                                        <p className="text-muted-foreground pt-2">{analysisResult.overallImpression.text}</p>
-                                    </CardContent>
-                                </Card>
+                    )}
+                    
+                    {!isLoading && !analysisResult && (
+                        <Card>
+                            <CardContent className="flex flex-col items-center justify-center gap-4 text-center p-8 min-h-[400px]">
+                                <Sparkles className="h-16 w-16 text-muted-foreground/30"/>
+                                <p className="text-lg font-semibold text-muted-foreground">Your analysis results will appear here</p>
+                            </CardContent>
+                        </Card>
+                    )}
         
-                                <Accordion type="single" collapsible className="w-full animate-in fade-in-0 duration-500 delay-200" defaultValue="item-0">
-                                    {analysisResult.featureAnalysis.map((feature, index) => (
-                                        <AccordionItem value={`item-${index}`} key={index}>
-                                            <AccordionTrigger className="text-lg font-semibold">{feature.feature}</AccordionTrigger>
-                                            <AccordionContent className="text-base text-muted-foreground space-y-4 pt-4">
-                                                <div className="flex items-center gap-4">
-                                                    <p className="text-3xl font-bold text-primary">{feature.rating}</p>
-                                                    <div className="w-full">
-                                                        <Progress value={feature.rating} className="h-2" />
-                                                        <p className="text-xs text-right text-muted-foreground mt-1">/ 100</p>
-                                                    </div>
-                                                </div>
-                                                <p>{feature.analysis}</p>
-                                            </AccordionContent>
-                                        </AccordionItem>
-                                    ))}
-                                </Accordion>
-                                
-                                {analysisResult.personalizedPlan && analysisResult.personalizedPlan.length > 0 && (
-                                    <Card className="border-primary/50 bg-primary/5 animate-in fade-in-0 duration-500 delay-300">
-                                        <CardHeader>
-                                            <CardTitle className="flex items-center gap-2"><Target className="h-6 w-6 text-primary" />Your Personalized Plan</CardTitle>
-                                            <CardDescription>A step-by-step guide based on your aesthetic goal.</CardDescription>
-                                        </CardHeader>
+                    {analysisResult && (
+                        <div className="space-y-6 animate-in fade-in-0 duration-500">
+                            <Card className="animate-in fade-in-0 duration-500">
+                                <CardHeader>
+                                    <CardTitle>Aesthetic Score</CardTitle>
+                                    <CardDescription>An overall score based on facial harmony, balance, and skin clarity.</CardDescription>
+                                </CardHeader>
+                                <CardContent className="flex items-center gap-4">
+                                    <p className="text-5xl font-bold text-primary">{analysisResult.aestheticScore}</p>
+                                    <div className="w-full">
+                                        <Progress value={analysisResult.aestheticScore} className="h-3" />
+                                        <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
+                                    </div>
+                                </CardContent>
+                            </Card>
+        
+                            {isGuest ? <LockedContent signIn={signInWithGoogle} /> : (
+                                <>
+                                    <Card className="bg-accent/50 animate-in fade-in-0 duration-500 delay-100">
+                                        <CardHeader><CardTitle>Overall Impression</CardTitle></CardHeader>
                                         <CardContent className="space-y-4">
-                                            {analysisResult.personalizedPlan.map((plan, index) => (
-                                                <div key={index} className="p-4 bg-background rounded-md shadow-sm">
-                                                    <h4 className="font-semibold text-primary">{`${index + 1}. ${plan.step}`}</h4>
-                                                    <p className="text-sm text-muted-foreground">{plan.description}</p>
+                                            <div className="flex items-center gap-4">
+                                                <p className="text-5xl font-bold text-primary">{analysisResult.overallImpression.rating}</p>
+                                                <div className="w-full">
+                                                    <Progress value={analysisResult.overallImpression.rating} className="h-3" />
+                                                    <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
                                                 </div>
-                                            ))}
+                                            </div>
+                                            <p className="text-muted-foreground pt-2">{analysisResult.overallImpression.text}</p>
                                         </CardContent>
                                     </Card>
-                                )}
-        
-                                <Card className="bg-accent/50 animate-in fade-in-0 duration-500 delay-400">
-                                    <CardHeader><CardTitle>Skincare Recommendations</CardTitle></CardHeader>
-                                    <CardContent className="space-y-4">
-                                        {analysisResult.skincareRecommendations.map((rec, index) => (
-                                            <div key={index} className="p-4 bg-background rounded-md shadow-sm">
-                                                <h4 className="font-semibold text-primary">{rec.recommendation}</h4>
-                                                <p className="text-sm text-muted-foreground">{rec.reason}</p>
-                                            </div>
+            
+                                    <Accordion type="single" collapsible className="w-full animate-in fade-in-0 duration-500 delay-200" defaultValue="item-0">
+                                        {analysisResult.featureAnalysis.map((feature, index) => (
+                                            <AccordionItem value={`item-${index}`} key={index}>
+                                                <AccordionTrigger className="text-lg font-semibold">{feature.feature}</AccordionTrigger>
+                                                <AccordionContent className="text-base text-muted-foreground space-y-4 pt-4">
+                                                    <div className="flex items-center gap-4">
+                                                        <p className="text-3xl font-bold text-primary">{feature.rating}</p>
+                                                        <div className="w-full">
+                                                            <Progress value={feature.rating} className="h-2" />
+                                                            <p className="text-xs text-right text-muted-foreground mt-1">/ 100</p>
+                                                        </div>
+                                                    </div>
+                                                    <p>{feature.analysis}</p>
+                                                </AccordionContent>
+                                            </AccordionItem>
                                         ))}
-                                    </CardContent>
-                                </Card>
-                            </>
-                        )}
-                    </div>
-                )}
+                                    </Accordion>
+                                    
+                                    {analysisResult.personalizedPlan && analysisResult.personalizedPlan.length > 0 && (
+                                        <Card className="border-primary/50 bg-primary/5 animate-in fade-in-0 duration-500 delay-300">
+                                            <CardHeader>
+                                                <CardTitle className="flex items-center gap-2"><Target className="h-6 w-6 text-primary" />Your Personalized Plan</CardTitle>
+                                                <CardDescription>A step-by-step guide based on your aesthetic goal.</CardDescription>
+                                            </CardHeader>
+                                            <CardContent className="space-y-4">
+                                                {analysisResult.personalizedPlan.map((plan, index) => (
+                                                    <div key={index} className="p-4 bg-background rounded-md shadow-sm">
+                                                        <h4 className="font-semibold text-primary">{`${index + 1}. ${plan.step}`}</h4>
+                                                        <p className="text-sm text-muted-foreground">{plan.description}</p>
+                                                    </div>
+                                                ))}
+                                            </CardContent>
+                                        </Card>
+                                    )}
+                                </>
+                            )}
+                        </div>
+                    )}
+                </div>
             </div>
+
+            {analysisResult && !isGuest && (
+                <Card className="bg-accent/50 animate-in fade-in-0 duration-500 delay-400">
+                    <CardHeader><CardTitle>Skincare Recommendations</CardTitle></CardHeader>
+                    <CardContent className="space-y-4">
+                        {analysisResult.skincareRecommendations.map((rec, index) => (
+                            <div key={index} className="p-4 bg-background rounded-md shadow-sm">
+                                <h4 className="font-semibold text-primary">{rec.recommendation}</h4>
+                                <p className="text-sm text-muted-foreground">{rec.reason}</p>
+                            </div>
+                        ))}
+                    </CardContent>
+                </Card>
+            )}
         </div>
     );
 };
