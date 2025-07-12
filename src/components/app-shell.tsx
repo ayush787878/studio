@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from 'react';
@@ -19,7 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { LayoutDashboard, LogOut, Coins, Moon, Sun, History, BookOpen } from 'lucide-react';
+import { LayoutDashboard, LogOut, Coins, Moon, Sun, History, BookOpen, UserSearch } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/use-auth';
 import { Switch } from '@/components/ui/switch';
@@ -45,6 +46,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   const navItems = [
     { href: "/", label: "Dashboard", icon: <LayoutDashboard /> },
+    { href: "/scan-face", label: "Scan Face", icon: <UserSearch /> },
     { href: "/history", label: "History", icon: <History /> },
     { href: "/advisory", label: "Advisory", icon: <BookOpen /> },
   ];
@@ -128,7 +130,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <SidebarInset>
         <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6 sticky top-0 z-30">
             <SidebarTrigger className="md:hidden" />
-            <h1 className="text-xl font-semibold capitalize">{pathname.substring(1) || 'Dashboard'}</h1>
+            <h1 className="text-xl font-semibold capitalize">{pathname.substring(1).replace('-', ' ') || 'Dashboard'}</h1>
             <div className="ml-auto flex items-center gap-4">
                 <Link href="https://facelyze.com" target="_blank" rel="noopener noreferrer">
                     <Button variant="outline" size="sm" className="gap-1.5">
