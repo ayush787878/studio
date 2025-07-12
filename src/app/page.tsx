@@ -74,7 +74,7 @@ const DashboardContent = () => {
     useEffect(() => {
         if (userProfile && analysisResult && isResultPendingSave) {
           const saveOnLogin = async () => {
-            if (userProfile.tokens < 1) {
+            if (userProfile.tokens < 3) {
               toast({
                 title: "Unlock Failed",
                 description: "You do not have enough tokens to unlock this analysis.",
@@ -84,10 +84,10 @@ const DashboardContent = () => {
               return;
             }
             
-            toast({ title: "Unlocking results...", description: "Saving to your account and deducting 1 token." });
+            toast({ title: "Unlocking results...", description: "Saving to your account and deducting 3 tokens." });
             try {
               await saveAnalysis(userProfile.uid, imagePreview!, analysisResult);
-              const newTokens = userProfile.tokens - 1;
+              const newTokens = userProfile.tokens - 3;
               await updateUserTokens(userProfile.uid, newTokens);
               await refreshUserProfile();
               
@@ -123,8 +123,8 @@ const DashboardContent = () => {
     const handleAnalyzeClick = async () => {
         if (!imageFile) return;
 
-        if (userProfile && userProfile.tokens < 1) {
-            toast({ variant: "destructive", title: "Analysis Failed", description: "You don't have enough tokens." });
+        if (userProfile && userProfile.tokens < 3) {
+            toast({ variant: "destructive", title: "Analysis Failed", description: "You don't have enough tokens. Each analysis costs 3 tokens." });
             return;
         }
 
@@ -148,10 +148,10 @@ const DashboardContent = () => {
         
                 if (userProfile) { // Logged-in user flow
                     await saveAnalysis(userProfile.uid, base64data, result);
-                    const newTokens = userProfile.tokens - 1;
+                    const newTokens = userProfile.tokens - 3;
                     await updateUserTokens(userProfile.uid, newTokens);
                     await refreshUserProfile();
-                    toast({ title: "Analysis Complete & Saved", description: "1 token has been deducted." });
+                    toast({ title: "Analysis Complete & Saved", description: "3 tokens have been deducted." });
                 } else { // Guest user flow
                     setIsResultPendingSave(true);
                     toast({ title: "Preview Generated!", description: "Log in to unlock your full detailed analysis." });
@@ -229,13 +229,13 @@ const DashboardContent = () => {
                      <div className="flex flex-col items-center gap-2 pt-4">
                         <Button
                             onClick={handleAnalyzeClick}
-                            disabled={!imageFile || isLoading || (!isGuest && tokens < 1)}
+                            disabled={!imageFile || isLoading || (!isGuest && tokens < 3)}
                             size="lg"
                             className="w-full max-w-sm"
                         >
                             {isLoading ? (<><Loader2 className="mr-2 h-5 w-5 animate-spin" />Analyzing...</>) 
                             : isGuest ? ('Analyze Face (Free Preview)') 
-                            : (`Analyze Face (1 Token)`)}
+                            : (`Analyze Face (3 Tokens)`)}
                         </Button>
                         {imagePreview && (
                             <Button onClick={handleReset} variant="outline" size="lg" className="w-full max-w-sm">
@@ -248,7 +248,7 @@ const DashboardContent = () => {
                                 <p className="text-sm text-muted-foreground pt-2">
                                     You have {tokens} {tokens === 1 ? 'token' : 'tokens'} remaining.
                                 </p>
-                                {tokens < 1 && !isLoading && <p className="text-destructive text-sm">You have no tokens left.</p>}
+                                {tokens < 3 && !isLoading && <p className="text-destructive text-sm">You don't have enough tokens left.</p>}
                             </>
                         )}
                     </div>
