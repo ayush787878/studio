@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -83,93 +84,95 @@ export default function HistoryPage() {
                           Analysis from {new Date(item.timestamp).toLocaleString()}
                       </CardTitle>
                   </CardHeader>
-                  <CardContent className="grid md:grid-cols-2 gap-8">
-                    <div>
-                      <Image src={item.photoDataUri} alt="Analysis photo" width={400} height={400} className="rounded-lg object-cover aspect-square w-full" />
+                  <CardContent className="space-y-8">
+                    <div className="grid md:grid-cols-2 gap-8">
+                      <div>
+                        <Image src={item.photoDataUri} alt="Analysis photo" width={400} height={400} className="rounded-lg object-cover aspect-square w-full" />
+                      </div>
+                      <div className="space-y-6">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Aesthetic Score</CardTitle>
+                                <CardDescription>An overall score based on facial harmony, balance, and skin clarity.</CardDescription>
+                            </CardHeader>
+                            <CardContent className="flex items-center gap-4">
+                                <p className="text-5xl font-bold text-primary">{item.analysis.aestheticScore}</p>
+                                <div className="w-full">
+                                    <Progress value={item.analysis.aestheticScore} className="h-3" />
+                                    <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        <Card className="bg-accent/50">
+                            <CardHeader>
+                                <CardTitle>Overall Impression</CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                                <div className="flex items-center gap-4">
+                                    <p className="text-5xl font-bold text-primary">{item.analysis.overallImpression.rating}</p>
+                                    <div className="w-full">
+                                        <Progress value={item.analysis.overallImpression.rating} className="h-3" />
+                                        <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
+                                    </div>
+                                </div>
+                                <p className="text-muted-foreground pt-2">{item.analysis.overallImpression.text}</p>
+                            </CardContent>
+                        </Card>
+
+                        <Accordion type="single" collapsible className="w-full">
+                            {item.analysis.featureAnalysis.map((feature, index) => (
+                                <AccordionItem value={`item-${index}`} key={index}>
+                                    <AccordionTrigger className="text-lg font-semibold">{feature.feature}</AccordionTrigger>
+                                    <AccordionContent className="text-base text-muted-foreground space-y-4 pt-4">
+                                        <div className="flex items-center gap-4">
+                                            <p className="text-3xl font-bold text-primary">{feature.rating}</p>
+                                            <div className="w-full">
+                                                <Progress value={feature.rating} className="h-2" />
+                                                <p className="text-xs text-right text-muted-foreground mt-1">/ 100</p>
+                                            </div>
+                                        </div>
+                                        <p>{feature.analysis}</p>
+                                    </AccordionContent>
+                                </AccordionItem>
+                            ))}
+                        </Accordion>
+                      </div>
                     </div>
-                    <div className="space-y-6">
-                      <Card>
-                          <CardHeader>
-                              <CardTitle>Aesthetic Score</CardTitle>
-                              <CardDescription>An overall score based on facial harmony, balance, and skin clarity.</CardDescription>
-                          </CardHeader>
-                          <CardContent className="flex items-center gap-4">
-                              <p className="text-5xl font-bold text-primary">{item.analysis.aestheticScore}</p>
-                              <div className="w-full">
-                                  <Progress value={item.analysis.aestheticScore} className="h-3" />
-                                  <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
-                              </div>
-                          </CardContent>
-                      </Card>
+                    
+                    {item.analysis.personalizedPlan && item.analysis.personalizedPlan.length > 0 && (
+                        <Card className="border-primary/50 bg-primary/5">
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2">
+                                    <Target className="h-6 w-6 text-primary" />
+                                    Your Personalized Plan
+                                </CardTitle>
+                                <CardDescription>A step-by-step guide based on your aesthetic goal for this analysis.</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                                {item.analysis.personalizedPlan.map((plan, index) => (
+                                    <div key={index} className="p-4 bg-background rounded-md shadow-sm">
+                                        <h4 className="font-semibold text-primary">{`${index + 1}. ${plan.step}`}</h4>
+                                        <p className="text-sm text-muted-foreground">{plan.description}</p>
+                                    </div>
+                                ))}
+                            </CardContent>
+                        </Card>
+                    )}
 
-                      <Card className="bg-accent/50">
-                          <CardHeader>
-                              <CardTitle>Overall Impression</CardTitle>
-                          </CardHeader>
-                          <CardContent className="space-y-4">
-                              <div className="flex items-center gap-4">
-                                  <p className="text-5xl font-bold text-primary">{item.analysis.overallImpression.rating}</p>
-                                  <div className="w-full">
-                                      <Progress value={item.analysis.overallImpression.rating} className="h-3" />
-                                      <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
-                                  </div>
-                              </div>
-                              <p className="text-muted-foreground pt-2">{item.analysis.overallImpression.text}</p>
-                          </CardContent>
-                      </Card>
-
-                      <Accordion type="single" collapsible className="w-full">
-                          {item.analysis.featureAnalysis.map((feature, index) => (
-                              <AccordionItem value={`item-${index}`} key={index}>
-                                  <AccordionTrigger className="text-lg font-semibold">{feature.feature}</AccordionTrigger>
-                                  <AccordionContent className="text-base text-muted-foreground space-y-4 pt-4">
-                                      <div className="flex items-center gap-4">
-                                          <p className="text-3xl font-bold text-primary">{feature.rating}</p>
-                                          <div className="w-full">
-                                              <Progress value={feature.rating} className="h-2" />
-                                              <p className="text-xs text-right text-muted-foreground mt-1">/ 100</p>
-                                          </div>
-                                      </div>
-                                      <p>{feature.analysis}</p>
-                                  </AccordionContent>
-                              </AccordionItem>
-                          ))}
-                      </Accordion>
-
-                      {item.analysis.personalizedPlan && item.analysis.personalizedPlan.length > 0 && (
-                          <Card className="border-primary/50 bg-primary/5">
-                              <CardHeader>
-                                  <CardTitle className="flex items-center gap-2">
-                                      <Target className="h-6 w-6 text-primary" />
-                                      Your Personalized Plan
-                                  </CardTitle>
-                                  <CardDescription>A step-by-step guide based on your aesthetic goal for this analysis.</CardDescription>
-                              </CardHeader>
-                              <CardContent className="space-y-4">
-                                  {item.analysis.personalizedPlan.map((plan, index) => (
-                                      <div key={index} className="p-4 bg-background rounded-md shadow-sm">
-                                          <h4 className="font-semibold text-primary">{`${index + 1}. ${plan.step}`}</h4>
-                                          <p className="text-sm text-muted-foreground">{plan.description}</p>
-                                      </div>
-                                  ))}
-                              </CardContent>
-                          </Card>
-                      )}
-
-                      <Card className="bg-accent/50">
-                          <CardHeader>
-                              <CardTitle>Skincare Recommendations</CardTitle>
-                          </CardHeader>
-                          <CardContent className="space-y-4">
-                              {item.analysis.skincareRecommendations.map((rec, index) => (
-                                  <div key={index} className="p-4 bg-background rounded-md shadow-sm">
-                                      <h4 className="font-semibold text-primary">{rec.recommendation}</h4>
-                                      <p className="text-sm text-muted-foreground">{rec.reason}</p>
-                                  </div>
-                              ))}
-                          </CardContent>
-                      </Card>
-                    </div>
+                    <Card className="bg-accent/50">
+                        <CardHeader>
+                            <CardTitle>Skincare Recommendations</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            {item.analysis.skincareRecommendations.map((rec, index) => (
+                                <div key={index} className="p-4 bg-background rounded-md shadow-sm">
+                                    <h4 className="font-semibold text-primary">{rec.recommendation}</h4>
+                                    <p className="text-sm text-muted-foreground">{rec.reason}</p>
+                                </div>
+                            ))}
+                        </CardContent>
+                    </Card>
                   </CardContent>
                 </Card>
               ))}
