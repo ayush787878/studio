@@ -4,6 +4,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/hooks/use-auth';
 import { ThemeProvider } from '@/components/theme-provider';
+import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: {
@@ -98,6 +99,12 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9124896176133484"
+          crossOrigin="anonymous"
+          strategy="lazyOnload"
         />
       </head>
       <body className="font-sans antialiased min-h-screen bg-background text-foreground">
