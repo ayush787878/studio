@@ -202,7 +202,7 @@ const DashboardContent = () => {
                         />
                         <div
                             onClick={() => !isLoading && fileInputRef.current?.click()}
-                            className={`group aspect-square max-w-sm mx-auto border-2 border-dashed border-muted-foreground/50 rounded-lg flex items-center justify-center transition-colors ${!isLoading ? 'cursor-pointer hover:border-primary' : 'cursor-not-allowed'}`}
+                            className={`group aspect-square max-w-xs mx-auto border-2 border-dashed border-muted-foreground/50 rounded-lg flex items-center justify-center transition-colors ${!isLoading ? 'cursor-pointer hover:border-primary' : 'cursor-not-allowed'}`}
                         >
                             {imagePreview ? (
                             <Image src={imagePreview} alt="Selected face" width={400} height={400} className="rounded-lg object-cover aspect-square" />
@@ -215,7 +215,7 @@ const DashboardContent = () => {
                             )}
                         </div>
                     </div>
-                     <div className="space-y-2 pt-4 max-w-sm mx-auto">
+                     <div className="space-y-2 pt-4 max-w-xs mx-auto">
                         <Label htmlFor="aesthetic-goal" className="font-semibold">What is your aesthetic goal? (Optional)</Label>
                         <Textarea
                             id="aesthetic-goal"
@@ -231,14 +231,14 @@ const DashboardContent = () => {
                             onClick={handleAnalyzeClick}
                             disabled={!imageFile || isLoading || (!isGuest && tokens < 3)}
                             size="lg"
-                            className="w-full max-w-sm"
+                            className="w-full max-w-xs"
                         >
                             {isLoading ? (<><Loader2 className="mr-2 h-5 w-5 animate-spin" />Analyzing...</>) 
                             : isGuest ? ('Analyze Face (Free Preview)') 
                             : (`Analyze Face (3 Tokens)`)}
                         </Button>
                         {imagePreview && (
-                            <Button onClick={handleReset} variant="outline" size="lg" className="w-full max-w-sm">
+                            <Button onClick={handleReset} variant="outline" size="lg" className="w-full max-w-xs">
                                 <RefreshCw className="mr-2 h-5 w-5" />
                                 Clear Photo
                             </Button>
@@ -278,7 +278,7 @@ const DashboardContent = () => {
     
                 {analysisResult && (
                     <div className="space-y-6 animate-in fade-in-0 duration-500">
-                        <Card>
+                        <Card className="animate-in fade-in-0 duration-500">
                             <CardHeader>
                                 <CardTitle>Aesthetic Score</CardTitle>
                                 <CardDescription>An overall score based on facial harmony, balance, and skin clarity.</CardDescription>
@@ -294,7 +294,7 @@ const DashboardContent = () => {
     
                         {isGuest ? <LockedContent signIn={signInWithGoogle} /> : (
                             <>
-                                <Card className="bg-accent/50">
+                                <Card className="bg-accent/50 animate-in fade-in-0 duration-500 delay-100">
                                     <CardHeader><CardTitle>Overall Impression</CardTitle></CardHeader>
                                     <CardContent className="space-y-4">
                                         <div className="flex items-center gap-4">
@@ -308,7 +308,7 @@ const DashboardContent = () => {
                                     </CardContent>
                                 </Card>
         
-                                <Accordion type="single" collapsible className="w-full" defaultValue="item-0">
+                                <Accordion type="single" collapsible className="w-full animate-in fade-in-0 duration-500 delay-200" defaultValue="item-0">
                                     {analysisResult.featureAnalysis.map((feature, index) => (
                                         <AccordionItem value={`item-${index}`} key={index}>
                                             <AccordionTrigger className="text-lg font-semibold">{feature.feature}</AccordionTrigger>
@@ -327,7 +327,7 @@ const DashboardContent = () => {
                                 </Accordion>
                                 
                                 {analysisResult.personalizedPlan && analysisResult.personalizedPlan.length > 0 && (
-                                    <Card className="border-primary/50 bg-primary/5">
+                                    <Card className="border-primary/50 bg-primary/5 animate-in fade-in-0 duration-500 delay-300">
                                         <CardHeader>
                                             <CardTitle className="flex items-center gap-2"><Target className="h-6 w-6 text-primary" />Your Personalized Plan</CardTitle>
                                             <CardDescription>A step-by-step guide based on your aesthetic goal.</CardDescription>
@@ -343,7 +343,7 @@ const DashboardContent = () => {
                                     </Card>
                                 )}
         
-                                <Card className="bg-accent/50">
+                                <Card className="bg-accent/50 animate-in fade-in-0 duration-500 delay-400">
                                     <CardHeader><CardTitle>Skincare Recommendations</CardTitle></CardHeader>
                                     <CardContent className="space-y-4">
                                         {analysisResult.skincareRecommendations.map((rec, index) => (
