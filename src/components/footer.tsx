@@ -27,7 +27,7 @@ export const Footer = () => (
                   <h4 className="font-semibold text-foreground">Legal</h4>
                   <nav className="flex flex-col gap-2">
                       <Link href="/terms" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>Terms of Service</Link>
-                      <Link href="#" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>Privacy Policy</Link>
+                      <Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>Privacy Policy</Link>
                       <Link href="#" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>Cookie Policy</Link>
                   </nav>
               </div>

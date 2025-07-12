@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useAuth } from '@/hooks/use-auth';
@@ -51,7 +52,7 @@ export default function LoginPage() {
                 Terms of Service
               </Link>{' '}
               and{' '}
-              <Link href="#" className="underline underline-offset-4 hover:text-primary">
+              <Link href="/privacy" className="underline underline-offset-4 hover:text-primary">
                 Privacy Policy
               </Link>
               .
