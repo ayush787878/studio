@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     siteName: 'Facelyze',
     images: [
       {
-        url: 'https://placehold.co/1200x630.png',
+        url: 'https://i.ibb.co/PGmC0pBK/Untitled-design-6.png',
         width: 1200,
         height: 630,
         alt: 'Facelyze AI Face Analysis',
@@ -31,9 +31,55 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Facelyze - AI Face Analysis & Aesthetic Scoring',
     description: 'Get a detailed AI analysis of your facial aesthetics, personalized scores, and skincare recommendations.',
-    images: ['https://placehold.co/1200x630.png'],
+    images: ['https://i.ibb.co/PGmC0pBK/Untitled-design-6.png'],
   },
   metadataBase: new URL('https://facelyze.com'),
+  icons: {
+    icon: 'https://i.ibb.co/PGmC0pBK/Untitled-design-6.png',
+    shortcut: 'https://i.ibb.co/PGmC0pBK/Untitled-design-6.png',
+    apple: 'https://i.ibb.co/PGmC0pBK/Untitled-design-6.png',
+  },
+};
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Facelyze",
+  "url": "https://facelyze.com/",
+  "potentialAction": [
+    {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://facelyze.com/?s={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    }
+  ],
+  "mainEntity": {
+    "@type": "WebPage",
+    "mainEntityOfPage": {
+      "@type": "WebSite",
+      "url": "https://facelyze.com"
+    },
+    "hasPart": [
+      {
+        "@type": "WebPage",
+        "name": "Dashboard",
+        "url": "https://facelyze.com/"
+      },
+      {
+        "@type": "WebPage",
+        "name": "Scan Face",
+        "url": "https://facelyze.com/scan-face"
+      },
+      {
+        "@type": "WebPage",
+        "name": "Advisory",
+        "url": "https://facelyze.com/advisory"
+      }
+    ]
+  }
 };
 
 export default function RootLayout({
@@ -48,6 +94,10 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
       </head>
       <body className="font-sans antialiased min-h-screen bg-background text-foreground">
         <ThemeProvider
