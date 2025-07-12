@@ -15,10 +15,12 @@ import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { updateUserTokens, saveAnalysis } from '@/services/userService';
 import { analyzeFace, type AnalyzeFaceOutput } from '@/ai/flows/feature-analysis';
-import { UploadCloud, Sparkles, Loader2, RefreshCw, Target, Lock } from 'lucide-react';
+import { UploadCloud, Sparkles, Loader2, RefreshCw, Target, Lock, Camera, FlipHorizontal, VideoOff } from 'lucide-react';
 import { Logo } from '@/components/logo';
 import { Footer } from '@/components/footer';
 import { PublicHeader } from '@/components/public-header';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 const LockedContent = ({ signIn }: { signIn: () => Promise<void> }) => (
     <div className="relative mt-6">
@@ -62,13 +64,17 @@ const DashboardContent = () => {
     const { userProfile, signInWithGoogle, refreshUserProfile } = useAuth();
     const { toast } = useToast();
 
-    const [imageFile, setImageFile] = useState<File | null>(null);
-    const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [imageDataUri, setImageDataUri] = useState<string | null>(null);
     const [aestheticGoal, setAestheticGoal] = useState('');
     const [analysisResult, setAnalysisResult] = useState<AnalyzeFaceOutput | null>(null);
     const [isResultPendingSave, setIsResultPendingSave] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
+    const [activeTab, setActiveTab] = useState('upload');
+
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
     // Effect to save analysis after a guest logs in
     useEffect(() => {
@@ -86,7 +92,7 @@ const DashboardContent = () => {
             
             toast({ title: "Unlocking results...", description: "Saving to your account and deducting 3 tokens." });
             try {
-              await saveAnalysis(userProfile.uid, imagePreview!, analysisResult);
+              await saveAnalysis(userProfile.uid, imageDataUri!, analysisResult);
               const newTokens = userProfile.tokens - 3;
               await updateUserTokens(userProfile.uid, newTokens);
               await refreshUserProfile();
@@ -104,24 +110,71 @@ const DashboardContent = () => {
           };
           saveOnLogin();
         }
-    }, [userProfile, analysisResult, isResultPendingSave, imagePreview, toast, refreshUserProfile]);
+    }, [userProfile, analysisResult, isResultPendingSave, imageDataUri, toast, refreshUserProfile]);
+    
+    useEffect(() => {
+        const getCameraPermission = async () => {
+          if (activeTab !== 'camera') return;
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            setHasCameraPermission(true);
+            if (videoRef.current) {
+              videoRef.current.srcObject = stream;
+            }
+          } catch (error) {
+            console.error('Error accessing camera:', error);
+            setHasCameraPermission(false);
+            toast({
+              variant: 'destructive',
+              title: 'Camera Access Denied',
+              description: 'Please enable camera permissions in your browser settings.',
+            });
+          }
+        };
+        getCameraPermission();
+    
+        return () => {
+          // Cleanup: stop video stream when component unmounts or tab changes
+          if (videoRef.current && videoRef.current.srcObject) {
+            const stream = videoRef.current.srcObject as MediaStream;
+            stream.getTracks().forEach(track => track.stop());
+          }
+        };
+    }, [activeTab, toast]);
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
-          setImageFile(file);
           setAnalysisResult(null);
           setIsResultPendingSave(false);
           const reader = new FileReader();
           reader.onloadend = () => {
-            setImagePreview(reader.result as string);
+            setImageDataUri(reader.result as string);
           };
           reader.readAsDataURL(file);
         }
     };
+
+    const handleTakePhoto = () => {
+        if (!videoRef.current || !canvasRef.current) return;
+        
+        const video = videoRef.current;
+        const canvas = canvasRef.current;
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+    
+        const context = canvas.getContext('2d');
+        if (context) {
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const dataUri = canvas.toDataURL('image/jpeg');
+            setImageDataUri(dataUri);
+            setAnalysisResult(null);
+            setIsResultPendingSave(false);
+        }
+    };
   
     const handleAnalyzeClick = async () => {
-        if (!imageFile) return;
+        if (!imageDataUri) return;
 
         if (userProfile && userProfile.tokens < 3) {
             toast({ variant: "destructive", title: "Analysis Failed", description: "You don't have enough tokens. Each analysis costs 3 tokens." });
@@ -132,47 +185,49 @@ const DashboardContent = () => {
         setAnalysisResult(null);
         setIsResultPendingSave(false);
 
-        const reader = new FileReader();
-        reader.readAsDataURL(imageFile);
+        try {
+            const result = await analyzeFace({ photoDataUri: imageDataUri, aestheticGoal });
+            setAnalysisResult(result);
     
-        reader.onerror = () => {
-          setIsLoading(false);
-          toast({ variant: "destructive", title: "File Error", description: "Could not read the image file." });
-        };
-    
-        reader.onloadend = async () => {
-            try {
-                const base64data = reader.result as string;
-                const result = await analyzeFace({ photoDataUri: base64data, aestheticGoal });
-                setAnalysisResult(result);
-        
-                if (userProfile) { // Logged-in user flow
-                    await saveAnalysis(userProfile.uid, base64data, result);
-                    const newTokens = userProfile.tokens - 3;
-                    await updateUserTokens(userProfile.uid, newTokens);
-                    await refreshUserProfile();
-                    toast({ title: "Analysis Complete & Saved", description: "3 tokens have been deducted." });
-                } else { // Guest user flow
-                    setIsResultPendingSave(true);
-                    toast({ title: "Preview Generated!", description: "Log in to unlock your full detailed analysis." });
-                }
-            } catch (error) {
-                console.error("Analysis failed:", error);
-                toast({ variant: "destructive", title: "Analysis Failed", description: "Something went wrong. Please try again." });
-            } finally {
-                setIsLoading(false);
+            if (userProfile) { // Logged-in user flow
+                await saveAnalysis(userProfile.uid, imageDataUri, result);
+                const newTokens = userProfile.tokens - 3;
+                await updateUserTokens(userProfile.uid, newTokens);
+                await refreshUserProfile();
+                toast({ title: "Analysis Complete & Saved", description: "3 tokens have been deducted." });
+            } else { // Guest user flow
+                setIsResultPendingSave(true);
+                toast({ title: "Preview Generated!", description: "Log in to unlock your full detailed analysis." });
             }
-        };
+        } catch (error) {
+            console.error("Analysis failed:", error);
+            toast({ variant: "destructive", title: "Analysis Failed", description: "Something went wrong. Please try again." });
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const handleReset = () => {
-        setImageFile(null);
-        setImagePreview(null);
+        setImageDataUri(null);
         setAnalysisResult(null);
         setIsResultPendingSave(false);
         setAestheticGoal('');
         if(fileInputRef.current) {
             fileInputRef.current.value = "";
+        }
+        // Re-request camera if in camera tab and permission was given
+        if (activeTab === 'camera' && hasCameraPermission) {
+            const getCameraPermission = async () => {
+              try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                if (videoRef.current) {
+                  videoRef.current.srcObject = stream;
+                }
+              } catch (error) {
+                console.error('Error re-accessing camera:', error);
+              }
+            };
+            getCameraPermission();
         }
     }
   
@@ -189,33 +244,72 @@ const DashboardContent = () => {
                         <Sparkles /> AI Face Analysis
                         </CardTitle>
                         <CardDescription>
-                        Upload a clear, front-facing photo to begin. Optionally, describe your goals.
+                          Choose your input method. Optionally, describe your goals.
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <div className="space-y-4 text-center">
-                            <input
-                                type="file"
-                                ref={fileInputRef}
-                                onChange={handleImageChange}
-                                accept="image/png, image/jpeg"
-                                className="hidden"
-                            />
-                            <div
-                                onClick={() => !isLoading && fileInputRef.current?.click()}
-                                className={`group aspect-square max-w-xs mx-auto border-2 border-dashed border-muted-foreground/50 rounded-lg flex items-center justify-center transition-colors ${!isLoading ? 'cursor-pointer hover:border-primary' : 'cursor-not-allowed'}`}
-                            >
-                                {imagePreview ? (
-                                <Image src={imagePreview} alt="Selected face" width={400} height={400} className="rounded-lg object-cover aspect-square" />
-                                ) : (
-                                <div className="flex flex-col items-center gap-2 text-muted-foreground">
-                                    <UploadCloud className="h-12 w-12" />
-                                    <p>Click to upload a photo</p>
-                                    <p className="text-xs">PNG or JPG</p>
+                        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                          <TabsList className="grid w-full grid-cols-2">
+                            <TabsTrigger value="upload">
+                              <UploadCloud className="mr-2 h-4 w-4" /> Upload Photo
+                            </TabsTrigger>
+                            <TabsTrigger value="camera">
+                              <Camera className="mr-2 h-4 w-4" /> Use Camera
+                            </TabsTrigger>
+                          </TabsList>
+                          <TabsContent value="upload">
+                            <div className="space-y-4 text-center pt-4">
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    onChange={handleImageChange}
+                                    accept="image/png, image/jpeg"
+                                    className="hidden"
+                                />
+                                <div
+                                    onClick={() => !isLoading && fileInputRef.current?.click()}
+                                    className={`group aspect-square max-w-xs mx-auto border-2 border-dashed border-muted-foreground/50 rounded-lg flex items-center justify-center transition-colors ${!isLoading ? 'cursor-pointer hover:border-primary' : 'cursor-not-allowed'}`}
+                                >
+                                    {imageDataUri ? (
+                                      <Image src={imageDataUri} alt="Selected face" width={400} height={400} className="rounded-lg object-cover aspect-square" />
+                                    ) : (
+                                      <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                                          <UploadCloud className="h-12 w-12" />
+                                          <p>Click to upload a photo</p>
+                                          <p className="text-xs">PNG or JPG</p>
+                                      </div>
+                                    )}
                                 </div>
+                            </div>
+                          </TabsContent>
+                          <TabsContent value="camera">
+                            <div className="space-y-4 text-center pt-4">
+                                <div className="aspect-square max-w-xs mx-auto border-2 border-dashed border-muted-foreground/50 rounded-lg flex items-center justify-center overflow-hidden">
+                                  {imageDataUri ? (
+                                     <Image src={imageDataUri} alt="Captured face" width={400} height={400} className="object-cover aspect-square" />
+                                  ) : (
+                                    <>
+                                      <video ref={videoRef} className="w-full aspect-video rounded-md" autoPlay muted playsInline />
+                                      {hasCameraPermission === false && (
+                                          <div className="absolute flex flex-col items-center gap-2 text-muted-foreground p-4">
+                                              <VideoOff className="h-12 w-12" />
+                                              <p>Camera access denied</p>
+                                          </div>
+                                      )}
+                                    </>
+                                  )}
+                                </div>
+                                {!imageDataUri && (
+                                    <Button onClick={handleTakePhoto} disabled={isLoading || hasCameraPermission !== true}>
+                                      <Camera className="mr-2 h-5 w-5" /> Take Photo
+                                    </Button>
                                 )}
                             </div>
-                        </div>
+                          </TabsContent>
+                        </Tabs>
+
+                        <canvas ref={canvasRef} className="hidden" />
+
                         <div className="space-y-2 pt-4 max-w-xs mx-auto">
                             <Label htmlFor="aesthetic-goal" className="font-semibold">What is your aesthetic goal? (Optional)</Label>
                             <Textarea
@@ -227,10 +321,11 @@ const DashboardContent = () => {
                                 disabled={isLoading}
                             />
                         </div>
+
                         <div className="flex flex-col items-center gap-2 pt-4">
                             <Button
                                 onClick={handleAnalyzeClick}
-                                disabled={!imageFile || isLoading || (!isGuest && tokens < 3)}
+                                disabled={!imageDataUri || isLoading || (!isGuest && tokens < 3)}
                                 size="lg"
                                 className="w-full max-w-xs"
                             >
@@ -238,7 +333,7 @@ const DashboardContent = () => {
                                 : isGuest ? ('Analyze Face (Free Preview)') 
                                 : (`Analyze Face (3 Tokens)`)}
                             </Button>
-                            {imagePreview && (
+                            {imageDataUri && (
                                 <Button onClick={handleReset} variant="outline" size="lg" className="w-full max-w-xs">
                                     <RefreshCw className="mr-2 h-5 w-5" />
                                     Clear Photo
@@ -397,3 +492,5 @@ export default function HomePage() {
         </div>
     );
 }
+
+    
