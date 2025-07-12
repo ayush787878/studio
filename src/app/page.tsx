@@ -4,18 +4,17 @@
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { AppShell } from '@/components/app-shell';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Progress } from '@/components/ui/progress';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { updateUserTokens, saveAnalysis } from '@/services/userService';
 import { analyzeFace, type AnalyzeFaceOutput } from '@/ai/flows/feature-analysis';
-import { UploadCloud, Sparkles, Loader2, RefreshCw, Target, Lock, Camera, FlipHorizontal, VideoOff } from 'lucide-react';
+import { UploadCloud, Sparkles, Loader2, RefreshCw, Target, Lock, Camera, VideoOff } from 'lucide-react';
 import { Logo } from '@/components/logo';
 import { Footer } from '@/components/footer';
 import { PublicHeader } from '@/components/public-header';
@@ -65,7 +64,6 @@ const DashboardContent = () => {
     const { toast } = useToast();
 
     const [imageDataUri, setImageDataUri] = useState<string | null>(null);
-    const [aestheticGoal, setAestheticGoal] = useState('');
     const [analysisResult, setAnalysisResult] = useState<AnalyzeFaceOutput | null>(null);
     const [isResultPendingSave, setIsResultPendingSave] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -186,6 +184,7 @@ const DashboardContent = () => {
         setIsResultPendingSave(false);
 
         try {
+            const aestheticGoal = userProfile?.aestheticGoal || '';
             const result = await analyzeFace({ photoDataUri: imageDataUri, aestheticGoal });
             setAnalysisResult(result);
     
@@ -211,7 +210,6 @@ const DashboardContent = () => {
         setImageDataUri(null);
         setAnalysisResult(null);
         setIsResultPendingSave(false);
-        setAestheticGoal('');
         if(fileInputRef.current) {
             fileInputRef.current.value = "";
         }
@@ -236,6 +234,15 @@ const DashboardContent = () => {
   
     return (
         <div className="animate-in fade-in-0 duration-500 space-y-8">
+             {userProfile && !userProfile.aestheticGoal && (
+                <Alert>
+                    <Target className="h-4 w-4" />
+                    <AlertTitle>Set Your Aesthetic Goal!</AlertTitle>
+                    <AlertDescription>
+                        You haven't set a goal yet. Visit the <Link href="/learning-plan" className="font-semibold text-primary hover:underline">Learning Plan</Link> page to create a personalized plan and get more tailored analysis results.
+                    </AlertDescription>
+                </Alert>
+            )}
             <div className="grid lg:grid-cols-2 gap-12">
                 {/* Left Column: Uploader */}
                 <Card className="lg:sticky lg:top-24 h-fit">
@@ -244,7 +251,7 @@ const DashboardContent = () => {
                         <Sparkles /> AI Face Analysis
                         </CardTitle>
                         <CardDescription>
-                          Choose your input method. Optionally, describe your goals.
+                          Choose your input method. Your saved aesthetic goal will be used automatically.
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -309,19 +316,7 @@ const DashboardContent = () => {
                         </Tabs>
 
                         <canvas ref={canvasRef} className="hidden" />
-
-                        <div className="space-y-2 pt-4 max-w-xs mx-auto">
-                            <Label htmlFor="aesthetic-goal" className="font-semibold">What is your aesthetic goal? (Optional)</Label>
-                            <Textarea
-                                id="aesthetic-goal"
-                                placeholder="e.g., I'd like to have a more defined jawline and clearer skin."
-                                value={aestheticGoal}
-                                onChange={(e) => setAestheticGoal(e.target.value)}
-                                className="resize-none"
-                                disabled={isLoading}
-                            />
-                        </div>
-
+                        
                         <div className="flex flex-col items-center gap-2 pt-4">
                             <Button
                                 onClick={handleAnalyzeClick}
@@ -492,5 +487,3 @@ export default function HomePage() {
         </div>
     );
 }
-
-    

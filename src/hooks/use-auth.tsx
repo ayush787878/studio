@@ -42,7 +42,7 @@ const MissingFirebaseConfig = () => (
                 <p>NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=...</p>
                 <p>NEXT_PUBLIC_FIREBASE_APP_ID=...</p>
             </div>
-            <p>You can find these values in your Firebase project settings under: <br /> <span className="font-semibold">Project Settings &gt; General &gt; Your apps &gt; Web app</span>.</p>
+            <p>You can find these values in your Firebase project settings under: <br /> <span className="font-semibold">Project Settings > General > Your apps > Web app</span>.</p>
         </CardContent>
       </Card>
     </div>
@@ -56,6 +56,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const refreshUserProfile = useCallback(async () => {
     if (!auth?.currentUser) {
+        setUserProfile(null);
         return;
     }
     try {
@@ -125,7 +126,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       await signInWithPopup(auth, provider);
       // The onAuthStateChanged listener will handle creating the user profile and routing.
-      router.push('/dashboard');
+      router.push('/');
     } catch (error: any) {
       console.error("Error signing in with Google", error);
       let description = "An unknown error occurred. Please try again.";

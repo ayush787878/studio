@@ -16,6 +16,7 @@ export type UserProfile = {
   displayName: string | null;
   photoURL: string | null;
   tokens: number;
+  aestheticGoal?: string;
 };
 
 export interface AnalysisResult {
@@ -52,6 +53,7 @@ export async function getOrCreateUser(user: AuthUser): Promise<UserProfile> {
       displayName: user.displayName,
       photoURL: user.photoURL,
       tokens: INITIAL_TOKENS,
+      aestheticGoal: '',
     };
     await set(userRef, newUserProfile);
     return newUserProfile;
@@ -69,6 +71,19 @@ export async function updateUserTokens(uid: string, newTokens: number): Promise<
     }
     const userRef = ref(rtdb, 'users/' + uid);
     await update(userRef, { tokens: newTokens });
+}
+
+/**
+ * Saves or updates the user's aesthetic goal.
+ * @param uid The user's ID.
+ * @param goal The aesthetic goal text.
+ */
+export async function saveUserGoal(uid: string, goal: string): Promise<void> {
+  if (!rtdb) {
+    throw new Error('Firebase is not configured.');
+  }
+  const userRef = ref(rtdb, 'users/' + uid);
+  await update(userRef, { aestheticGoal: goal });
 }
 
 /**
