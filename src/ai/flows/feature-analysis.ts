@@ -56,7 +56,9 @@ Analyze the provided photo. Identify key facial features, and provide personaliz
 - Provide an 'aestheticScore' from 0 to 100 based on overall facial harmony, balance, and clarity of the skin. Be objective and professional.
 - For the 'overallImpression', provide both a textual summary in the 'text' field and a separate numerical 'rating' out of 100 that reflects the general positive impression.
 - For each item in 'featureAnalysis', you must provide a numerical 'rating' from 0 to 100 for that specific feature, in addition to the textual analysis.
-- For 'skincareRecommendations', provide at least 3 detailed and actionable recommendations. For each one, the 'reason' should be a comprehensive, multi-sentence explanation. Connect the recommendation directly to specific observations from the user's photo (e.g., 'Due to the observed dryness around the cheeks, a hydrating serum is recommended to...').
+- For 'skincareRecommendations', provide at least 3 detailed and actionable recommendations.
+  - For each recommendation, the 'recommendation' field should be a clear, actionable title (e.g., "Use a Gentle Hydrating Cleanser").
+  - The 'reason' field must be a comprehensive, multi-sentence explanation. It must connect the recommendation directly to specific observations from the user's photo (e.g., "Due to the observed mild redness and what appears to be some dry patches on your cheeks, a gentle hydrating cleanser is recommended..."). It should also suggest specific product types or key ingredients to look for (e.g., "Look for cleansers with ingredients like glycerin or hyaluronic acid, and avoid harsh sulfates.").
 
 {{#if aestheticGoal}}
 - The user has specified an aesthetic goal: "{{aestheticGoal}}". Based on your analysis of their photo, generate a 'personalizedPlan'. This plan must be a series of actionable, step-by-step instructions to help them work towards their goal. The steps should be safe, realistic, and constructive, potentially including skincare routines, facial exercises, or lifestyle suggestions. For each step, provide a clear 'step' title and a detailed 'description' explaining how to do it and why it helps.
