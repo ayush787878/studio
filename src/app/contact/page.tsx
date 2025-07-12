@@ -32,10 +32,8 @@ export default function ContactPage() {
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <p className="text-muted-foreground mb-1">For general inquiries:</p>
-                            <a href="mailto:support@facelyze.com" className="font-semibold text-primary hover:underline">support@facelyze.com</a>
-                             <p className="text-muted-foreground mt-4 mb-1">For media and press:</p>
-                            <a href="mailto:press@facelyze.com" className="font-semibold text-primary hover:underline">press@facelyze.com</a>
+                            <p className="text-muted-foreground mb-1">For all inquiries, please email:</p>
+                            <a href="mailto:japearseller@gmail.com" className="font-semibold text-primary hover:underline">japearseller@gmail.com</a>
                         </CardContent>
                     </Card>
                      <Card>
