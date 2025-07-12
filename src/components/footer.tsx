@@ -51,7 +51,7 @@ export const Footer = () => (
       <div className="border-t bg-background">
         <div className="container flex flex-col items-center justify-between gap-2 py-4 sm:flex-row">
             <p className="text-sm text-muted-foreground">&copy; 2024 Facelyze.com. All rights reserved.</p>
-            <p className="text-sm text-muted-foreground">A project by AI enthusiasts.</p>
+            <p className="text-sm text-muted-foreground">Powered by xjavzor</p>
         </div>
       </div>
     </footer>
