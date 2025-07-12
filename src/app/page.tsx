@@ -275,7 +275,7 @@ const DashboardContent = () => {
                     <AlertDialogFooter className="sm:justify-center gap-2">
                         <AlertDialogCancel>Close</AlertDialogCancel>
                         <AlertDialogAction asChild>
-                            <Link href="https://zplaybox.com" target="_blank" rel="noopener noreferrer">
+                            <Link href="https://facelyze.com" target="_blank" rel="noopener noreferrer">
                                 Claim Offer
                             </Link>
                         </AlertDialogAction>
