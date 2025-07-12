@@ -8,7 +8,7 @@ export function Logo() {
         alt="Facelyze Logo"
         width={24}
         height={24}
-        className="h-6 w-6"
+        className="h-6 w-6 rounded-full"
       />
       <span className="font-semibold text-lg text-foreground">
         Facelyze
