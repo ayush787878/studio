@@ -2,7 +2,6 @@
 "use client";
 
 import { useState } from 'react';
-import Script from 'next/script';
 import { AppShell } from '@/components/app-shell';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -70,13 +69,6 @@ export default function LearningPlanPage() {
   };
 
   return (
-    <>
-      <Script
-        async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9124896176133484"
-        crossOrigin="anonymous"
-        strategy="afterInteractive"
-      />
       <AppShell>
         <div className="space-y-8 animate-in fade-in-0 duration-500">
           <div className="flex items-center gap-4">
@@ -160,6 +152,5 @@ export default function LearningPlanPage() {
 
         </div>
       </AppShell>
-    </>
   );
 }
