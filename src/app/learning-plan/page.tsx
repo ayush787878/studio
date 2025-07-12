@@ -48,12 +48,15 @@ export default function LearningPlanPage() {
 
     try {
       // First, save the goal to the user's profile
-      await saveUserGoal(userProfile!.uid, aestheticGoal);
-      await refreshUserProfile(); // Refresh context to have the latest goal
-      toast({
-        title: "Goal Saved!",
-        description: "Your aesthetic goal has been updated in your profile.",
-      });
+      if (userProfile) {
+        await saveUserGoal(userProfile.uid, aestheticGoal);
+        await refreshUserProfile(); // Refresh context to have the latest goal
+        toast({
+          title: "Goal Saved!",
+          description: "Your aesthetic goal has been updated in your profile.",
+        });
+      }
+
 
       // Then, generate the learning plan
       const result = await generateLearningPlan({ aestheticGoal });
