@@ -3,10 +3,7 @@ import { PublicHeader } from "@/components/public-header";
 import { Footer } from "@/components/footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Mail, HelpCircle, Newspaper } from "lucide-react";
+import { Mail, HelpCircle } from "lucide-react";
 import Link from "next/link";
 
 export default function ContactPage() {
@@ -22,7 +19,7 @@ export default function ContactPage() {
                 </p>
             </section>
 
-            <section className="mt-16 grid md:grid-cols-2 gap-12 items-start">
+            <section className="mt-16 max-w-lg mx-auto">
                 <div className="space-y-8">
                     <Card>
                         <CardHeader>
@@ -50,36 +47,6 @@ export default function ContactPage() {
                             <Button asChild variant="link" className="px-0">
                                 <Link href="/advisory">Explore our Guides</Link>
                             </Button>
-                        </CardContent>
-                    </Card>
-                </div>
-                <div>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Send a Message</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                             <form className="space-y-4">
-                                <div className="grid sm:grid-cols-2 gap-4">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="first-name">First Name</Label>
-                                        <Input id="first-name" placeholder="John" />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="last-name">Last Name</Label>
-                                        <Input id="last-name" placeholder="Doe" />
-                                    </div>
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="email">Email</Label>
-                                    <Input id="email" type="email" placeholder="john.doe@example.com" />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="message">Message</Label>
-                                    <Textarea id="message" placeholder="Your message..." rows={5} />
-                                </div>
-                                <Button type="submit" className="w-full">Send Message</Button>
-                            </form>
                         </CardContent>
                     </Card>
                 </div>
