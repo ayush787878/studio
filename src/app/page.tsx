@@ -12,14 +12,16 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Progress } from '@/components/ui/progress';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
-import { updateUserTokens, saveAnalysis } from '@/services/userService';
+import { updateUserTokens, saveAnalysis, incrementAnalysisCount } from '@/services/userService';
 import { analyzeFace, type AnalyzeFaceOutput } from '@/ai/flows/feature-analysis';
-import { UploadCloud, Sparkles, Loader2, RefreshCw, Target, Lock, Camera, VideoOff } from 'lucide-react';
+import { UploadCloud, Sparkles, Loader2, RefreshCw, Target, Lock, Camera, VideoOff, Gift } from 'lucide-react';
 import { Logo } from '@/components/logo';
 import { Footer } from '@/components/footer';
 import { PublicHeader } from '@/components/public-header';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
 
 const LockedContent = ({ signIn }: { signIn: () => Promise<void> }) => (
     <div className="relative mt-6">
@@ -69,6 +71,7 @@ const DashboardContent = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
     const [activeTab, setActiveTab] = useState('upload');
+    const [showPromo, setShowPromo] = useState(false);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -91,6 +94,7 @@ const DashboardContent = () => {
             toast({ title: "Unlocking results...", description: "Saving to your account and deducting 3 tokens." });
             try {
               await saveAnalysis(userProfile.uid, imageDataUri!, analysisResult);
+              await incrementAnalysisCount(userProfile.uid);
               const newTokens = userProfile.tokens - 3;
               await updateUserTokens(userProfile.uid, newTokens);
               await refreshUserProfile();
@@ -99,6 +103,13 @@ const DashboardContent = () => {
                 title: "Analysis Unlocked & Saved!",
                 description: "Your full results are now available.",
               });
+
+              // Check for promo after saving for the first time
+              const newAnalysisCount = userProfile.analysisCount + 1;
+              if (newAnalysisCount === 1 || newAnalysisCount === 3) {
+                setShowPromo(true);
+              }
+
             } catch (error) {
               console.error("Failed to save analysis on login:", error);
               toast({ title: "Error", description: "Could not save the analysis.", variant: "destructive" });
@@ -190,10 +201,20 @@ const DashboardContent = () => {
     
             if (userProfile) { // Logged-in user flow
                 await saveAnalysis(userProfile.uid, imageDataUri, result);
+                await incrementAnalysisCount(userProfile.uid);
                 const newTokens = userProfile.tokens - 3;
                 await updateUserTokens(userProfile.uid, newTokens);
-                await refreshUserProfile();
+                
+                await refreshUserProfile(); // This will give us the new analysisCount
+                
                 toast({ title: "Analysis Complete & Saved", description: "3 tokens have been deducted." });
+                
+                // Use the fresh profile data to check for promo
+                const newAnalysisCount = (userProfile.analysisCount || 0) + 1;
+                if (newAnalysisCount === 1 || newAnalysisCount === 3) {
+                    setShowPromo(true);
+                }
+
             } else { // Guest user flow
                 setIsResultPendingSave(true);
                 toast({ title: "Preview Generated!", description: "Log in to unlock your full detailed analysis." });
@@ -234,6 +255,34 @@ const DashboardContent = () => {
   
     return (
         <div className="animate-in fade-in-0 duration-500 space-y-8">
+            <AlertDialog open={showPromo} onOpenChange={setShowPromo}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <div className="flex justify-center mb-4">
+                            <div className="h-16 w-16 bg-primary/10 rounded-full flex items-center justify-center">
+                                <Gift className="h-8 w-8 text-primary" />
+                            </div>
+                        </div>
+                        <AlertDialogTitle className="text-center text-2xl">A Special Offer For You!</AlertDialogTitle>
+                        <AlertDialogDescription className="text-center pt-2">
+                           Get our complete **Health Care Full Book Advisor** for a comprehensive guide to self-improvement.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <div className="flex items-center justify-center gap-4 my-4">
+                        <span className="text-4xl font-bold text-primary">$23</span>
+                        <Badge variant="destructive" className="text-lg py-1 px-3">95% OFF</Badge>
+                    </div>
+                    <AlertDialogFooter className="sm:justify-center gap-2">
+                        <AlertDialogCancel>Close</AlertDialogCancel>
+                        <AlertDialogAction asChild>
+                            <Link href="https://zplaybox.com" target="_blank" rel="noopener noreferrer">
+                                Claim Offer
+                            </Link>
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
              {userProfile && !userProfile.aestheticGoal && (
                 <Alert>
                     <Target className="h-4 w-4" />

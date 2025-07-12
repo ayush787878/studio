@@ -1,5 +1,5 @@
 import { rtdb } from '@/lib/firebase';
-import { ref, get, set, update, push } from 'firebase/database';
+import { ref, get, set, update, push, increment } from 'firebase/database';
 import { type AnalyzeFaceOutput } from '@/ai/flows/feature-analysis';
 
 // A simple interface for the properties we need from the Firebase Auth user.
@@ -17,6 +17,7 @@ export type UserProfile = {
   photoURL: string | null;
   tokens: number;
   aestheticGoal?: string;
+  analysisCount: number;
 };
 
 export interface AnalysisResult {
@@ -45,7 +46,13 @@ export async function getOrCreateUser(user: AuthUser): Promise<UserProfile> {
   const snapshot = await get(userRef);
 
   if (snapshot.exists()) {
-    return snapshot.val() as UserProfile;
+    // Ensure existing users have an analysisCount
+    const profile = snapshot.val() as UserProfile;
+    if (typeof profile.analysisCount === 'undefined') {
+        profile.analysisCount = 0;
+        await update(userRef, { analysisCount: 0 });
+    }
+    return profile;
   } else {
     const newUserProfile: UserProfile = {
       uid: user.uid,
@@ -54,6 +61,7 @@ export async function getOrCreateUser(user: AuthUser): Promise<UserProfile> {
       photoURL: user.photoURL,
       tokens: INITIAL_TOKENS,
       aestheticGoal: '',
+      analysisCount: 0,
     };
     await set(userRef, newUserProfile);
     return newUserProfile;
@@ -71,6 +79,18 @@ export async function updateUserTokens(uid: string, newTokens: number): Promise<
     }
     const userRef = ref(rtdb, 'users/' + uid);
     await update(userRef, { tokens: newTokens });
+}
+
+/**
+ * Increments the analysis count for a user by 1.
+ * @param uid The user's ID.
+ */
+export async function incrementAnalysisCount(uid: string): Promise<void> {
+    if (!rtdb) {
+        throw new Error('Firebase is not configured.');
+    }
+    const userRef = ref(rtdb, 'users/' + uid);
+    await update(userRef, { analysisCount: increment(1) });
 }
 
 /**
