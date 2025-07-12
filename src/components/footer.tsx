@@ -28,7 +28,7 @@ export const Footer = () => (
                   <nav className="flex flex-col gap-2">
                       <Link href="/terms" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>Terms of Service</Link>
                       <Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>Privacy Policy</Link>
-                      <Link href="#" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>Cookie Policy</Link>
+                      <Link href="/cookie-policy" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>Cookie Policy</Link>
                   </nav>
               </div>
               <div className="space-y-4">
