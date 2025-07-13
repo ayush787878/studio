@@ -9,7 +9,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Progress } from '@/components/ui/progress';
 import { useAuth } from '@/hooks/use-auth';
 import { getAnalysisHistory, type AnalysisHistoryItem } from '@/services/userService';
-import { Loader2, History, Frown, Target } from 'lucide-react';
+import { History, Frown, Target } from 'lucide-react';
+import { LoadingIndicator } from '@/components/loading-indicator';
 
 export default function HistoryPage() {
   const { userProfile } = useAuth();
@@ -41,7 +42,7 @@ export default function HistoryPage() {
     return (
         <AppShell>
             <div className="flex flex-col items-center justify-center gap-4 text-center p-8 min-h-[400px]">
-                <Loader2 className="h-16 w-16 animate-spin text-primary" />
+                <LoadingIndicator />
                 <p className="text-lg font-semibold">Loading your history...</p>
             </div>
         </AppShell>

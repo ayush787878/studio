@@ -11,7 +11,8 @@ import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { saveUserGoal } from '@/services/userService';
 import { generateLearningPlan, type GenerateLearningPlanOutput } from '@/ai/flows/personalized-learning';
-import { Loader2, Sparkles, Target, AlertTriangle, Lightbulb } from 'lucide-react';
+import { Sparkles, Target, AlertTriangle, Lightbulb } from 'lucide-react';
+import { LoadingIndicator } from '@/components/loading-indicator';
 
 const icons: { [key: string]: React.ReactNode } = {
   Skincare: <span className="text-lg">🧴</span>,
@@ -99,7 +100,7 @@ export default function LearningPlanPage() {
                 />
               </div>
               <Button onClick={handleGeneratePlan} disabled={isLoading || !aestheticGoal.trim()} size="lg">
-                {isLoading ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" />Generating & Saving...</> : <><Sparkles className="mr-2 h-5 w-5" />Generate My Plan</>}
+                {isLoading ? "Generating & Saving..." : <><Sparkles className="mr-2 h-5 w-5" />Generate My Plan</>}
               </Button>
             </CardContent>
           </Card>
@@ -107,7 +108,7 @@ export default function LearningPlanPage() {
           {isLoading && (
               <Card>
                   <CardContent className="flex flex-col items-center justify-center gap-4 text-center p-8 min-h-[300px]">
-                      <Loader2 className="h-16 w-16 animate-spin text-primary" />
+                      <LoadingIndicator />
                       <p className="text-lg font-semibold">Our AI is crafting your personalized plan...</p>
                       <p className="text-muted-foreground">This may take a moment.</p>
                   </CardContent>

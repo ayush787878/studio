@@ -8,7 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { identifyPerson, type IdentifyPersonOutput } from '@/ai/flows/person-identification';
-import { UploadCloud, Sparkles, Loader2, RefreshCw, UserSearch } from 'lucide-react';
+import { UploadCloud, Sparkles, RefreshCw, UserSearch } from 'lucide-react';
+import { LoadingIndicator } from '@/components/loading-indicator';
 
 export default function ScanFacePage() {
     const { toast } = useToast();
@@ -129,7 +130,7 @@ export default function ScanFacePage() {
                                     size="lg"
                                     className="w-full max-w-sm"
                                 >
-                                    {isLoading ? (<><Loader2 className="mr-2 h-5 w-5 animate-spin" />Scanning...</>) 
+                                    {isLoading ? "Scanning..."
                                     : ('Find Details')}
                                 </Button>
                                 {imagePreview && (
@@ -147,7 +148,7 @@ export default function ScanFacePage() {
                         {isLoading && (
                             <Card>
                                 <CardContent className="flex flex-col items-center justify-center gap-4 text-center p-8 min-h-[400px]">
-                                    <Loader2 className="h-16 w-16 animate-spin text-primary" />
+                                    <LoadingIndicator />
                                     <p className="text-lg font-semibold">Our AI is scanning your photo...</p>
                                     <p className="text-muted-foreground">This may take a moment.</p>
                                 </CardContent>

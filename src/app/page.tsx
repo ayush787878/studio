@@ -14,7 +14,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { updateUserTokens, saveAnalysis, incrementAnalysisCount } from '@/services/userService';
 import { analyzeFace, type AnalyzeFaceOutput } from '@/ai/flows/feature-analysis';
-import { UploadCloud, Sparkles, Loader2, RefreshCw, Target, Lock, Camera, VideoOff, Gift } from 'lucide-react';
+import { UploadCloud, Sparkles, RefreshCw, Target, Lock, Camera, VideoOff, Gift } from 'lucide-react';
 import { Logo } from '@/components/logo';
 import { Footer } from '@/components/footer';
 import { PublicHeader } from '@/components/public-header';
@@ -22,6 +22,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
+import { LoadingIndicator } from '@/components/loading-indicator';
 
 const LockedContent = ({ signIn }: { signIn: () => Promise<void> }) => (
     <div className="relative mt-6">
@@ -363,11 +364,9 @@ const DashboardContent = () => {
                                 onClick={handleAnalyzeClick}
                                 disabled={!imageDataUri || isLoading || (!isGuest && tokens < 3)}
                                 size="lg"
-                                className="w-full max-w-xs flex items-center gap-2"
+                                className="w-full max-w-xs"
                             >
-                                {isLoading ? (<><Loader2 className="animate-spin" />Analyzing...</>) 
-                                : isGuest ? ('Analyze Face (Free Preview)') 
-                                : (<>Analyze Face (3 Tokens)</>)}
+                                {isLoading ? "Analyzing..." : isGuest ? "Analyze Face (Free Preview)" : "Analyze Face (3 Tokens)"}
                             </Button>
                             {imageDataUri && (
                                 <Button onClick={handleReset} variant="outline" size="lg" className="w-full max-w-xs flex items-center gap-2">
@@ -392,7 +391,7 @@ const DashboardContent = () => {
                     {isLoading && (
                         <Card>
                             <CardContent className="flex flex-col items-center justify-center gap-4 text-center p-8 min-h-[400px]">
-                                <Loader2 className="h-16 w-16 animate-spin text-primary" />
+                                <LoadingIndicator />
                                 <p className="text-lg font-semibold">Our AI is analyzing your photo...</p>
                                 <p className="text-muted-foreground">This may take a moment. Please don't close this page.</p>
                             </CardContent>
@@ -507,8 +506,7 @@ export default function HomePage() {
         return (
           <div className="flex h-screen w-full items-center justify-center bg-background">
             <div className="flex flex-col items-center gap-4">
-              <Logo />
-              <p className="text-muted-foreground animate-pulse">Loading Your Experience...</p>
+              <LoadingIndicator text="Loading Your Experience..." />
             </div>
           </div>
         );

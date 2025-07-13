@@ -6,7 +6,8 @@ import Image from 'next/image';
 import { AppShell } from '@/components/app-shell';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { getAdvisoryContent, type AdvisoryContent } from '@/ai/flows/advisory';
-import { Loader2, BookOpen, AlertTriangle } from 'lucide-react';
+import { BookOpen, AlertTriangle } from 'lucide-react';
+import { LoadingIndicator } from '@/components/loading-indicator';
 
 export default function AdvisoryPage() {
   const [content, setContent] = useState<AdvisoryContent | null>(null);
@@ -44,7 +45,7 @@ export default function AdvisoryPage() {
           {isLoading && (
               <Card>
                   <CardContent className="flex flex-col items-center justify-center gap-4 text-center p-8 min-h-[400px]">
-                      <Loader2 className="h-16 w-16 animate-spin text-primary" />
+                      <LoadingIndicator />
                       <p className="text-lg font-semibold">Generating your personalized advisory...</p>
                       <p className="text-muted-foreground">This may take a moment.</p>
                   </CardContent>
