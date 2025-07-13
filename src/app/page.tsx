@@ -49,14 +49,6 @@ const LockedContent = ({ signIn }: { signIn: () => Promise<void> }) => (
                   <AccordionContent>A detailed breakdown will be shown here.</AccordionContent>
               </AccordionItem>
           </Accordion>
-          <Card className="bg-accent/50">
-              <CardHeader>
-                  <CardTitle>Skincare Recommendations</CardTitle>
-              </CardHeader>
-              <CardContent>
-                  <p className="text-muted-foreground">Personalized skincare suggestions will be available here.</p>
-              </CardContent>
-          </Card>
       </div>
     </div>
 );
@@ -292,7 +284,7 @@ const DashboardContent = () => {
                     </AlertDescription>
                 </Alert>
             )}
-            <div className="grid lg:grid-cols-2 gap-12">
+            <div className="grid lg:grid-cols-2 gap-8">
                 {/* Left Column: Uploader */}
                 <Card className="lg:sticky lg:top-24 h-fit">
                     <CardHeader>
@@ -306,11 +298,11 @@ const DashboardContent = () => {
                     <CardContent className="space-y-4">
                         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                           <TabsList className="grid w-full grid-cols-2">
-                            <TabsTrigger value="upload">
-                              <UploadCloud className="mr-2 h-4 w-4" /> Upload Photo
+                            <TabsTrigger value="upload" className="flex items-center gap-2">
+                              <UploadCloud /> Upload Photo
                             </TabsTrigger>
-                            <TabsTrigger value="camera">
-                              <Camera className="mr-2 h-4 w-4" /> Use Camera
+                            <TabsTrigger value="camera" className="flex items-center gap-2">
+                              <Camera /> Use Camera
                             </TabsTrigger>
                           </TabsList>
                           <TabsContent value="upload">
@@ -356,8 +348,8 @@ const DashboardContent = () => {
                                   )}
                                 </div>
                                 {!imageDataUri && (
-                                    <Button onClick={handleTakePhoto} disabled={isLoading || hasCameraPermission !== true}>
-                                      <Camera className="mr-2 h-5 w-5" /> Take Photo
+                                    <Button onClick={handleTakePhoto} disabled={isLoading || hasCameraPermission !== true} className="flex items-center gap-2">
+                                      <Camera /> Take Photo
                                     </Button>
                                 )}
                             </div>
@@ -371,15 +363,15 @@ const DashboardContent = () => {
                                 onClick={handleAnalyzeClick}
                                 disabled={!imageDataUri || isLoading || (!isGuest && tokens < 3)}
                                 size="lg"
-                                className="w-full max-w-xs"
+                                className="w-full max-w-xs flex items-center gap-2"
                             >
-                                {isLoading ? (<><Loader2 className="mr-2 h-5 w-5 animate-spin" />Analyzing...</>) 
+                                {isLoading ? (<><Loader2 className="animate-spin" />Analyzing...</>) 
                                 : isGuest ? ('Analyze Face (Free Preview)') 
-                                : (`Analyze Face (3 Tokens)`)}
+                                : (<>Analyze Face (3 Tokens)</>)}
                             </Button>
                             {imageDataUri && (
-                                <Button onClick={handleReset} variant="outline" size="lg" className="w-full max-w-xs">
-                                    <RefreshCw className="mr-2 h-5 w-5" />
+                                <Button onClick={handleReset} variant="outline" size="lg" className="w-full max-w-xs flex items-center gap-2">
+                                    <RefreshCw />
                                     Clear Photo
                                 </Button>
                             )}
@@ -418,10 +410,10 @@ const DashboardContent = () => {
         
                     {analysisResult && (
                         <div className="space-y-6 animate-in fade-in-0 duration-500">
-                            <Card className="animate-in fade-in-0 duration-500">
+                            <Card className="animate-in fade-in-0 duration-500 bg-accent/50">
                                 <CardHeader>
                                     <CardTitle>Aesthetic Score</CardTitle>
-                                    <CardDescription>An overall score based on facial harmony, balance, and skin clarity.</CardDescription>
+                                    <CardDescription>Overall harmony, balance, and skin clarity.</CardDescription>
                                 </CardHeader>
                                 <CardContent className="flex items-center gap-4">
                                     <p className="text-5xl font-bold text-primary">{analysisResult.aestheticScore}</p>
@@ -434,7 +426,7 @@ const DashboardContent = () => {
         
                             {isGuest ? <LockedContent signIn={signInWithGoogle} /> : (
                                 <>
-                                    <Card className="bg-accent/50 animate-in fade-in-0 duration-500 delay-100">
+                                    <Card className="animate-in fade-in-0 duration-500 delay-100">
                                         <CardHeader><CardTitle>Overall Impression</CardTitle></CardHeader>
                                         <CardContent className="space-y-4">
                                             <div className="flex items-center gap-4">
@@ -490,17 +482,19 @@ const DashboardContent = () => {
             </div>
 
             {analysisResult && !isGuest && (
-                <Card className="bg-accent/50 animate-in fade-in-0 duration-500 delay-400">
-                    <CardHeader><CardTitle>Skincare Recommendations</CardTitle></CardHeader>
-                    <CardContent className="space-y-4">
-                        {analysisResult.skincareRecommendations.map((rec, index) => (
-                            <div key={index} className="p-4 bg-background rounded-md shadow-sm">
-                                <h4 className="font-semibold text-primary">{rec.recommendation}</h4>
-                                <p className="text-sm text-muted-foreground">{rec.reason}</p>
-                            </div>
-                        ))}
-                    </CardContent>
-                </Card>
+                <div className="animate-in fade-in-0 duration-500 delay-400">
+                    <Card className="bg-accent/50">
+                        <CardHeader><CardTitle>Skincare Recommendations</CardTitle></CardHeader>
+                        <CardContent className="space-y-4">
+                            {analysisResult.skincareRecommendations.map((rec, index) => (
+                                <div key={index} className="p-4 bg-background rounded-md shadow-sm">
+                                    <h4 className="font-semibold text-primary">{rec.recommendation}</h4>
+                                    <p className="text-sm text-muted-foreground">{rec.reason}</p>
+                                </div>
+                            ))}
+                        </CardContent>
+                    </Card>
+                </div>
             )}
         </div>
     );

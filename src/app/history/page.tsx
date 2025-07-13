@@ -82,10 +82,10 @@ export default function HistoryPage() {
                         <Image src={item.photoDataUri} alt="Analysis photo" width={400} height={400} className="rounded-lg object-cover aspect-square w-full" />
                       </div>
                       <div className="space-y-6">
-                        <Card>
+                        <Card className="bg-accent/50">
                             <CardHeader>
                                 <CardTitle>Aesthetic Score</CardTitle>
-                                <CardDescription>An overall score based on facial harmony, balance, and skin clarity.</CardDescription>
+                                <CardDescription>Overall harmony, balance, and skin clarity.</CardDescription>
                             </CardHeader>
                             <CardContent className="flex items-center gap-4">
                                 <p className="text-5xl font-bold text-primary">{item.analysis.aestheticScore}</p>
@@ -96,7 +96,7 @@ export default function HistoryPage() {
                             </CardContent>
                         </Card>
 
-                        <Card className="bg-accent/50">
+                        <Card>
                             <CardHeader>
                                 <CardTitle>Overall Impression</CardTitle>
                             </CardHeader>
