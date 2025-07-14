@@ -1,4 +1,3 @@
-
 import Link from 'next/link';
 import { Logo } from '@/components/logo';
 import { Instagram } from 'lucide-react';
@@ -46,7 +45,7 @@ export const Footer = () => (
       <div className="border-t bg-background">
         <div className="container flex flex-col items-center justify-between gap-2 py-4 sm:flex-row">
             <p className="text-sm text-muted-foreground">&copy; 2024 Facelyze.com. All rights reserved.</p>
-            <p className="text-sm text-muted-foreground">Powered by xjavzor</p>
+            <p className="text-sm text-muted-foreground">Powered by ONYXIAI</p>
         </div>
       </div>
     </footer>

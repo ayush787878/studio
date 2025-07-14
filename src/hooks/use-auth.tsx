@@ -9,7 +9,7 @@ import { AlertTriangle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { getOrCreateUser, type UserProfile, type AuthUser } from '@/services/userService';
-import { LoadingIndicator } from '@/components/loading-indicator';
+import { SplashScreen } from '@/components/splash-screen';
 
 interface AuthContextType {
   userProfile: UserProfile | null;
@@ -52,6 +52,7 @@ const MissingFirebaseConfig = () => (
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showSplash, setShowSplash] = useState(true);
   const router = useRouter();
   const { toast } = useToast();
 
@@ -87,8 +88,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
-          // Immediately create a plain object to prevent passing the complex
-          // Firebase User object with circular references down the chain.
           const authUser: AuthUser = {
             uid: user.uid,
             email: user.email,
@@ -126,7 +125,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
-      // The onAuthStateChanged listener will handle creating the user profile and routing.
       router.push('/');
     } catch (error: any) {
       console.error("Error signing in with Google", error);
@@ -182,14 +180,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   if (!auth) {
     return <MissingFirebaseConfig />;
   }
+  
+  const handleSplashFinish = () => {
+    setShowSplash(false);
+  };
 
-  if (loading) {
-      return (
-        <div className="flex h-screen w-full flex-col items-center justify-center bg-background">
-          <LoadingIndicator text="Loading Your Experience..." />
-          <p className="text-sm text-muted-foreground absolute bottom-10">Powered by xjavzor</p>
-        </div>
-      );
+  if (loading || showSplash) {
+    return <SplashScreen onFinished={handleSplashFinish} />;
   }
 
   return (
