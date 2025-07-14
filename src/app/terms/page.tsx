@@ -28,9 +28,9 @@ export default function TermsOfServicePage() {
                 </p>
               </section>
               <section>
-                <h2 className="text-xl font-semibold text-foreground mb-2">3. User Accounts and Tokens</h2>
+                <h2 className="text-xl font-semibold text-foreground mb-2">3. User Accounts, Pricing, and Service Delivery</h2>
                 <p>
-                  To access certain features, you must create an account. You are responsible for safeguarding your account information. The Service operates on a token system, where each analysis consumes a certain number of tokens. Tokens are provided upon account creation and may be subject to change.
+                  To access certain features, you must create an account. You are responsible for safeguarding your account information. The Service operates on a token system. Each AI analysis consumes a set number of tokens, which is displayed on the analysis button. Tokens are provided upon account creation and can be topped up via purchases. The analysis results (our digital service) are delivered instantly on the web application page after a successful analysis. There is no physical shipping or separate delivery process.
                 </p>
               </section>
                <section>

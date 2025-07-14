@@ -7,9 +7,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Sparkles, Target, Users } from "lucide-react";
 
 const teamMembers = [
-  { name: "Alex Johnson", role: "Founder & Lead AI Developer", image: "https://placehold.co/100x100.png", hint: "professional portrait" },
-  { name: "Samantha Lee", role: "UI/UX Designer", image: "https://placehold.co/100x100.png", hint: "professional portrait" },
-  { name: "David Chen", role: "Aesthetics Research Scientist", image: "https://placehold.co/100x100.png", hint: "professional portrait" },
+  { name: "Alex Johnson", role: "Founder & Lead AI Developer", hint: "professional portrait" },
+  { name: "Samantha Lee", role: "UI/UX Designer", hint: "professional portrait" },
+  { name: "David Chen", role: "Aesthetics Research Scientist", hint: "professional portrait" },
 ];
 
 export default function AboutPage() {
@@ -77,8 +77,7 @@ export default function AboutPage() {
                 <Card key={member.name} className="text-center">
                   <CardContent className="pt-6">
                     <Avatar className="w-24 h-24 mx-auto mb-4">
-                      <AvatarImage src={member.image} alt={member.name} data-ai-hint={member.hint} />
-                      <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
+                      <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                     </Avatar>
                     <h3 className="text-xl font-semibold">{member.name}</h3>
                     <p className="text-primary">{member.role}</p>

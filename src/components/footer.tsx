@@ -1,7 +1,7 @@
 
 import Link from 'next/link';
 import { Logo } from '@/components/logo';
-import { Twitter, Instagram, Facebook } from 'lucide-react';
+import { Instagram } from 'lucide-react';
 
 export const Footer = () => (
     <footer className="bg-accent/20 border-t">
@@ -29,19 +29,14 @@ export const Footer = () => (
                       <Link href="/terms" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>Terms of Service</Link>
                       <Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>Privacy Policy</Link>
                       <Link href="/cookie-policy" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>Cookie Policy</Link>
+                      <Link href="/refund-policy" className="text-sm text-muted-foreground hover:text-primary" prefetch={false}>Refund Policy</Link>
                   </nav>
               </div>
               <div className="space-y-4">
                   <h4 className="font-semibold text-foreground">Connect</h4>
                   <div className="flex items-center gap-4">
-                      <Link href="#" aria-label="Twitter" className="text-muted-foreground hover:text-primary" prefetch={false}>
-                          <Twitter className="h-5 w-5" />
-                      </Link>
-                      <Link href="#" aria-label="Instagram" className="text-muted-foreground hover:text-primary" prefetch={false}>
+                      <Link href="https://instagram.com/facelyze" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-muted-foreground hover:text-primary" prefetch={false}>
                           <Instagram className="h-5 w-5" />
-                      </Link>
-                      <Link href="#" aria-label="Facebook" className="text-muted-foreground hover:text-primary" prefetch={false}>
-                          <Facebook className="h-5 w-5" />
                       </Link>
                   </div>
               </div>
