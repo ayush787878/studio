@@ -391,9 +391,9 @@ const DashboardContent = () => {
                     {isLoading && (
                         <Card>
                             <CardContent className="flex flex-col items-center justify-center gap-4 text-center p-8 min-h-[400px]">
-                                <LoadingIndicator />
                                 <p className="text-lg font-semibold">Our AI is analyzing your photo...</p>
                                 <p className="text-muted-foreground">This may take a moment. Please don't close this page.</p>
+                                <Progress value={null} className="w-full h-2 animate-pulse" />
                             </CardContent>
                         </Card>
                     )}
