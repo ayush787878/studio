@@ -67,7 +67,7 @@ const RatingCard = ({ title, score }: { title: string; score: number }) => {
                 <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
             </CardHeader>
             <CardContent className="p-4 pt-0">
-                <p className="text-4xl font-bold text-white">{score}</p>
+                <p className="text-4xl font-bold text-foreground">{score}</p>
                 <Progress value={score} className="h-2 mt-2" indicatorClassName={getIndicatorColor(score)} />
             </CardContent>
         </Card>
