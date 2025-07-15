@@ -17,6 +17,8 @@ interface AuthContextType {
   signInWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
   refreshUserProfile: () => Promise<void>;
+  showLoginConfetti: boolean;
+  setShowLoginConfetti: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -53,6 +55,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [showSplash, setShowSplash] = useState(true);
+  const [showLoginConfetti, setShowLoginConfetti] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
 
@@ -87,6 +90,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
+        const isNewLogin = !userProfile; // Check if it's a new login session
         try {
           const authUser: AuthUser = {
             uid: user.uid,
@@ -96,6 +100,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           };
           const profile = await getOrCreateUser(authUser);
           setUserProfile(profile);
+          if (isNewLogin) {
+            setShowLoginConfetti(true); // Trigger confetti for new logins
+          }
         } catch (error) {
           console.error("Error getting or creating user profile:", error);
           toast({
@@ -110,7 +117,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setLoading(false);
     });
     return () => unsubscribe();
-  }, [toast]);
+  }, [toast, userProfile]);
 
   const signInWithGoogle = async () => {
     if (!auth) {
@@ -196,7 +203,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ userProfile, loading, signInWithGoogle, logout, refreshUserProfile }}>
+    <AuthContext.Provider value={{ userProfile, loading, signInWithGoogle, logout, refreshUserProfile, showLoginConfetti, setShowLoginConfetti }}>
       {children}
     </AuthContext.Provider>
   );

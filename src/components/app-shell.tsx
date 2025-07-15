@@ -26,13 +26,16 @@ import { useAuth } from '@/hooks/use-auth';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Footer } from './footer';
+import Confetti from 'react-confetti';
+import { useWindowSize } from 'react-use';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { userProfile, logout, loading } = useAuth();
+  const { userProfile, logout, loading, showLoginConfetti, setShowLoginConfetti } = useAuth();
   const { theme, setTheme } = useTheme();
   const [isMounted, setIsMounted] = React.useState(false);
+  const { width, height } = useWindowSize();
 
   React.useEffect(() => {
     setIsMounted(true);
@@ -43,6 +46,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       router.push('/login');
     }
   }, [userProfile, loading, router]);
+
+  React.useEffect(() => {
+    if (showLoginConfetti) {
+      const timer = setTimeout(() => setShowLoginConfetti(false), 8000); // Confetti for 8 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [showLoginConfetti, setShowLoginConfetti]);
 
   const navItems = [
     { href: "/", label: "Dashboard", icon: <LayoutDashboard /> },
@@ -63,6 +73,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <SidebarProvider>
+      {showLoginConfetti && <Confetti width={width} height={height} recycle={false} numberOfPieces={400} />}
       <Sidebar>
         <SidebarContent className="p-2">
           <SidebarHeader>
