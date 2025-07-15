@@ -14,7 +14,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { updateUserTokens, saveAnalysis, incrementAnalysisCount } from '@/services/userService';
 import { analyzeFace, type AnalyzeFaceOutput } from '@/ai/flows/feature-analysis';
-import { UploadCloud, Sparkles, RefreshCw, Target, Lock, Camera, VideoOff, Gift } from 'lucide-react';
+import { UploadCloud, Sparkles, RefreshCw, Target, Lock, Camera, VideoOff, Gift, PartyPopper } from 'lucide-react';
 import { Logo } from '@/components/logo';
 import { Footer } from '@/components/footer';
 import { PublicHeader } from '@/components/public-header';
@@ -96,6 +96,7 @@ const DashboardContent = () => {
     const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
     const [activeTab, setActiveTab] = useState('upload');
     const [showPromo, setShowPromo] = useState(false);
+    const [showEventPromo, setShowEventPromo] = useState(false);
     const [showAnalysisConfetti, setShowAnalysisConfetti] = useState(false);
     const { width, height } = useWindowSize();
 
@@ -103,6 +104,16 @@ const DashboardContent = () => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    
+    // Effect for event promo pop-up
+    useEffect(() => {
+        if (userProfile) { // Only show to logged-in users
+            const timer = setTimeout(() => {
+                setShowEventPromo(true);
+            }, 5000); // 5 seconds
+            return () => clearTimeout(timer);
+        }
+    }, [userProfile]);
 
     // Effect to save analysis after a guest logs in
     useEffect(() => {
@@ -318,6 +329,31 @@ const DashboardContent = () => {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
+            
+            <AlertDialog open={showEventPromo} onOpenChange={setShowEventPromo}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <div className="flex justify-center mb-4">
+                            <div className="h-16 w-16 bg-gradient-to-br from-pink-500 via-red-500 to-yellow-500 text-white rounded-full flex items-center justify-center">
+                                <PartyPopper className="h-8 w-8" />
+                            </div>
+                        </div>
+                        <AlertDialogTitle className="text-center text-2xl">Make Money With Your Reels!</AlertDialogTitle>
+                        <AlertDialogDescription className="text-center pt-2">
+                           Join our Instagram Reels Event and win cash prizes by showcasing Facelyze. It's easy to participate!
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter className="sm:justify-center gap-2">
+                        <AlertDialogCancel>Maybe Later</AlertDialogCancel>
+                        <AlertDialogAction asChild>
+                            <Link href="/event">
+                                Learn More
+                            </Link>
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
 
              {userProfile && !userProfile.aestheticGoal && (
                 <Alert>

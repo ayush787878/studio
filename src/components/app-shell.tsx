@@ -28,6 +28,7 @@ import { Label } from '@/components/ui/label';
 import { Footer } from './footer';
 import Confetti from 'react-confetti';
 import { useWindowSize } from 'react-use';
+import { cn } from '@/lib/utils';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -60,7 +61,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     { href: "/history", label: "History", icon: <History /> },
     { href: "/learning-plan", label: "Learning Plan", icon: <Lightbulb /> },
     { href: "/advisory", label: "Advisory", icon: <BookOpen /> },
-    { href: "/event", label: "Event", icon: <Trophy /> },
+    { 
+      href: "/event", 
+      label: "Event", 
+      icon: <Trophy />,
+      isSpecial: true,
+    },
   ];
 
   if (loading || !userProfile || !isMounted) {
@@ -86,6 +92,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   <SidebarMenuButton
                     isActive={pathname === item.href}
                     tooltip={item.label}
+                    className={cn(
+                        item.isSpecial && "bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 text-white hover:opacity-90 hover:text-white"
+                    )}
                   >
                     {item.icon}
                     <span>{item.label}</span>
