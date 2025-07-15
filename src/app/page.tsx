@@ -36,12 +36,14 @@ const LockedContent = ({ signIn }: { signIn: () => Promise<void> }) => (
           </Button>
       </div>
       <div className="space-y-6 blur-sm select-none pointer-events-none">
-          <Card className="bg-accent/50">
+          <Card>
               <CardHeader>
-                  <CardTitle>Overall Impression</CardTitle>
+                  <CardTitle className="font-headline">Your Rating</CardTitle>
               </CardHeader>
-              <CardContent>
-                  <p className="text-muted-foreground">A brief, encouraging summary of facial aesthetics will appear here.</p>
+              <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                 <RatingCard title="Overall" score={0} />
+                 <RatingCard title="Potential" score={0} />
+                 <RatingCard title="Masculinity" score={0} />
               </CardContent>
           </Card>
           <Accordion type="single" collapsible className="w-full">
@@ -461,23 +463,23 @@ const DashboardContent = () => {
                                     </div>
                                 </CardContent>
                             </Card>
-
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle className="font-headline">Your Rating</CardTitle>
-                                </CardHeader>
-                                <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                    <RatingCard title="Overall" score={analysisResult.specificRatings.overall} />
-                                    <RatingCard title="Potential" score={analysisResult.specificRatings.potential} />
-                                    <RatingCard title="Masculinity" score={analysisResult.specificRatings.masculinity} />
-                                    <RatingCard title="Jawline" score={analysisResult.specificRatings.jawline} />
-                                    <RatingCard title="Cheekbones" score={analysisResult.specificRatings.cheekbones} />
-                                    <RatingCard title="Skin Quality" score={analysisResult.specificRatings.skinQuality} />
-                                </CardContent>
-                            </Card>
         
                             {isGuest ? <LockedContent signIn={signInWithGoogle} /> : (
-                                <>
+                                <div className="space-y-6">
+                                    <Card>
+                                        <CardHeader>
+                                            <CardTitle className="font-headline">Your Rating</CardTitle>
+                                        </CardHeader>
+                                        <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                            <RatingCard title="Overall" score={analysisResult.specificRatings.overall} />
+                                            <RatingCard title="Potential" score={analysisResult.specificRatings.potential} />
+                                            <RatingCard title="Masculinity" score={analysisResult.specificRatings.masculinity} />
+                                            <RatingCard title="Jawline" score={analysisResult.specificRatings.jawline} />
+                                            <RatingCard title="Cheekbones" score={analysisResult.specificRatings.cheekbones} />
+                                            <RatingCard title="Skin Quality" score={analysisResult.specificRatings.skinQuality} />
+                                        </CardContent>
+                                    </Card>
+
                                     <Accordion type="single" collapsible className="w-full animate-in fade-in-0 duration-500 delay-200" defaultValue="item-0">
                                         {analysisResult.featureAnalysis.map((feature, index) => (
                                             <AccordionItem value={`item-${index}`} key={index}>
@@ -512,7 +514,7 @@ const DashboardContent = () => {
                                             </CardContent>
                                         </Card>
                                     )}
-                                </>
+                                </div>
                             )}
                         </div>
                     )}
