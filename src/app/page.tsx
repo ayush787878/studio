@@ -54,17 +54,25 @@ const LockedContent = ({ signIn }: { signIn: () => Promise<void> }) => (
     </div>
 );
 
-const RatingCard = ({ title, score }: { title: string; score: number }) => (
-    <Card className="text-center">
-        <CardHeader className="p-4">
-            <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
-        </CardHeader>
-        <CardContent className="p-4 pt-0">
-            <p className="text-4xl font-bold text-primary">{score}</p>
-            <Progress value={score} className="h-2 mt-2" />
-        </CardContent>
-    </Card>
-);
+const RatingCard = ({ title, score }: { title: string; score: number }) => {
+    const getIndicatorColor = (value: number) => {
+        if (value >= 75) return 'bg-green-500';
+        if (value >= 50) return 'bg-orange-500';
+        return 'bg-red-500';
+    };
+
+    return (
+        <Card className="text-center">
+            <CardHeader className="p-4">
+                <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
+            </CardHeader>
+            <CardContent className="p-4 pt-0">
+                <p className="text-4xl font-bold text-primary">{score}</p>
+                <Progress value={score} className="h-2 mt-2" indicatorClassName={getIndicatorColor(score)} />
+            </CardContent>
+        </Card>
+    );
+};
 
 
 const DashboardContent = () => {
@@ -405,8 +413,8 @@ const DashboardContent = () => {
                         <Card>
                             <CardContent className="flex flex-col items-center justify-center gap-4 text-center p-8 min-h-[400px]">
                                 <LoadingIndicator text="Our AI is analyzing your photo..." />
-                                <p className="text-muted-foreground">This may take a moment. Please don't close this page.</p>
                                 <Progress value={null} className="w-full h-2 animate-pulse" />
+                                <p className="text-muted-foreground">This may take a moment. Please don't close this page.</p>
                             </CardContent>
                         </Card>
                     )}
