@@ -19,7 +19,7 @@ export default {
     extend: {
       fontFamily: {
         body: ['Poppins', 'sans-serif'],
-        headline: ['Lora', 'serif'],
+        headline: ['Kanit', 'sans-serif'],
         code: ['monospace'],
       },
       colors: {
