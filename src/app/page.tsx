@@ -23,6 +23,9 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { LoadingIndicator } from '@/components/loading-indicator';
+import Confetti from 'react-confetti';
+import { useWindowSize } from 'react-use';
+
 
 const LockedContent = ({ signIn }: { signIn: () => Promise<void> }) => (
     <div className="relative mt-6">
@@ -41,7 +44,7 @@ const LockedContent = ({ signIn }: { signIn: () => Promise<void> }) => (
           </Button>
       </div>
       <div className="space-y-6 blur-sm select-none pointer-events-none">
-          <Card>
+           <Card>
               <CardHeader>
                   <CardTitle className="font-headline">Your Rating</CardTitle>
               </CardHeader>
@@ -93,6 +96,9 @@ const DashboardContent = () => {
     const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
     const [activeTab, setActiveTab] = useState('upload');
     const [showPromo, setShowPromo] = useState(false);
+    const [showAnalysisConfetti, setShowAnalysisConfetti] = useState(false);
+    const { width, height } = useWindowSize();
+
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -141,6 +147,13 @@ const DashboardContent = () => {
           saveOnLogin();
         }
     }, [userProfile, analysisResult, isResultPendingSave, imageDataUri, toast, refreshUserProfile]);
+    
+    useEffect(() => {
+        if (showAnalysisConfetti) {
+            const timer = setTimeout(() => setShowAnalysisConfetti(false), 8000); // Confetti for 8 seconds
+            return () => clearTimeout(timer);
+        }
+    }, [showAnalysisConfetti]);
     
     useEffect(() => {
         const getCameraPermission = async () => {
@@ -219,6 +232,7 @@ const DashboardContent = () => {
             const aestheticGoal = userProfile?.aestheticGoal || '';
             const result = await analyzeFace({ photoDataUri: imageDataUri, aestheticGoal });
             setAnalysisResult(result);
+            setShowAnalysisConfetti(true);
     
             if (userProfile) { // Logged-in user flow
                 await saveAnalysis(userProfile.uid, imageDataUri, result);
@@ -276,6 +290,7 @@ const DashboardContent = () => {
   
     return (
         <div className="animate-in fade-in-0 duration-500 space-y-8">
+            {showAnalysisConfetti && <Confetti width={width} height={height} recycle={false} numberOfPieces={400} />}
             <AlertDialog open={showPromo} onOpenChange={setShowPromo}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
@@ -471,7 +486,7 @@ const DashboardContent = () => {
         
                             {isGuest ? <LockedContent signIn={signInWithGoogle} /> : (
                                 <div className="space-y-6">
-                                    <Card>
+                                     <Card>
                                         <CardHeader>
                                             <CardTitle className="font-headline">Your Rating</CardTitle>
                                         </CardHeader>
