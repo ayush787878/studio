@@ -54,6 +54,19 @@ const LockedContent = ({ signIn }: { signIn: () => Promise<void> }) => (
     </div>
 );
 
+const RatingCard = ({ title, score }: { title: string; score: number }) => (
+    <Card className="text-center">
+        <CardHeader className="p-4">
+            <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
+        </CardHeader>
+        <CardContent className="p-4 pt-0">
+            <p className="text-4xl font-bold text-primary">{score}</p>
+            <Progress value={score} className="h-2 mt-2" />
+        </CardContent>
+    </Card>
+);
+
+
 const DashboardContent = () => {
     const { userProfile, signInWithGoogle, refreshUserProfile } = useAuth();
     const { toast } = useToast();
@@ -391,7 +404,7 @@ const DashboardContent = () => {
                     {isLoading && (
                         <Card>
                             <CardContent className="flex flex-col items-center justify-center gap-4 text-center p-8 min-h-[400px]">
-                                <p className="text-lg font-semibold">Our AI is analyzing your photo...</p>
+                                <LoadingIndicator text="Our AI is analyzing your photo..." />
                                 <p className="text-muted-foreground">This may take a moment. Please don't close this page.</p>
                                 <Progress value={null} className="w-full h-2 animate-pulse" />
                             </CardContent>
@@ -420,6 +433,20 @@ const DashboardContent = () => {
                                         <Progress value={analysisResult.aestheticScore} className="h-3" />
                                         <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
                                     </div>
+                                </CardContent>
+                            </Card>
+
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Your Rating</CardTitle>
+                                </CardHeader>
+                                <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                    <RatingCard title="Overall" score={analysisResult.specificRatings.overall} />
+                                    <RatingCard title="Potential" score={analysisResult.specificRatings.potential} />
+                                    <RatingCard title="Masculinity" score={analysisResult.specificRatings.masculinity} />
+                                    <RatingCard title="Jawline" score={analysisResult.specificRatings.jawline} />
+                                    <RatingCard title="Cheekbones" score={analysisResult.specificRatings.cheekbones} />
+                                    <RatingCard title="Skin Quality" score={analysisResult.specificRatings.skinQuality} />
                                 </CardContent>
                             </Card>
         

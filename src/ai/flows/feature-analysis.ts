@@ -26,6 +26,14 @@ const AnalyzeFaceOutputSchema = z.object({
         text: z.string().describe("Provide a brief, positive and encouraging textual summary of the user's facial aesthetics."),
         rating: z.number().min(0).max(100).describe("A numerical rating from 0 to 100 for the overall impression. This score is based on the general positive qualities you observe."),
     }),
+    specificRatings: z.object({
+        overall: z.number().min(0).max(100).describe("A rating for the overall facial harmony."),
+        potential: z.number().min(0).max(100).describe("A rating for the user's aesthetic potential."),
+        masculinity: z.number().min(0).max(100).describe("A rating for the masculinity of the facial features. If the face appears feminine, provide a lower score and note it in the analysis."),
+        jawline: z.number().min(0).max(100).describe("A rating for the definition and shape of the jawline."),
+        cheekbones: z.number().min(0).max(100).describe("A rating for the prominence and definition of the cheekbones."),
+        skinQuality: z.number().min(0).max(100).describe("A rating for the quality and clarity of the skin, considering factors like texture and blemishes."),
+    }).describe("A set of specific ratings for key aesthetic attributes."),
     featureAnalysis: z.array(z.object({
         feature: z.string().describe("The facial feature being analyzed (e.g., Eyes, Nose, Lips, Jawline)."),
         analysis: z.string().describe("A detailed analysis of this specific feature."),
@@ -54,6 +62,7 @@ const prompt = ai.definePrompt({
 
 Analyze the provided photo. Identify key facial features, and provide personalized skincare recommendations.
 - Provide an 'aestheticScore' from 0 to 100 based on overall facial harmony, balance, and clarity of the skin. Be objective and professional.
+- Provide the six 'specificRatings' (overall, potential, masculinity, jawline, cheekbones, skinQuality) as numerical scores from 0-100.
 - For the 'overallImpression', provide both a textual summary in the 'text' field and a separate numerical 'rating' out of 100 that reflects the general positive impression.
 - For each item in 'featureAnalysis', you must provide a numerical 'rating' from 0 to 100 for that specific feature, in addition to the textual analysis.
 - For 'skincareRecommendations', provide at least 3 detailed and actionable recommendations.
