@@ -87,7 +87,7 @@ export default function EventPage() {
             <div className="inline-block p-3 bg-primary/10 rounded-full mb-2 animate-in zoom-in-50 duration-500">
               <PartyPopper className="h-10 w-10 text-primary" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold font-headline bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
+            <h1 className="text-4xl md:text-5xl font-bold font-headline bg-clip-text text-transparent bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500">
               Facelyze Reels Challenge
             </h1>
             <p className="text-lg text-muted-foreground">Join our event, get creative, and win cash prizes!</p>
@@ -152,10 +152,13 @@ export default function EventPage() {
           </AlertDescription>
         </Alert>
 
-        <div className="text-center text-muted-foreground text-sm">
-            <p>Make sure you're following our official account to stay updated.</p>
-            <Button asChild variant="link" className="px-0 text-lg">
-                <Link href="https://instagram.com/facelyze" target="_blank" rel="noopener noreferrer">Follow @facelyze on <Instagram className="inline-block ml-1" /></Link>
+        <div className="text-center space-y-4">
+            <p className="text-muted-foreground text-sm">Make sure you're following our official account to stay updated.</p>
+            <Button asChild size="lg" className="bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] text-white text-lg font-bold hover:opacity-90 transition-opacity shadow-lg">
+                <Link href="https://instagram.com/facelyze" target="_blank" rel="noopener noreferrer">
+                    <Instagram className="mr-3 h-6 w-6" />
+                    Follow @facelyze on Instagram
+                </Link>
             </Button>
         </div>
 
