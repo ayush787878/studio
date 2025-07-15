@@ -26,11 +26,16 @@ import { LoadingIndicator } from '@/components/loading-indicator';
 
 const LockedContent = ({ signIn }: { signIn: () => Promise<void> }) => (
     <div className="relative mt-6">
-      <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/80 rounded-lg z-10 p-4 text-center">
+      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center rounded-lg bg-background/80 p-4 text-center">
           <Lock className="h-12 w-12 text-primary mb-4" />
           <h3 className="text-xl font-bold mb-2">Unlock Full Analysis</h3>
-          <p className="text-muted-foreground mb-4 max-w-sm">Sign in to see your detailed results, personalized plan, and save your progress.</p>
-          <Button onClick={signIn} size="lg">
+           <p className="text-muted-foreground mb-4 max-w-sm">Sign in to see:</p>
+           <ul className="text-left text-muted-foreground list-disc pl-6 mb-6 space-y-1">
+                <li>Your detailed feature ratings</li>
+                <li>A personalized improvement plan</li>
+                <li>Your complete analysis history</li>
+           </ul>
+          <Button onClick={signIn} size="lg" className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:opacity-90 transition-opacity shadow-lg">
               <Sparkles className="mr-2 h-5 w-5" />
               Sign In to Unlock
           </Button>
