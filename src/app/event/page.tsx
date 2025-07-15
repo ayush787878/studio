@@ -5,32 +5,49 @@ import { useState, useEffect } from 'react';
 import { AppShell } from '@/components/app-shell';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Trophy, Clipboard, Instagram, PartyPopper, CheckCircle } from 'lucide-react';
+import { Trophy, Clipboard, Instagram, PartyPopper, CheckCircle, AlertTriangle, Send } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import Confetti from 'react-confetti';
 import { useWindowSize } from 'react-use';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+
 
 const steps = [
   {
+    step: "Step 1",
     title: "Create a Reel",
     description: "Make an engaging and creative Instagram Reel showcasing the Facelyze website and its features.",
-    icon: <PartyPopper className="h-8 w-8 text-rose-500" />
+    icon: <PartyPopper className="h-8 w-8 text-pink-600" />,
+    bgColor: "bg-pink-100",
   },
   {
+    step: "Step 2",
     title: "Upload to Instagram",
     description: "Post your Reel to your public Instagram account.",
-    icon: <Instagram className="h-8 w-8 text-purple-500" />
+    icon: <Instagram className="h-8 w-8 text-purple-600" />,
+    bgColor: "bg-purple-100",
   },
   {
+    step: "Step 3",
     title: "Mention & Tag Us",
     description: "In your Reel's caption, you must mention our official Instagram account @facelyze.",
-    icon: <CheckCircle className="h-8 w-8 text-teal-500" />
+    icon: <CheckCircle className="h-8 w-8 text-teal-600" />,
+    bgColor: "bg-teal-100",
   },
   {
+    step: "Step 4",
     title: "Use Our Caption & Hashtags",
     description: "Copy and use the official caption and hashtags provided below to be eligible for the prize.",
-    icon: <Clipboard className="h-8 w-8 text-blue-500" />
+    icon: <Clipboard className="h-8 w-8 text-blue-600" />,
+    bgColor: "bg-blue-100",
+  },
+  {
+    step: "Step 5",
+    title: "Approval & Payout",
+    description: "Our team will review your reel. Once approved, we will DM you on Instagram to arrange your payout.",
+    icon: <Send className="h-8 w-8 text-orange-600" />,
+    bgColor: "bg-orange-100",
   }
 ];
 
@@ -88,23 +105,23 @@ export default function EventPage() {
               <p className="text-5xl md:text-6xl font-bold">$5 - $20 USD</p>
               <p className="text-xl font-semibold mt-4">For Every 200,000 Views!</p>
             </div>
-            <p className="text-xs text-purple-200 mt-4">There is no limit. The more views you get, the more you can win. Payouts available in all local currency equivalents.</p>
+            <p className="text-xs text-purple-200 mt-4">Prize limit up to 10M views. Payouts available in all local currency equivalents.</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
             <CardTitle className="text-2xl font-headline">How to Participate</CardTitle>
-            <CardDescription>Follow these 4 simple steps to enter the challenge.</CardDescription>
+            <CardDescription>Follow these 5 simple steps to enter the challenge.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            {steps.map((step, index) => (
-              <div key={index} className="flex items-start gap-4 p-4 bg-accent/50 rounded-lg">
-                <div className="flex-shrink-0 flex-grow-0 h-14 w-14 bg-background rounded-full flex items-center justify-center font-bold text-lg shadow-inner">
+            {steps.map((step) => (
+              <div key={step.step} className="flex items-start gap-4 p-4 bg-accent/50 rounded-lg">
+                <div className={`flex-shrink-0 flex-grow-0 h-14 w-14 ${step.bgColor} rounded-full flex items-center justify-center font-bold text-lg shadow-inner`}>
                   {step.icon}
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg text-primary">{step.title}</h3>
+                  <h3 className="font-semibold text-lg text-primary">{step.step}: {step.title}</h3>
                   <p className="text-muted-foreground">{step.description}</p>
                 </div>
               </div>
@@ -126,6 +143,14 @@ export default function EventPage() {
             </Button>
           </CardContent>
         </Card>
+
+        <Alert variant="destructive">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertTitle>Important Warning</AlertTitle>
+          <AlertDescription>
+            Any use of fake views or engagement will result in immediate disqualification from the event and a permanent ban from all future promotions.
+          </AlertDescription>
+        </Alert>
 
         <div className="text-center text-muted-foreground text-sm">
             <p>Make sure you're following our official account to stay updated.</p>
