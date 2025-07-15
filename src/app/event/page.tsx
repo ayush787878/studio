@@ -1,29 +1,36 @@
 
 "use client";
 
+import { useState, useEffect } from 'react';
 import { AppShell } from '@/components/app-shell';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Trophy, Clipboard, Instagram } from 'lucide-react';
+import { Trophy, Clipboard, Instagram, PartyPopper, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
+import Confetti from 'react-confetti';
+import { useWindowSize } from 'react-use';
 
 const steps = [
   {
     title: "Create a Reel",
-    description: "Make an engaging and creative Instagram Reel showcasing the Facelyze website and its features."
+    description: "Make an engaging and creative Instagram Reel showcasing the Facelyze website and its features.",
+    icon: <PartyPopper className="h-8 w-8 text-rose-500" />
   },
   {
     title: "Upload to Instagram",
-    description: "Post your Reel to your public Instagram account."
+    description: "Post your Reel to your public Instagram account.",
+    icon: <Instagram className="h-8 w-8 text-purple-500" />
   },
   {
     title: "Mention & Tag Us",
-    description: "In your Reel's caption, you must mention our official Instagram account @facelyze."
+    description: "In your Reel's caption, you must mention our official Instagram account @facelyze.",
+    icon: <CheckCircle className="h-8 w-8 text-teal-500" />
   },
   {
     title: "Use Our Caption & Hashtags",
-    description: "Copy and use the official caption and hashtags provided below to be eligible for the prize."
+    description: "Copy and use the official caption and hashtags provided below to be eligible for the prize.",
+    icon: <Clipboard className="h-8 w-8 text-blue-500" />
   }
 ];
 
@@ -31,6 +38,13 @@ const officialCaption = `Unlocking my aesthetic potential with AI! ✨ Just used
 
 export default function EventPage() {
   const { toast } = useToast();
+  const { width, height } = useWindowSize();
+  const [showConfetti, setShowConfetti] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowConfetti(false), 8000); // Confetti for 8 seconds
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(officialCaption).then(() => {
@@ -50,29 +64,31 @@ export default function EventPage() {
 
   return (
     <AppShell>
+      {showConfetti && <Confetti width={width} height={height} recycle={false} numberOfPieces={300} />}
       <div className="space-y-8 animate-in fade-in-0 duration-500">
-        <div className="flex items-center gap-4">
-          <Trophy className="h-8 w-8 text-primary" />
-          <div>
-            <h1 className="text-3xl font-bold font-headline">Facelyze Reels Challenge</h1>
-            <p className="text-muted-foreground">Join our event, get creative, and win cash prizes!</p>
-          </div>
+        <div className="text-center space-y-2">
+            <div className="inline-block p-3 bg-primary/10 rounded-full mb-2 animate-in zoom-in-50 duration-500">
+              <PartyPopper className="h-10 w-10 text-primary" />
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold font-headline bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
+              Facelyze Reels Challenge
+            </h1>
+            <p className="text-lg text-muted-foreground">Join our event, get creative, and win cash prizes!</p>
         </div>
 
-        <Card className="bg-accent/50 border-primary/20">
+        <Card className="bg-gradient-to-br from-purple-600 via-pink-600 to-rose-600 text-primary-foreground border-0 shadow-2xl animate-in slide-in-from-bottom-5 duration-700">
           <CardHeader>
             <CardTitle className="text-2xl font-headline flex items-center gap-2">
-              <Trophy className="h-6 w-6 text-primary" /> The Prize
+              <Trophy className="h-6 w-6" /> The Prize
             </CardTitle>
-            <CardDescription>Views on your Reel can turn into real money.</CardDescription>
+            <CardDescription className="text-purple-200">Views on your Reel can turn into real money.</CardDescription>
           </CardHeader>
           <CardContent className="text-center">
-            <div className="bg-background p-6 rounded-lg">
-              <p className="text-4xl md:text-5xl font-bold text-primary">₹500 INR</p>
-              <p className="text-lg text-muted-foreground mt-2">(or USD equivalent)</p>
+            <div className="bg-white/10 p-6 rounded-lg backdrop-blur-sm">
+              <p className="text-5xl md:text-6xl font-bold">$5 - $20 USD</p>
               <p className="text-xl font-semibold mt-4">For Every 200,000 Views!</p>
             </div>
-            <p className="text-xs text-muted-foreground mt-4">There is no limit. The more views you get, the more you can win.</p>
+            <p className="text-xs text-purple-200 mt-4">There is no limit. The more views you get, the more you can win. Payouts available in all local currency equivalents.</p>
           </CardContent>
         </Card>
 
@@ -83,28 +99,16 @@ export default function EventPage() {
           </CardHeader>
           <CardContent className="space-y-6">
             {steps.map((step, index) => (
-              <div key={index} className="flex items-start gap-4">
-                <div className="flex-shrink-0 flex-grow-0 h-10 w-10 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold text-lg">
-                  {index + 1}
+              <div key={index} className="flex items-start gap-4 p-4 bg-accent/50 rounded-lg">
+                <div className="flex-shrink-0 flex-grow-0 h-14 w-14 bg-background rounded-full flex items-center justify-center font-bold text-lg shadow-inner">
+                  {step.icon}
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg">{step.title}</h3>
+                  <h3 className="font-semibold text-lg text-primary">{step.title}</h3>
                   <p className="text-muted-foreground">{step.description}</p>
                 </div>
               </div>
             ))}
-             <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 flex-grow-0 h-10 w-10 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold text-lg">
-                  <Instagram className="h-6 w-6" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-lg">Follow Us on Instagram</h3>
-                  <p className="text-muted-foreground">Make sure you're following our official account to stay updated.</p>
-                   <Button asChild variant="link" className="px-0">
-                      <Link href="https://instagram.com/facelyze" target="_blank" rel="noopener noreferrer">Follow @facelyze</Link>
-                  </Button>
-                </div>
-              </div>
           </CardContent>
         </Card>
         
@@ -114,14 +118,21 @@ export default function EventPage() {
             <CardDescription>You must use this exact text in your Instagram Reel's caption.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="p-4 bg-muted rounded-md text-muted-foreground text-sm italic">
+            <div className="p-4 bg-muted rounded-md text-muted-foreground text-sm italic border-l-4 border-primary">
                 {officialCaption}
             </div>
-            <Button onClick={handleCopy} className="w-full md:w-auto">
+            <Button onClick={handleCopy} className="w-full md:w-auto bg-gradient-to-r from-blue-500 to-teal-500 text-white hover:opacity-90 transition-opacity">
               <Clipboard className="mr-2 h-4 w-4" /> Copy Caption
             </Button>
           </CardContent>
         </Card>
+
+        <div className="text-center text-muted-foreground text-sm">
+            <p>Make sure you're following our official account to stay updated.</p>
+            <Button asChild variant="link" className="px-0 text-lg">
+                <Link href="https://instagram.com/facelyze" target="_blank" rel="noopener noreferrer">Follow @facelyze on <Instagram className="inline-block ml-1" /></Link>
+            </Button>
+        </div>
 
       </div>
     </AppShell>
