@@ -156,7 +156,7 @@ export default function EventPage() {
           <AlertTitle>Important Warning</AlertTitle>
           <AlertDescription>
             Any use of fake views or engagement will result in immediate disqualification from the event and a permanent ban from all future promotions.
-          </Aler tDescription>
+          </AlertDescription>
         </Alert>
 
       </div>
