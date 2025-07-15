@@ -84,6 +84,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter>
+           <div className="flex items-center justify-between p-2 rounded-md group-data-[collapsible=icon]:justify-center">
+              <Label htmlFor="dark-mode-toggle" className="flex items-center gap-2 font-normal cursor-pointer group-data-[collapsible=icon]:hidden">
+                  {theme === 'dark' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+                  <span>Theme</span>
+              </Label>
+              <Switch
+                  id="dark-mode-toggle"
+                  checked={theme === 'dark'}
+                  onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')}
+              />
+            </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <div className="flex items-center gap-2 p-2 rounded-md hover:bg-accent cursor-pointer">
@@ -105,19 +116,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     <Coins className="mr-2 h-4 w-4 text-primary" />
                     <span>{userProfile?.tokens ?? 0} Tokens</span>
                   </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                  <div className="flex items-center justify-between w-full">
-                    <Label htmlFor="dark-mode-toggle" className="flex items-center gap-2 font-normal cursor-pointer">
-                        {theme === 'dark' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
-                        <span>Dark Mode</span>
-                    </Label>
-                    <Switch
-                        id="dark-mode-toggle"
-                        checked={theme === 'dark'}
-                        onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')}
-                    />
-                  </div>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={logout}>
