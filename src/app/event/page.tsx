@@ -93,19 +93,19 @@ export default function EventPage() {
             <p className="text-lg text-muted-foreground">Join our event, get creative, and win cash prizes!</p>
         </div>
 
-        <Card className="bg-gradient-to-br from-purple-600 via-pink-600 to-rose-600 text-primary-foreground border-0 shadow-2xl animate-in slide-in-from-bottom-5 duration-700">
+        <Card className="bg-gradient-to-br from-purple-500 via-pink-500 to-red-500 text-white border-0 shadow-2xl animate-in slide-in-from-bottom-5 duration-700">
           <CardHeader>
             <CardTitle className="text-2xl font-headline flex items-center gap-2">
               <Trophy className="h-6 w-6" /> The Prize
             </CardTitle>
-            <CardDescription className="text-purple-200">Views on your Reel can turn into real money.</CardDescription>
+            <CardDescription className="text-white/80">Views on your Reel can turn into real money.</CardDescription>
           </CardHeader>
           <CardContent className="text-center">
             <div className="bg-white/10 p-6 rounded-lg backdrop-blur-sm">
               <p className="text-5xl md:text-6xl font-bold">$5 - $20 USD</p>
               <p className="text-xl font-semibold mt-4">For Every 200,000 Views!</p>
             </div>
-            <p className="text-xs text-purple-200 mt-4">Prize limit up to 10M views. Payouts available in all local currency equivalents.</p>
+            <p className="text-xs text-white/80 mt-4">Prize limit up to 10M views. Payouts available in all local currency equivalents.</p>
           </CardContent>
         </Card>
 
