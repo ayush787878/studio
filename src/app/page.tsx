@@ -44,14 +44,14 @@ const LockedContent = ({ signIn }: { signIn: () => Promise<void> }) => (
           </Button>
       </div>
       <div className="space-y-6 blur-sm select-none pointer-events-none">
-           <Card>
+          <Card>
               <CardHeader>
                   <CardTitle className="font-headline">Your Rating</CardTitle>
               </CardHeader>
               <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                 <RatingCard title="Overall" score={0} />
-                 <RatingCard title="Potential" score={0} />
-                 <RatingCard title="Masculinity" score={0} />
+                  <RatingCard title="Overall" score={0} />
+                  <RatingCard title="Potential" score={0} />
+                  <RatingCard title="Masculinity" score={0} />
               </CardContent>
           </Card>
           <Accordion type="single" collapsible className="w-full">
@@ -465,22 +465,6 @@ const DashboardContent = () => {
                             </div>
                         </CardContent>
                     </Card>
-
-                    {analysisResult && !isGuest && (
-                        <Card className="animate-in fade-in-0 duration-500 delay-100">
-                            <CardHeader><CardTitle className="font-headline">Overall Impression</CardTitle></CardHeader>
-                            <CardContent className="space-y-4">
-                                <div className="flex items-center gap-4">
-                                    <p className="text-5xl font-bold text-foreground">{analysisResult.overallImpression.rating}</p>
-                                    <div className="w-full">
-                                        <Progress value={analysisResult.overallImpression.rating} className="h-3" />
-                                        <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
-                                    </div>
-                                </div>
-                                <p className="text-muted-foreground pt-2">{analysisResult.overallImpression.text}</p>
-                            </CardContent>
-                        </Card>
-                    )}
                 </div>
         
                 {/* Right Column: Results */}
@@ -535,6 +519,22 @@ const DashboardContent = () => {
                                             <RatingCard title="Skin Quality" score={analysisResult.specificRatings.skinQuality} />
                                         </CardContent>
                                     </Card>
+
+                                    {analysisResult.overallImpression && (
+                                        <Card className="animate-in fade-in-0 duration-500 delay-100">
+                                            <CardHeader><CardTitle className="font-headline">Overall Impression</CardTitle></CardHeader>
+                                            <CardContent className="space-y-4">
+                                                <div className="flex items-center gap-4">
+                                                    <p className="text-5xl font-bold text-foreground">{analysisResult.overallImpression.rating}</p>
+                                                    <div className="w-full">
+                                                        <Progress value={analysisResult.overallImpression.rating} className="h-3" />
+                                                        <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
+                                                    </div>
+                                                </div>
+                                                <p className="text-muted-foreground pt-2">{analysisResult.overallImpression.text}</p>
+                                            </CardContent>
+                                        </Card>
+                                    )}
 
                                     <Accordion type="single" collapsible className="w-full animate-in fade-in-0 duration-500 delay-200" defaultValue="item-0">
                                         {analysisResult.featureAnalysis.map((feature, index) => (
@@ -625,3 +625,5 @@ export default function HomePage() {
         </div>
     );
 }
+
+    
