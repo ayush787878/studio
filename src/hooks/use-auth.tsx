@@ -128,23 +128,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       router.push('/');
     } catch (error: any) {
       console.error("Error signing in with Google", error);
+      let title = "Login Failed";
       let description = "An unknown error occurred. Please try again.";
       if (error.code) {
         switch (error.code) {
           case 'auth/popup-closed-by-user':
-            description = 'Sign-in popup closed by user. Please try again.';
+            title = 'Sign-In Cancelled';
+            description = 'You closed the sign-in window before completing the process. Please try again.';
             break;
           case 'auth/popup-blocked':
+            title = 'Popup Blocked';
             description = 'Sign-in popup was blocked by the browser. Please allow popups for this site.';
             break;
           case 'auth/operation-not-allowed':
-            description = 'Google Sign-in is not enabled in the Firebase console.';
+             title = 'Login Method Disabled';
+            description = 'Google Sign-in is not enabled for this app. Please contact support.';
             break;
           case 'auth/unauthorized-domain':
-             description = 'This domain is not authorized for OAuth operations. Please check your Firebase console settings.';
+             title = 'Unauthorized Domain';
+             description = 'This domain is not authorized for login. Please contact support.';
              break;
           case 'auth/api-key-not-valid':
-             description = 'The provided Firebase API key is not valid. Please check your configuration.';
+             title = 'Invalid Configuration';
+             description = 'The provided Firebase API key is not valid. Please contact support.';
              break;
           default:
             description = error.message;
@@ -152,8 +158,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
       }
       toast({
-          title: "Login Failed",
-          description,
+          title: title,
+          description: description,
           variant: "destructive"
       });
     }
