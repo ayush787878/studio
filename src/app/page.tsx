@@ -308,104 +308,122 @@ const DashboardContent = () => {
             )}
             <div className="grid lg:grid-cols-2 gap-8">
                 {/* Left Column: Uploader */}
-                <Card className="lg:sticky lg:top-24 h-fit">
-                    <CardHeader>
-                        <CardTitle className="text-3xl flex items-center gap-2">
-                        <Sparkles /> AI Face Analysis
-                        </CardTitle>
-                        <CardDescription>
-                          Choose your input method. Your saved aesthetic goal will be used automatically.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                          <TabsList className="grid w-full grid-cols-2">
-                            <TabsTrigger value="upload" className="flex items-center gap-2">
-                              <UploadCloud /> Upload Photo
-                            </TabsTrigger>
-                            <TabsTrigger value="camera" className="flex items-center gap-2">
-                              <Camera /> Use Camera
-                            </TabsTrigger>
-                          </TabsList>
-                          <TabsContent value="upload">
-                            <div className="space-y-4 text-center pt-4">
-                                <input
-                                    type="file"
-                                    ref={fileInputRef}
-                                    onChange={handleImageChange}
-                                    accept="image/png, image/jpeg"
-                                    className="hidden"
-                                />
-                                <div
-                                    onClick={() => !isLoading && fileInputRef.current?.click()}
-                                    className={`group aspect-square max-w-xs mx-auto border-2 border-dashed border-muted-foreground/50 rounded-lg flex items-center justify-center transition-colors ${!isLoading ? 'cursor-pointer hover:border-primary' : 'cursor-not-allowed'}`}
-                                >
+                <div className="space-y-8">
+                    <Card className="lg:sticky lg:top-24 h-fit">
+                        <CardHeader>
+                            <CardTitle className="text-3xl flex items-center gap-2 font-headline">
+                            <Sparkles /> AI Face Analysis
+                            </CardTitle>
+                            <CardDescription>
+                            Choose your input method. Your saved aesthetic goal will be used automatically.
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                            <TabsList className="grid w-full grid-cols-2">
+                                <TabsTrigger value="upload" className="flex items-center gap-2">
+                                <UploadCloud /> Upload Photo
+                                </TabsTrigger>
+                                <TabsTrigger value="camera" className="flex items-center gap-2">
+                                <Camera /> Use Camera
+                                </TabsTrigger>
+                            </TabsList>
+                            <TabsContent value="upload">
+                                <div className="space-y-4 text-center pt-4">
+                                    <input
+                                        type="file"
+                                        ref={fileInputRef}
+                                        onChange={handleImageChange}
+                                        accept="image/png, image/jpeg"
+                                        className="hidden"
+                                    />
+                                    <div
+                                        onClick={() => !isLoading && fileInputRef.current?.click()}
+                                        className={`group aspect-square max-w-xs mx-auto border-2 border-dashed border-muted-foreground/50 rounded-lg flex items-center justify-center transition-colors ${!isLoading ? 'cursor-pointer hover:border-primary' : 'cursor-not-allowed'}`}
+                                    >
+                                        {imageDataUri ? (
+                                        <Image src={imageDataUri} alt="Selected face" width={400} height={400} className="rounded-lg object-cover aspect-square" />
+                                        ) : (
+                                        <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                                            <UploadCloud className="h-12 w-12" />
+                                            <p>Click to upload a photo</p>
+                                            <p className="text-xs">PNG or JPG</p>
+                                        </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </TabsContent>
+                            <TabsContent value="camera">
+                                <div className="space-y-4 text-center pt-4">
+                                    <div className="aspect-square max-w-xs mx-auto border-2 border-dashed border-muted-foreground/50 rounded-lg flex items-center justify-center overflow-hidden">
                                     {imageDataUri ? (
-                                      <Image src={imageDataUri} alt="Selected face" width={400} height={400} className="rounded-lg object-cover aspect-square" />
+                                        <Image src={imageDataUri} alt="Captured face" width={400} height={400} className="object-cover aspect-square" />
                                     ) : (
-                                      <div className="flex flex-col items-center gap-2 text-muted-foreground">
-                                          <UploadCloud className="h-12 w-12" />
-                                          <p>Click to upload a photo</p>
-                                          <p className="text-xs">PNG or JPG</p>
-                                      </div>
+                                        <>
+                                        <video ref={videoRef} className="w-full aspect-video rounded-md" autoPlay muted playsInline />
+                                        {hasCameraPermission === false && (
+                                            <div className="absolute flex flex-col items-center gap-2 text-muted-foreground p-4">
+                                                <VideoOff className="h-12 w-12" />
+                                                <p>Camera access denied</p>
+                                            </div>
+                                        )}
+                                        </>
+                                    )}
+                                    </div>
+                                    {!imageDataUri && (
+                                        <Button onClick={handleTakePhoto} disabled={isLoading || hasCameraPermission !== true} className="flex items-center gap-2">
+                                        <Camera /> Take Photo
+                                        </Button>
                                     )}
                                 </div>
-                            </div>
-                          </TabsContent>
-                          <TabsContent value="camera">
-                            <div className="space-y-4 text-center pt-4">
-                                <div className="aspect-square max-w-xs mx-auto border-2 border-dashed border-muted-foreground/50 rounded-lg flex items-center justify-center overflow-hidden">
-                                  {imageDataUri ? (
-                                     <Image src={imageDataUri} alt="Captured face" width={400} height={400} className="object-cover aspect-square" />
-                                  ) : (
-                                    <>
-                                      <video ref={videoRef} className="w-full aspect-video rounded-md" autoPlay muted playsInline />
-                                      {hasCameraPermission === false && (
-                                          <div className="absolute flex flex-col items-center gap-2 text-muted-foreground p-4">
-                                              <VideoOff className="h-12 w-12" />
-                                              <p>Camera access denied</p>
-                                          </div>
-                                      )}
-                                    </>
-                                  )}
-                                </div>
-                                {!imageDataUri && (
-                                    <Button onClick={handleTakePhoto} disabled={isLoading || hasCameraPermission !== true} className="flex items-center gap-2">
-                                      <Camera /> Take Photo
+                            </TabsContent>
+                            </Tabs>
+
+                            <canvas ref={canvasRef} className="hidden" />
+                            
+                            <div className="flex flex-col items-center gap-2 pt-4">
+                                <Button
+                                    onClick={handleAnalyzeClick}
+                                    disabled={!imageDataUri || isLoading || (!isGuest && tokens < 3)}
+                                    size="lg"
+                                    className="w-full max-w-xs"
+                                >
+                                    {isLoading ? "Analyzing..." : isGuest ? "Analyze Face (Free Preview)" : "Analyze Face (3 Tokens)"}
+                                </Button>
+                                {imageDataUri && (
+                                    <Button onClick={handleReset} variant="outline" size="lg" className="w-full max-w-xs flex items-center gap-2">
+                                        <RefreshCw />
+                                        Clear Photo
                                     </Button>
                                 )}
+                                {!isGuest && (
+                                    <>
+                                        <p className="text-sm text-muted-foreground pt-2">
+                                            You have {tokens} {tokens === 1 ? 'token' : 'tokens'} remaining.
+                                        </p>
+                                        {tokens < 3 && !isLoading && <p className="text-destructive text-sm">You don't have enough tokens left.</p>}
+                                    </>
+                                )}
                             </div>
-                          </TabsContent>
-                        </Tabs>
+                        </CardContent>
+                    </Card>
 
-                        <canvas ref={canvasRef} className="hidden" />
-                        
-                        <div className="flex flex-col items-center gap-2 pt-4">
-                            <Button
-                                onClick={handleAnalyzeClick}
-                                disabled={!imageDataUri || isLoading || (!isGuest && tokens < 3)}
-                                size="lg"
-                                className="w-full max-w-xs"
-                            >
-                                {isLoading ? "Analyzing..." : isGuest ? "Analyze Face (Free Preview)" : "Analyze Face (3 Tokens)"}
-                            </Button>
-                            {imageDataUri && (
-                                <Button onClick={handleReset} variant="outline" size="lg" className="w-full max-w-xs flex items-center gap-2">
-                                    <RefreshCw />
-                                    Clear Photo
-                                </Button>
-                            )}
-                            {!isGuest && (
-                                <>
-                                    <p className="text-sm text-muted-foreground pt-2">
-                                        You have {tokens} {tokens === 1 ? 'token' : 'tokens'} remaining.
-                                    </p>
-                                    {tokens < 3 && !isLoading && <p className="text-destructive text-sm">You don't have enough tokens left.</p>}
-                                </>
-                            )}
-                        </div>
-                    </CardContent>
-                </Card>
+                    {analysisResult && !isGuest && (
+                        <Card className="animate-in fade-in-0 duration-500 delay-100">
+                            <CardHeader><CardTitle className="font-headline">Overall Impression</CardTitle></CardHeader>
+                            <CardContent className="space-y-4">
+                                <div className="flex items-center gap-4">
+                                    <p className="text-5xl font-bold text-foreground">{analysisResult.overallImpression.rating}</p>
+                                    <div className="w-full">
+                                        <Progress value={analysisResult.overallImpression.rating} className="h-3" />
+                                        <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
+                                    </div>
+                                </div>
+                                <p className="text-muted-foreground pt-2">{analysisResult.overallImpression.text}</p>
+                            </CardContent>
+                        </Card>
+                    )}
+                </div>
         
                 {/* Right Column: Results */}
                 <div className="space-y-6">
@@ -432,7 +450,7 @@ const DashboardContent = () => {
                         <div className="space-y-6 animate-in fade-in-0 duration-500">
                             <Card className="animate-in fade-in-0 duration-500 bg-accent/50">
                                 <CardHeader>
-                                    <CardTitle>Aesthetic Score</CardTitle>
+                                    <CardTitle className="font-headline">Aesthetic Score</CardTitle>
                                     <CardDescription>Overall harmony, balance, and skin clarity.</CardDescription>
                                 </CardHeader>
                                 <CardContent className="flex items-center gap-4">
@@ -446,7 +464,7 @@ const DashboardContent = () => {
 
                             <Card>
                                 <CardHeader>
-                                    <CardTitle>Your Rating</CardTitle>
+                                    <CardTitle className="font-headline">Your Rating</CardTitle>
                                 </CardHeader>
                                 <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
                                     <RatingCard title="Overall" score={analysisResult.specificRatings.overall} />
@@ -460,27 +478,13 @@ const DashboardContent = () => {
         
                             {isGuest ? <LockedContent signIn={signInWithGoogle} /> : (
                                 <>
-                                    <Card className="animate-in fade-in-0 duration-500 delay-100">
-                                        <CardHeader><CardTitle>Overall Impression</CardTitle></CardHeader>
-                                        <CardContent className="space-y-4">
-                                            <div className="flex items-center gap-4">
-                                                <p className="text-5xl font-bold text-primary">{analysisResult.overallImpression.rating}</p>
-                                                <div className="w-full">
-                                                    <Progress value={analysisResult.overallImpression.rating} className="h-3" />
-                                                    <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
-                                                </div>
-                                            </div>
-                                            <p className="text-muted-foreground pt-2">{analysisResult.overallImpression.text}</p>
-                                        </CardContent>
-                                    </Card>
-            
                                     <Accordion type="single" collapsible className="w-full animate-in fade-in-0 duration-500 delay-200" defaultValue="item-0">
                                         {analysisResult.featureAnalysis.map((feature, index) => (
                                             <AccordionItem value={`item-${index}`} key={index}>
                                                 <AccordionTrigger className="text-lg font-semibold">{feature.feature}</AccordionTrigger>
                                                 <AccordionContent className="text-base text-muted-foreground space-y-4 pt-4">
                                                     <div className="flex items-center gap-4">
-                                                        <p className="text-3xl font-bold text-primary">{feature.rating}</p>
+                                                        <p className="text-3xl font-bold text-foreground">{feature.rating}</p>
                                                         <div className="w-full">
                                                             <Progress value={feature.rating} className="h-2" />
                                                             <p className="text-xs text-right text-muted-foreground mt-1">/ 100</p>
@@ -495,7 +499,7 @@ const DashboardContent = () => {
                                     {analysisResult.personalizedPlan && analysisResult.personalizedPlan.length > 0 && (
                                         <Card className="border-primary/50 bg-primary/5 animate-in fade-in-0 duration-500 delay-300">
                                             <CardHeader>
-                                                <CardTitle className="flex items-center gap-2"><Target className="h-6 w-6 text-primary" />Your Personalized Plan</CardTitle>
+                                                <CardTitle className="flex items-center gap-2 font-headline"><Target className="h-6 w-6 text-primary" />Your Personalized Plan</CardTitle>
                                                 <CardDescription>A step-by-step guide based on your aesthetic goal.</CardDescription>
                                             </CardHeader>
                                             <CardContent className="space-y-4">
@@ -518,7 +522,7 @@ const DashboardContent = () => {
             {analysisResult && !isGuest && (
                 <div className="animate-in fade-in-0 duration-500 delay-400">
                     <Card className="bg-accent/50">
-                        <CardHeader><CardTitle>Skincare Recommendations</CardTitle></CardHeader>
+                        <CardHeader><CardTitle className="font-headline">Skincare Recommendations</CardTitle></CardHeader>
                         <CardContent className="space-y-4">
                             {analysisResult.skincareRecommendations.map((rec, index) => (
                                 <div key={index} className="p-4 bg-background rounded-md shadow-sm">
