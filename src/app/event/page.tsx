@@ -108,8 +108,9 @@ export default function EventPage() {
           </CardHeader>
           <CardContent className="text-center">
             <div className="bg-white/10 p-6 rounded-lg backdrop-blur-sm">
-              <p className="text-5xl md:text-6xl font-bold">$5 - $20 USD</p>
-              <p className="text-xl font-semibold mt-4">For Every 200,000 Views!</p>
+              <p className="text-xl font-semibold">For Every</p>
+              <p className="text-5xl md:text-6xl font-bold animate-pulse">200,000 Views!</p>
+              <p className="text-2xl font-bold mt-4">$5 - $20 USD</p>
             </div>
             <p className="text-xs text-white/80 mt-4">Prize limit up to 10M views. Payouts available in all local currency equivalents.</p>
           </CardContent>
