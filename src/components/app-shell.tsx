@@ -20,7 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { LayoutDashboard, LogOut, Coins, Moon, Sun, History, BookOpen, UserSearch, Lightbulb, Trophy, Gem, Megaphone, X, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, LogOut, Coins, Moon, Sun, History, BookOpen, UserSearch, Lightbulb, Trophy, Gem } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/use-auth';
 import { Switch } from '@/components/ui/switch';
@@ -29,42 +29,6 @@ import { Footer } from './footer';
 import Confetti from 'react-confetti';
 import { useWindowSize } from 'react-use';
 import { cn } from '@/lib/utils';
-import { Alert, AlertDescription, AlertTitle } from './ui/alert';
-
-const AdBanner = () => {
-    const [isOpen, setIsOpen] = React.useState(true);
-    const router = useRouter();
-
-    if (!isOpen) {
-        return null;
-    }
-
-    const handleClick = () => {
-        router.push('/event');
-    }
-
-    return (
-        <div className="relative isolate flex items-center gap-x-6 overflow-hidden bg-primary/90 px-6 py-2.5 sm:px-3.5 sm:before:flex-1 text-primary-foreground">
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                <p className="text-sm leading-6">
-                    <Megaphone className="inline h-5 w-5 mr-2" />
-                    <strong className="font-semibold">Join Our Event!</strong>
-                    <svg viewBox="0 0 2 2" className="mx-2 inline h-0.5 w-0.5 fill-current" aria-hidden="true"><circle cx="1" cy="1" r="1" /></svg>
-                     Set Your Aesthetic Goal & Win Prizes!
-                </p>
-                <button onClick={handleClick} className="group flex-none rounded-full bg-primary-foreground/20 px-3.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-primary-foreground/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900">
-                    Learn more <span aria-hidden="true" className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">&rarr;</span>
-                </button>
-            </div>
-            <div className="flex flex-1 justify-end">
-                <button type="button" className="-m-3 p-3 focus-visible:outline-offset-[-4px]" onClick={() => setIsOpen(false)}>
-                    <span className="sr-only">Dismiss</span>
-                    <X className="h-5 w-5" aria-hidden="true" />
-                </button>
-            </div>
-        </div>
-    )
-}
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -186,7 +150,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </Sidebar>
       <SidebarInset>
         <div className="flex flex-col h-full">
-            <AdBanner />
             <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6 sticky top-0 z-30">
                 <SidebarTrigger className="md:hidden" />
                 <h1 className="text-xl font-semibold capitalize">{pathname.substring(1).replace('-', ' ') || 'Dashboard'}</h1>

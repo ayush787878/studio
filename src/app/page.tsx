@@ -442,6 +442,23 @@ const DashboardContent = () => {
                         <Hand className="h-8 w-8 text-yellow-500" />
                         Welcome back, {userProfile.displayName?.split(' ')[0] || 'friend'}!
                     </h1>
+
+                     <Link href="/event" className="block group">
+                        <div className="relative isolate flex items-center gap-x-6 overflow-hidden bg-gradient-to-r from-pink-400 via-pink-500 to-red-500 text-white px-6 py-3.5 sm:px-3.5 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                                <PartyPopper className="h-6 w-6 animate-pulse" />
+                                <p className="text-sm leading-6 font-semibold">
+                                    <strong className="font-bold">Join Our Event & Win Prizes!</strong>
+                                    <svg viewBox="0 0 2 2" className="mx-2 inline h-0.5 w-0.5 fill-current" aria-hidden="true"><circle cx="1" cy="1" r="1" /></svg>
+                                    Create an Instagram Reel and get rewarded for views.
+                                </p>
+                            </div>
+                            <div className="ml-auto flex flex-1 justify-end">
+                                <ChevronRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                            </div>
+                        </div>
+                    </Link>
+
                      {tokens < 3 && (
                         <Alert variant="destructive">
                             <AlertCircle className="h-4 w-4" />
