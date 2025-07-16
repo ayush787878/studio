@@ -118,7 +118,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setLoading(false);
     });
     return () => unsubscribe();
-  }, [toast]);
+  }, [toast, userProfile]);
 
   const signInWithGoogle = async () => {
     if (!auth) {

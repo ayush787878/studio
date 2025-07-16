@@ -14,7 +14,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { updateUserTokens } from '@/services/userService';
 import { analyzeFace, type AnalyzeFaceOutput } from '@/ai/flows/feature-analysis';
-import { UploadCloud, Sparkles, RefreshCw, Target, Lock, Camera, VideoOff, Gift, PartyPopper, Palette, AlertCircle, Coins, ChevronRight, Hand } from 'lucide-react';
+import { UploadCloud, Sparkles, RefreshCw, Target, Lock, Camera, VideoOff, Gift, PartyPopper, Palette, AlertCircle, Coins, ChevronRight, Hand, Download } from 'lucide-react';
 import { Logo } from '@/components/logo';
 import { Footer } from '@/components/footer';
 import { PublicHeader } from '@/components/public-header';
@@ -36,7 +36,6 @@ const LockedContent = ({ signIn }: { signIn: () => Promise<void> }) => (
            <ul className="text-left text-muted-foreground list-disc pl-6 mb-6 space-y-1">
                 <li>Your detailed feature ratings</li>
                 <li>A personalized improvement plan</li>
-                <li>Your complete analysis history</li>
            </ul>
           <Button onClick={signIn} size="lg" className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:opacity-90 transition-opacity shadow-lg">
               <Sparkles className="mr-2 h-5 w-5" />
@@ -296,6 +295,26 @@ const DashboardContent = () => {
             getCameraPermission();
         }
     }
+
+    const handleDownload = () => {
+        if (!analysisResult) return;
+
+        const dataStr = JSON.stringify(analysisResult, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(dataBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'facelyze_analysis.json';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+
+        toast({
+            title: "Download Started",
+            description: "Your analysis file is being downloaded."
+        });
+    };
   
     const tokens = userProfile?.tokens ?? 0;
     const isGuest = !userProfile;
@@ -311,7 +330,7 @@ const DashboardContent = () => {
                         </div>
                         <AlertDialogTitle className="text-center text-2xl">Welcome to Facelyze!</AlertDialogTitle>
                         <AlertDialogDescription className="text-center pt-2">
-                           Sign in to unlock your complete analysis, including detailed ratings, history, and personalized plans. Or, try a limited preview now.
+                           Sign in to unlock your complete analysis, including detailed ratings, and personalized plans.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter className="sm:justify-center gap-2 flex-col-reverse sm:flex-row">
@@ -589,29 +608,7 @@ const DashboardContent = () => {
                             </div>
 
                             {isGuest ? (
-                                <div className="relative mt-6">
-                                    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center rounded-lg bg-background/80 p-4 text-center">
-                                        <Lock className="h-12 w-12 text-primary mb-4" />
-                                        <h3 className="text-xl font-bold mb-2">Unlock Full Analysis</h3>
-                                        <p className="text-muted-foreground mb-4 max-w-sm">Sign in to see:</p>
-                                        <ul className="text-left text-muted-foreground list-disc pl-6 mb-6 space-y-1">
-                                            <li>Your detailed feature ratings</li>
-                                            <li>A personalized improvement plan</li>
-                                        </ul>
-                                        <Button onClick={signInWithGoogle} size="lg" className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:opacity-90 transition-opacity shadow-lg">
-                                            <Sparkles className="mr-2 h-5 w-5" />
-                                            Sign In to Unlock
-                                        </Button>
-                                    </div>
-                                    <div className="space-y-6 blur-sm select-none pointer-events-none">
-                                        <Accordion type="single" collapsible className="w-full">
-                                            <AccordionItem value="item-1">
-                                                <AccordionTrigger className="text-lg font-semibold">Feature Analysis</AccordionTrigger>
-                                                <AccordionContent>A detailed breakdown will be shown here.</AccordionContent>
-                                            </AccordionItem>
-                                        </Accordion>
-                                    </div>
-                                </div>
+                                <LockedContent signIn={signInWithGoogle} />
                             ) : (
                                 <div className="space-y-6">
                                     <Accordion type="single" collapsible className="w-full animate-in fade-in-0 duration-500 delay-200" defaultValue="item-0">
@@ -648,6 +645,11 @@ const DashboardContent = () => {
                                             </CardContent>
                                         </Card>
                                     )}
+
+                                    <Button onClick={handleDownload} variant="outline" className="w-full flex items-center gap-2">
+                                        <Download />
+                                        Download Analysis Results
+                                    </Button>
                                 </div>
                             )}
                         </div>
