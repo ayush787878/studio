@@ -20,7 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { LayoutDashboard, LogOut, Coins, Moon, Sun, History, BookOpen, UserSearch, Lightbulb, Trophy, Gem } from 'lucide-react';
+import { LayoutDashboard, LogOut, Coins, Moon, Sun, BookOpen, UserSearch, Lightbulb, Trophy, Gem } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/use-auth';
 import { Switch } from '@/components/ui/switch';
@@ -58,7 +58,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const navItems = [
     { href: "/", label: "Dashboard", icon: <LayoutDashboard /> },
     { href: "/scan-face", label: "Scan Face", icon: <UserSearch /> },
-    { href: "/history", label: "History", icon: <History /> },
     { href: "/learning-plan", label: "Learning Plan", icon: <Lightbulb /> },
     { href: "/advisory", label: "Advisory", icon: <BookOpen /> },
     { href: "/store", label: "Get Tokens", icon: <Gem /> },

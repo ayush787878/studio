@@ -12,7 +12,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Progress } from '@/components/ui/progress';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
-import { updateUserTokens, saveAnalysis, incrementAnalysisCount } from '@/services/userService';
+import { updateUserTokens } from '@/services/userService';
 import { analyzeFace, type AnalyzeFaceOutput } from '@/ai/flows/feature-analysis';
 import { UploadCloud, Sparkles, RefreshCw, Target, Lock, Camera, VideoOff, Gift, PartyPopper, Palette, AlertCircle, Coins, ChevronRight, Hand } from 'lucide-react';
 import { Logo } from '@/components/logo';
@@ -113,7 +113,6 @@ const DashboardContent = () => {
 
     const [imageDataUri, setImageDataUri] = useState<string | null>(null);
     const [analysisResult, setAnalysisResult] = useState<AnalyzeFaceOutput | null>(null);
-    const [isResultPendingSave, setIsResultPendingSave] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [progress, setProgress] = useState(0);
     const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
@@ -173,50 +172,6 @@ const DashboardContent = () => {
         }
     }, [userProfile]);
 
-    // Effect to save analysis after a guest logs in
-    useEffect(() => {
-        if (userProfile && analysisResult && isResultPendingSave) {
-          const saveOnLogin = async () => {
-            if (userProfile.tokens < 3) {
-              toast({
-                title: "Unlock Failed",
-                description: "You do not have enough tokens to unlock this analysis.",
-                variant: "destructive",
-              });
-              setIsResultPendingSave(false);
-              return;
-            }
-            
-            toast({ title: "Unlocking results...", description: "Saving to your account and deducting 3 tokens." });
-            try {
-              await saveAnalysis(userProfile.uid, imageDataUri!, analysisResult);
-              await incrementAnalysisCount(userProfile.uid);
-              const newTokens = userProfile.tokens - 3;
-              await updateUserTokens(userProfile.uid, newTokens);
-              await refreshUserProfile();
-              
-              toast({
-                title: "Analysis Unlocked & Saved!",
-                description: "Your full results are now available.",
-              });
-
-              // Check for promo after saving for the first time
-              const newAnalysisCount = userProfile.analysisCount + 1;
-              if (newAnalysisCount === 1 || newAnalysisCount === 3) {
-                setShowPromo(true);
-              }
-
-            } catch (error) {
-              console.error("Failed to save analysis on login:", error);
-              toast({ title: "Error", description: "Could not save the analysis.", variant: "destructive" });
-            } finally {
-              setIsResultPendingSave(false);
-            }
-          };
-          saveOnLogin();
-        }
-    }, [userProfile, analysisResult, isResultPendingSave, imageDataUri, toast, refreshUserProfile]);
-    
     useEffect(() => {
         if (showAnalysisConfetti) {
             const timer = setTimeout(() => setShowAnalysisConfetti(false), 8000); // Confetti for 8 seconds
@@ -258,7 +213,6 @@ const DashboardContent = () => {
         const file = event.target.files?.[0];
         if (file) {
           setAnalysisResult(null);
-          setIsResultPendingSave(false);
           const reader = new FileReader();
           reader.onloadend = () => {
             setImageDataUri(reader.result as string);
@@ -281,7 +235,6 @@ const DashboardContent = () => {
             const dataUri = canvas.toDataURL('image/jpeg');
             setImageDataUri(dataUri);
             setAnalysisResult(null);
-            setIsResultPendingSave(false);
         }
     };
   
@@ -295,7 +248,6 @@ const DashboardContent = () => {
 
         setIsLoading(true);
         setAnalysisResult(null);
-        setIsResultPendingSave(false);
 
         try {
             const aestheticGoal = userProfile?.aestheticGoal || '';
@@ -308,24 +260,12 @@ const DashboardContent = () => {
             setShowAnalysisConfetti(true);
     
             if (userProfile) { // Logged-in user flow
-                await saveAnalysis(userProfile.uid, imageDataUri, result);
-                await incrementAnalysisCount(userProfile.uid);
                 const newTokens = userProfile.tokens - 3;
                 await updateUserTokens(userProfile.uid, newTokens);
-                
-                await refreshUserProfile(); // This will give us the new analysisCount
-                
-                toast({ title: "Analysis Complete & Saved", description: "3 tokens have been deducted." });
-                
-                // Use the fresh profile data to check for promo
-                const newAnalysisCount = (userProfile.analysisCount || 0) + 1;
-                if (newAnalysisCount === 1 || newAnalysisCount === 3) {
-                    setShowPromo(true);
-                }
-
+                await refreshUserProfile();
+                toast({ title: "Analysis Complete", description: "3 tokens have been deducted." });
             } else { // Guest user flow
-                setIsResultPendingSave(true);
-                toast({ title: "Preview Generated!", description: "Log in to unlock your full detailed analysis." });
+                toast({ title: "Preview Generated!", description: "Log in to unlock your full detailed analysis and save your history." });
             }
         } catch (error) {
             console.error("Analysis failed:", error);
@@ -338,7 +278,6 @@ const DashboardContent = () => {
     const handleReset = () => {
         setImageDataUri(null);
         setAnalysisResult(null);
-        setIsResultPendingSave(false);
         if(fileInputRef.current) {
             fileInputRef.current.value = "";
         }
@@ -577,27 +516,6 @@ const DashboardContent = () => {
                             </div>
                         </CardContent>
                     </Card>
-
-                    {analysisResult && (
-                        <div className="space-y-6">
-                            <GeneralTraitsCard traits={analysisResult.generalTraits} />
-                            {analysisResult.overallImpression && (
-                                <Card className="animate-in fade-in-0 duration-500 delay-100 h-full">
-                                    <CardHeader><CardTitle className="font-headline">Overall Impression</CardTitle></CardHeader>
-                                    <CardContent className="space-y-4">
-                                        <div className="flex items-center gap-4">
-                                            <p className="text-5xl font-bold text-foreground">{analysisResult.overallImpression.rating}</p>
-                                            <div className="w-full">
-                                                <Progress value={analysisResult.overallImpression.rating} className="h-3" />
-                                                <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
-                                            </div>
-                                        </div>
-                                        <p className="text-muted-foreground pt-2">{analysisResult.overallImpression.text}</p>
-                                    </CardContent>
-                                </Card>
-                            )}
-                        </div>
-                    )}
                 </div>
         
                 {/* Right Column: Results */}
@@ -637,6 +555,23 @@ const DashboardContent = () => {
                                 </CardContent>
                             </Card>
 
+                             <GeneralTraitsCard traits={analysisResult.generalTraits} />
+                            {analysisResult.overallImpression && (
+                                <Card className="animate-in fade-in-0 duration-500 delay-100 h-full">
+                                    <CardHeader><CardTitle className="font-headline">Overall Impression</CardTitle></CardHeader>
+                                    <CardContent className="space-y-4">
+                                        <div className="flex items-center gap-4">
+                                            <p className="text-5xl font-bold text-foreground">{analysisResult.overallImpression.rating}</p>
+                                            <div className="w-full">
+                                                <Progress value={analysisResult.overallImpression.rating} className="h-3" />
+                                                <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
+                                            </div>
+                                        </div>
+                                        <p className="text-muted-foreground pt-2">{analysisResult.overallImpression.text}</p>
+                                    </CardContent>
+                                </Card>
+                            )}
+
                             <div className="space-y-6">
                                 <Card>
                                     <CardHeader>
@@ -662,7 +597,6 @@ const DashboardContent = () => {
                                         <ul className="text-left text-muted-foreground list-disc pl-6 mb-6 space-y-1">
                                             <li>Your detailed feature ratings</li>
                                             <li>A personalized improvement plan</li>
-                                            <li>Your complete analysis history</li>
                                         </ul>
                                         <Button onClick={signInWithGoogle} size="lg" className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:opacity-90 transition-opacity shadow-lg">
                                             <Sparkles className="mr-2 h-5 w-5" />
@@ -769,7 +703,3 @@ export default function HomePage() {
         </div>
     );
 }
-
-    
-
-    
