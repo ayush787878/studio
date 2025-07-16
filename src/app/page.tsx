@@ -587,6 +587,12 @@ const DashboardContent = () => {
                                         Clear Photo
                                     </Button>
                                 )}
+                                {analysisResult && (
+                                    <Button onClick={handleDownload} size="lg" className="w-full max-w-xs flex items-center gap-2">
+                                        <Download />
+                                        Download Results
+                                    </Button>
+                                )}
                                 {!isGuest && (
                                     <>
                                         <p className="text-sm text-muted-foreground pt-2">
@@ -708,11 +714,6 @@ const DashboardContent = () => {
                                             </CardContent>
                                         </Card>
                                     )}
-
-                                    <Button onClick={handleDownload} variant="outline" className="w-full flex items-center gap-2">
-                                        <Download />
-                                        Download Analysis Results
-                                    </Button>
                                 </div>
                             )}
                         </div>
