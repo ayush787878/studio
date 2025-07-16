@@ -83,35 +83,29 @@ export default function HistoryPage() {
                         <Image src={item.photoDataUri} alt="Analysis photo" width={400} height={400} className="rounded-lg object-cover aspect-square w-full" />
                       </div>
                       <div className="space-y-6">
-                        <Card className="bg-accent/50">
-                            <CardHeader>
-                                <CardTitle>Aesthetic Score</CardTitle>
-                                <CardDescription>Overall harmony, balance, and skin clarity.</CardDescription>
-                            </CardHeader>
-                            <CardContent className="flex items-center gap-4">
-                                <p className="text-5xl font-bold text-primary">{item.analysis.aestheticScore}</p>
-                                <div className="w-full">
-                                    <Progress value={item.analysis.aestheticScore} className="h-3" />
-                                    <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
-                                </div>
-                            </CardContent>
-                        </Card>
+                        
+                        <div className="grid md:grid-cols-2 gap-6">
+                            <Card className="bg-accent/50">
+                                <CardHeader>
+                                    <CardTitle>Aesthetic Score</CardTitle>
+                                    <CardDescription>Overall harmony, balance, and skin clarity.</CardDescription>
+                                </CardHeader>
+                                <CardContent className="flex items-center gap-4">
+                                    <p className="text-5xl font-bold text-primary">{item.analysis.aestheticScore}</p>
+                                </CardContent>
+                            </Card>
 
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Overall Impression</CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                                <div className="flex items-center gap-4">
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Overall Impression</CardTitle>
+                                </CardHeader>
+                                <CardContent>
                                     <p className="text-5xl font-bold text-primary">{item.analysis.overallImpression.rating}</p>
-                                    <div className="w-full">
-                                        <Progress value={item.analysis.overallImpression.rating} className="h-3" />
-                                        <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
-                                    </div>
-                                </div>
-                                <p className="text-muted-foreground pt-2">{item.analysis.overallImpression.text}</p>
-                            </CardContent>
-                        </Card>
+                                </CardContent>
+                            </Card>
+                        </div>
+
+                        <p className="text-muted-foreground pt-2">{item.analysis.overallImpression.text}</p>
 
                         <Accordion type="single" collapsible className="w-full">
                             {item.analysis.featureAnalysis.map((feature, index) => (
