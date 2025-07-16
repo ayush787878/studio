@@ -44,16 +44,7 @@ const LockedContent = ({ signIn }: { signIn: () => Promise<void> }) => (
           </Button>
       </div>
       <div className="space-y-6 blur-sm select-none pointer-events-none">
-            <Card>
-                <CardHeader>
-                    <CardTitle className="font-headline">Your Rating</CardTitle>
-                </CardHeader>
-                <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    <RatingCard title="Overall" score={0} />
-                    <RatingCard title="Potential" score={0} />
-                    <RatingCard title="Masculinity" score={0} />
-                </CardContent>
-            </Card>
+            <GeneralTraitsCard traits={{ faceShape: 'Oval', eyeColor: 'Brown', hairColor: 'Black', skinTone: 'Fair' }} />
             <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="item-1">
                     <AccordionTrigger className="text-lg font-semibold">Feature Analysis</AccordionTrigger>
@@ -85,17 +76,17 @@ const RatingCard = ({ title, score }: { title: string; score: number }) => {
 };
 
 const TraitItem = ({ label, value }: { label: string; value: string }) => (
-    <div className="flex justify-between items-center py-2 border-b border-border/50">
+    <div className="flex justify-between items-center py-3 border-b border-border/50">
         <p className="text-sm font-medium text-muted-foreground">{label}</p>
         <p className="text-sm font-semibold text-foreground">{value}</p>
     </div>
 );
 
-const GeneralTraitsCard = ({ traits }: { traits: AnalyzeFaceOutput['generalTraits'] }) => {
+const GeneralTraitsCard = ({ traits }: { traits: AnalyzeFaceOutput['generalTraits'] | null }) => {
     if (!traits) return null;
     
     return (
-        <Card className="animate-in fade-in-0 duration-500 mt-8">
+        <Card className="animate-in fade-in-0 duration-500">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2 font-headline">
                     <Palette />
@@ -552,10 +543,6 @@ const DashboardContent = () => {
                             </div>
                         </CardContent>
                     </Card>
-                    
-                    {analysisResult && !isLoading && (
-                        <GeneralTraitsCard traits={analysisResult.generalTraits} />
-                    )}
                 </div>
         
                 {/* Right Column: Results */}
@@ -609,26 +596,26 @@ const DashboardContent = () => {
                                         <RatingCard title="Skin Quality" score={analysisResult.specificRatings.skinQuality} />
                                     </CardContent>
                                 </Card>
-
-                                {analysisResult.overallImpression && (
-                                    <Card className="animate-in fade-in-0 duration-500 delay-100">
-                                        <CardHeader><CardTitle className="font-headline">Overall Impression</CardTitle></CardHeader>
-                                        <CardContent className="space-y-4">
-                                            <div className="flex items-center gap-4">
-                                                <p className="text-5xl font-bold text-foreground">{analysisResult.overallImpression.rating}</p>
-                                                <div className="w-full">
-                                                    <Progress value={analysisResult.overallImpression.rating} className="h-3" />
-                                                    <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
-                                                </div>
-                                            </div>
-                                            <p className="text-muted-foreground pt-2">{analysisResult.overallImpression.text}</p>
-                                        </CardContent>
-                                    </Card>
-                                )}
                             </div>
 
                             {isGuest ? <LockedContent signIn={signInWithGoogle} /> : (
                                 <div className="space-y-6">
+                                    <GeneralTraitsCard traits={analysisResult.generalTraits} />
+                                    {analysisResult.overallImpression && (
+                                        <Card className="animate-in fade-in-0 duration-500 delay-100">
+                                            <CardHeader><CardTitle className="font-headline">Overall Impression</CardTitle></CardHeader>
+                                            <CardContent className="space-y-4">
+                                                <div className="flex items-center gap-4">
+                                                    <p className="text-5xl font-bold text-foreground">{analysisResult.overallImpression.rating}</p>
+                                                    <div className="w-full">
+                                                        <Progress value={analysisResult.overallImpression.rating} className="h-3" />
+                                                        <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
+                                                    </div>
+                                                </div>
+                                                <p className="text-muted-foreground pt-2">{analysisResult.overallImpression.text}</p>
+                                            </CardContent>
+                                        </Card>
+                                    )}
                                     <Accordion type="single" collapsible className="w-full animate-in fade-in-0 duration-500 delay-200" defaultValue="item-0">
                                         {analysisResult.featureAnalysis.map((feature, index) => (
                                             <AccordionItem value={`item-${index}`} key={index}>
