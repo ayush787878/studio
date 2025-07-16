@@ -14,7 +14,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { updateUserTokens, saveAnalysis, incrementAnalysisCount } from '@/services/userService';
 import { analyzeFace, type AnalyzeFaceOutput } from '@/ai/flows/feature-analysis';
-import { UploadCloud, Sparkles, RefreshCw, Target, Lock, Camera, VideoOff, Gift, PartyPopper, Palette, AlertCircle, Coins } from 'lucide-react';
+import { UploadCloud, Sparkles, RefreshCw, Target, Lock, Camera, VideoOff, Gift, PartyPopper, Palette, AlertCircle, Coins, ChevronRight, Hand } from 'lucide-react';
 import { Logo } from '@/components/logo';
 import { Footer } from '@/components/footer';
 import { PublicHeader } from '@/components/public-header';
@@ -299,7 +299,11 @@ const DashboardContent = () => {
 
         try {
             const aestheticGoal = userProfile?.aestheticGoal || '';
-            const result = await analyzeFace({ photoDataUri: imageDataUri, aestheticGoal });
+            const result = await analyzeFace({
+                photoDataUri: imageDataUri,
+                userName: userProfile?.displayName?.split(' ')[0] || 'there',
+                aestheticGoal
+            });
             setAnalysisResult(result);
             setShowAnalysisConfetti(true);
     
@@ -431,22 +435,30 @@ const DashboardContent = () => {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-
-
-            {userProfile && tokens < 3 && (
-                <Alert variant="destructive">
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertTitle>Low on Tokens!</AlertTitle>
-                    <div className="flex justify-between items-center">
-                        <AlertDescription>
-                            You have {tokens} {tokens === 1 ? 'token' : 'tokens'} left. Get more to continue analyzing.
-                        </AlertDescription>
-                        <Button asChild variant="outline" size="sm">
-                            <Link href="/store">Get More Tokens</Link>
-                        </Button>
-                    </div>
-                </Alert>
+            
+            {userProfile && (
+                <div className="space-y-4">
+                    <h1 className="text-3xl font-bold flex items-center gap-3">
+                        <Hand className="h-8 w-8 text-yellow-500" />
+                        Welcome back, {userProfile.displayName?.split(' ')[0] || 'friend'}!
+                    </h1>
+                     {tokens < 3 && (
+                        <Alert variant="destructive">
+                            <AlertCircle className="h-4 w-4" />
+                            <AlertTitle>Low on Tokens!</AlertTitle>
+                            <div className="flex justify-between items-center">
+                                <AlertDescription>
+                                    You have {tokens} {tokens === 1 ? 'token' : 'tokens'} left. Get more to continue analyzing.
+                                </AlertDescription>
+                                <Button asChild variant="outline" size="sm">
+                                    <Link href="/store">Get More Tokens</Link>
+                                </Button>
+                            </div>
+                        </Alert>
+                    )}
+                </div>
             )}
+            
             <div className="grid lg:grid-cols-2 gap-8">
                 {/* Left Column: Uploader */}
                 <div className="space-y-8">

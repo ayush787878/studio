@@ -16,6 +16,7 @@ const AnalyzeFaceInputSchema = z.object({
     .describe(
       "A photo of a person's face, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
     ),
+  userName: z.string().optional().describe("The user's display name for personalization."),
   aestheticGoal: z.string().optional().describe("An optional description of the user's desired aesthetic goal (e.g., 'a sharper jawline', 'brighter skin')."),
 });
 export type AnalyzeFaceInput = z.infer<typeof AnalyzeFaceInputSchema>;
@@ -64,12 +65,16 @@ const prompt = ai.definePrompt({
   name: 'analyzeFacePrompt',
   input: {schema: AnalyzeFaceInputSchema},
   output: {schema: AnalyzeFaceOutputSchema},
-  prompt: `You are an expert virtual aesthetician. Your goal is to provide a positive, constructive, and helpful analysis of a user's face based on a photograph. Be encouraging and focus on providing useful advice.
+  prompt: `You are an expert virtual aesthetician. Your goal is to provide a positive, constructive, and helpful analysis of a user's face based on a photograph. Your tone should be friendly, encouraging, and personal, as if you are a knowledgeable friend giving advice.
+
+{{#if userName}}
+Address the user directly by their name, {{userName}}, throughout the analysis to make it feel like a one-on-one consultation. For example, "Alright, {{userName}}, let's take a look..." or "Based on your photo, {{userName}}, I'd recommend...".
+{{/if}}
 
 Analyze the provided photo. Identify key facial features, and provide personalized skincare recommendations.
 - First, identify the general, non-rated traits and populate the 'generalTraits' object. This includes face shape, eye color, hair color, and skin tone.
 - Provide an 'aestheticScore' from 0 to 100 based on overall facial harmony, balance, and clarity of the skin. Be objective and professional.
-- For the 'overallImpression', provide both a detailed, multi-sentence textual summary in the 'text' field and a separate numerical 'rating' out of 100 that reflects the general positive impression.
+- For the 'overallImpression', provide both a detailed, multi-sentence textual summary in the 'text' field and a separate numerical 'rating' out of 100 that reflects the general positive impression. This text should be particularly friendly and encouraging.
 - Provide the six 'specificRatings' (overall, potential, masculinity, jawline, cheekbones, skinQuality) as numerical scores from 0-100.
 - For each item in 'featureAnalysis', you must provide a numerical 'rating' from 0 to 100 for that specific feature, in addition to the textual analysis.
 - For 'skincareRecommendations', provide at least 3 detailed and actionable recommendations.
@@ -77,10 +82,10 @@ Analyze the provided photo. Identify key facial features, and provide personaliz
   - The 'reason' field must be a comprehensive, multi-sentence explanation. It must connect the recommendation directly to specific observations from the user's photo (e.g., "Due to the observed mild redness and what appears to be some dry patches on your cheeks, a gentle hydrating cleanser is recommended..."). It should also suggest specific product types or key ingredients to look for (e.g., "Look for cleansers with ingredients like glycerin or hyaluronic acid, and avoid harsh sulfates.").
 
 {{#if aestheticGoal}}
-- The user has specified an aesthetic goal: "{{aestheticGoal}}". Based on your analysis of their photo, generate a 'personalizedPlan'. This plan must be a series of actionable, step-by-step instructions to help them work towards their goal. The steps should be safe, realistic, and constructive, potentially including skincare routines, facial exercises, or lifestyle suggestions. For each step, provide a clear 'step' title and a detailed 'description' explaining how to do it and why it helps.
+- The user, {{userName}}, has specified an aesthetic goal: "{{aestheticGoal}}". Based on your analysis of their photo, generate a 'personalizedPlan'. This plan must be a series of actionable, step-by-step instructions to help them work towards their goal. The steps should be safe, realistic, and constructive, potentially including skincare routines, facial exercises, or lifestyle suggestions. For each step, provide a clear 'step' title and a detailed 'description' explaining how to do it and why it helps.
 {{/if}}
 
-Your analysis MUST be respectful, positive, and avoid any harsh or negative language. The tone should be that of a helpful professional providing expert advice.
+Your analysis MUST be respectful, positive, and avoid any harsh or negative language.
 
 Photo to analyze: {{media url=photoDataUri}}`,
 });
