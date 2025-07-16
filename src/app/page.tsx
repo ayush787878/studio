@@ -433,14 +433,16 @@ const DashboardContent = () => {
             </AlertDialog>
 
 
-             {userProfile && !userProfile.aestheticGoal && (
-                <Alert>
-                    <Target className="h-4 w-4" />
-                    <AlertTitle>Set Your Aesthetic Goal!</AlertTitle>
-                    <AlertDescription>
-                        You haven't set a goal yet. Visit the <Link href="/learning-plan" className="font-semibold text-primary hover:underline">Learning Plan</Link> page to create a personalized plan and get more tailored analysis results.
-                    </AlertDescription>
-                </Alert>
+            {userProfile && (
+                <Link href="/event" className="block cursor-pointer">
+                    <Alert className="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 text-white border-0 hover:opacity-90 transition-opacity">
+                        <PartyPopper className="h-4 w-4 text-white" />
+                        <AlertTitle className="font-bold">Join the Reels Event!</AlertTitle>
+                        <AlertDescription className="text-white/90">
+                            Create a Reel about Facelyze and win cash for views. Click here to learn more!
+                        </AlertDescription>
+                    </Alert>
+                </Link>
             )}
             <div className="grid lg:grid-cols-2 gap-8">
                 {/* Left Column: Uploader */}
@@ -598,7 +600,33 @@ const DashboardContent = () => {
                                 </Card>
                             </div>
 
-                            {isGuest ? <LockedContent signIn={signInWithGoogle} /> : (
+                            {isGuest ? (
+                                <div className="relative mt-6">
+                                    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center rounded-lg bg-background/80 p-4 text-center">
+                                        <Lock className="h-12 w-12 text-primary mb-4" />
+                                        <h3 className="text-xl font-bold mb-2">Unlock Full Analysis</h3>
+                                        <p className="text-muted-foreground mb-4 max-w-sm">Sign in to see:</p>
+                                        <ul className="text-left text-muted-foreground list-disc pl-6 mb-6 space-y-1">
+                                            <li>Your detailed feature ratings</li>
+                                            <li>A personalized improvement plan</li>
+                                            <li>Your complete analysis history</li>
+                                        </ul>
+                                        <Button onClick={signInWithGoogle} size="lg" className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:opacity-90 transition-opacity shadow-lg">
+                                            <Sparkles className="mr-2 h-5 w-5" />
+                                            Sign In to Unlock
+                                        </Button>
+                                    </div>
+                                    <div className="space-y-6 blur-sm select-none pointer-events-none">
+                                        <GeneralTraitsCard traits={analysisResult.generalTraits} />
+                                        <Accordion type="single" collapsible className="w-full">
+                                            <AccordionItem value="item-1">
+                                                <AccordionTrigger className="text-lg font-semibold">Feature Analysis</AccordionTrigger>
+                                                <AccordionContent>A detailed breakdown will be shown here.</AccordionContent>
+                                            </AccordionItem>
+                                        </Accordion>
+                                    </div>
+                                </div>
+                            ) : (
                                 <div className="space-y-6">
                                     <GeneralTraitsCard traits={analysisResult.generalTraits} />
                                     {analysisResult.overallImpression && (
