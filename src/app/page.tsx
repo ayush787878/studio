@@ -649,7 +649,17 @@ const DashboardContent = () => {
                                         </Button>
                                     </div>
                                     <div className="space-y-6 blur-sm select-none pointer-events-none">
-                                        <GeneralTraitsCard traits={analysisResult.generalTraits} />
+                                        <div className="grid md:grid-cols-2 gap-6">
+                                            <GeneralTraitsCard traits={analysisResult.generalTraits} />
+                                            {analysisResult.overallImpression && (
+                                                <Card className="h-full">
+                                                    <CardHeader><CardTitle className="font-headline">Overall Impression</CardTitle></CardHeader>
+                                                    <CardContent>
+                                                        <p className="text-muted-foreground">{analysisResult.overallImpression.text}</p>
+                                                    </CardContent>
+                                                </Card>
+                                            )}
+                                        </div>
                                         <Accordion type="single" collapsible className="w-full">
                                             <AccordionItem value="item-1">
                                                 <AccordionTrigger className="text-lg font-semibold">Feature Analysis</AccordionTrigger>
