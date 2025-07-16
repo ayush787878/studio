@@ -108,10 +108,14 @@ const DashboardContent = () => {
     // Effect for event promo pop-up
     useEffect(() => {
         if (userProfile) { // Only show to logged-in users
-            const timer = setTimeout(() => {
-                setShowEventPromo(true);
-            }, 2000); // 2 seconds
-            return () => clearTimeout(timer);
+            const promoShown = sessionStorage.getItem('eventPromoShown');
+            if (!promoShown) {
+                const timer = setTimeout(() => {
+                    setShowEventPromo(true);
+                    sessionStorage.setItem('eventPromoShown', 'true');
+                }, 2000); // 2 seconds
+                return () => clearTimeout(timer);
+            }
         }
     }, [userProfile]);
 
