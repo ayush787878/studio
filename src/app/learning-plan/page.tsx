@@ -11,8 +11,10 @@ import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { saveUserGoal } from '@/services/userService';
 import { generateLearningPlan, type GenerateLearningPlanOutput } from '@/ai/flows/personalized-learning';
-import { Sparkles, Target, AlertTriangle, Lightbulb } from 'lucide-react';
+import { Sparkles, Target, AlertTriangle, Lightbulb, Star, Zap } from 'lucide-react';
 import { LoadingIndicator } from '@/components/loading-indicator';
+import Link from 'next/link';
+import { Badge } from '@/components/ui/badge';
 
 const icons: { [key: string]: React.ReactNode } = {
   Skincare: <span className="text-lg">🧴</span>,
@@ -79,6 +81,32 @@ export default function LearningPlanPage() {
                   <p className="text-muted-foreground">Define your goal to receive a tailored step-by-step plan.</p>
               </div>
           </div>
+
+          <Card className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 text-primary-foreground border-0 shadow-lg">
+            <CardHeader className="flex-row items-center gap-4">
+                <div className="p-3 bg-white/20 rounded-full">
+                    <Star className="h-8 w-8 text-yellow-300" />
+                </div>
+                <div>
+                    <CardTitle className="text-2xl">Upgrade to a Personal Mentor</CardTitle>
+                    <CardDescription className="text-white/80">Get 1-on-1 guidance from a dedicated aesthetics coach.</CardDescription>
+                </div>
+            </CardHeader>
+            <CardContent className="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                    <div>
+                        <p className="text-4xl font-bold">$44<span className="text-base font-normal">/year</span></p>
+                        <p className="text-sm text-white/80 line-through">$200</p>
+                    </div>
+                    <Badge variant="destructive" className="text-lg py-1 px-3 animate-pulse">78% OFF</Badge>
+                </div>
+                <Button asChild size="lg" className="bg-white text-purple-700 hover:bg-white/90 font-bold w-full md:w-auto">
+                    <Link href="/store">
+                        <Zap className="mr-2 h-5 w-5" /> Subscribe Now
+                    </Link>
+                </Button>
+            </CardContent>
+          </Card>
 
           <Card>
             <CardHeader>
