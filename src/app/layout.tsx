@@ -11,11 +11,11 @@ export const metadata: Metadata = {
     template: '%s | Facelyze',
     default: 'Facelyze - AI Face Analysis & Aesthetic Scoring',
   },
-  description: "Get a detailed AI analysis of your facial aesthetics. Facelyze provides personalized scores, feature breakdowns, and actionable skincare recommendations to help you achieve your goals.",
-  keywords: ['face analysis', 'facial aesthetics', 'aesthetic score', 'lookmaxxing', 'beauty ai', 'skincare recommendations', 'self-improvement'],
+  description: "Unlock your true aesthetic potential with Facelyze, your personal AI-powered face analysis coach. Receive objective scores, in-depth analysis of your facial features, and a personalized roadmap with actionable skincare and grooming advice to help you achieve your self-improvement goals.",
+  keywords: ['ai face analysis', 'aesthetic score', 'facial harmony', 'lookmaxxing', 'beauty ai', 'skincare recommendations', 'self-improvement', 'face rating', 'grooming advice'],
   openGraph: {
     title: 'Facelyze - AI Face Analysis & Aesthetic Scoring',
-    description: 'Get a detailed AI analysis of your facial aesthetics, personalized scores, and skincare recommendations.',
+    description: 'Unlock your true aesthetic potential with your personal AI-powered face analysis coach. Get objective scores and a personalized roadmap for self-improvement.',
     url: 'https://facelyze.com',
     siteName: 'Facelyze',
     images: [
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Facelyze - AI Face Analysis & Aesthetic Scoring',
-    description: 'Get a detailed AI analysis of your facial aesthetics, personalized scores, and skincare recommendations.',
+    description: 'Unlock your true aesthetic potential with your personal AI-powered face analysis coach. Get objective scores and a personalized roadmap for self-improvement.',
     images: ['https://i.ibb.co/PGmC0pBK/Untitled-design-6.png'],
   },
   metadataBase: new URL('https://facelyze.com'),
