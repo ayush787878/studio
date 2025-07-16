@@ -82,7 +82,7 @@ export default function LearningPlanPage() {
               </div>
           </div>
 
-          <Card className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 text-primary-foreground border-0 shadow-lg">
+          <Card className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 text-white border-0 shadow-lg">
             <CardHeader className="flex-row items-center gap-4">
                 <div className="p-3 bg-white/20 rounded-full">
                     <Star className="h-8 w-8 text-yellow-300" />
