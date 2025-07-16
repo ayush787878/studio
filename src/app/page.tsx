@@ -14,7 +14,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { updateUserTokens, saveAnalysis, incrementAnalysisCount } from '@/services/userService';
 import { analyzeFace, type AnalyzeFaceOutput } from '@/ai/flows/feature-analysis';
-import { UploadCloud, Sparkles, RefreshCw, Target, Lock, Camera, VideoOff, Gift, PartyPopper, Palette } from 'lucide-react';
+import { UploadCloud, Sparkles, RefreshCw, Target, Lock, Camera, VideoOff, Gift, PartyPopper, Palette, AlertCircle, Coins } from 'lucide-react';
 import { Logo } from '@/components/logo';
 import { Footer } from '@/components/footer';
 import { PublicHeader } from '@/components/public-header';
@@ -433,16 +433,19 @@ const DashboardContent = () => {
             </AlertDialog>
 
 
-            {userProfile && (
-                <Link href="/event" className="block cursor-pointer">
-                    <Alert className="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 text-white border-0 hover:opacity-90 transition-opacity">
-                        <PartyPopper className="h-4 w-4 text-white" />
-                        <AlertTitle className="font-bold">Join the Reels Event!</AlertTitle>
-                        <AlertDescription className="text-white/90">
-                            Create a Reel about Facelyze, get 200,000 views, and win cash prizes! Click to learn more and participate.
+            {userProfile && tokens < 3 && (
+                <Alert variant="destructive">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>Low on Tokens!</AlertTitle>
+                    <div className="flex justify-between items-center">
+                        <AlertDescription>
+                            You have {tokens} {tokens === 1 ? 'token' : 'tokens'} left. Get more to continue analyzing.
                         </AlertDescription>
-                    </Alert>
-                </Link>
+                        <Button asChild variant="outline" size="sm">
+                            <Link href="/store">Get More Tokens</Link>
+                        </Button>
+                    </div>
+                </Alert>
             )}
             <div className="grid lg:grid-cols-2 gap-8">
                 {/* Left Column: Uploader */}

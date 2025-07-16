@@ -20,7 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { LayoutDashboard, LogOut, Coins, Moon, Sun, History, BookOpen, UserSearch, Lightbulb, Trophy } from 'lucide-react';
+import { LayoutDashboard, LogOut, Coins, Moon, Sun, History, BookOpen, UserSearch, Lightbulb, Trophy, Gem } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/use-auth';
 import { Switch } from '@/components/ui/switch';
@@ -61,6 +61,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     { href: "/history", label: "History", icon: <History /> },
     { href: "/learning-plan", label: "Learning Plan", icon: <Lightbulb /> },
     { href: "/advisory", label: "Advisory", icon: <BookOpen /> },
+    { href: "/store", label: "Get Tokens", icon: <Gem /> },
     { 
       href: "/event", 
       label: "Event", 
@@ -133,7 +134,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="p-0">
-                  <Link href="https://facelyze.com" target="_blank" rel="noopener noreferrer" className="flex items-center w-full px-2 py-1.5 cursor-pointer">
+                  <Link href="/store" className="flex items-center w-full px-2 py-1.5 cursor-pointer">
                     <Coins className="mr-2 h-4 w-4 text-primary" />
                     <span>{userProfile?.tokens ?? 0} Tokens</span>
                   </Link>
@@ -152,7 +153,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <SidebarTrigger className="md:hidden" />
             <h1 className="text-xl font-semibold capitalize">{pathname.substring(1).replace('-', ' ') || 'Dashboard'}</h1>
             <div className="ml-auto flex items-center gap-4">
-                <Link href="https://facelyze.com" target="_blank" rel="noopener noreferrer">
+                <Link href="/store">
                     <Button variant="outline" size="sm" className="gap-1.5">
                         <Coins className="h-4 w-4 text-primary" />
                         <span className="font-semibold">{userProfile?.tokens ?? 0}</span>
