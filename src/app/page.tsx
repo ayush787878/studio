@@ -124,6 +124,7 @@ const DashboardContent = () => {
     const [analysisResult, setAnalysisResult] = useState<AnalyzeFaceOutput | null>(null);
     const [isResultPendingSave, setIsResultPendingSave] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [progress, setProgress] = useState(0);
     const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
     const [activeTab, setActiveTab] = useState('upload');
     const [showPromo, setShowPromo] = useState(false);
@@ -142,6 +143,30 @@ const DashboardContent = () => {
             setShowWelcomeDialog(true);
         }
     }, [userProfile]);
+
+    useEffect(() => {
+        let timer: NodeJS.Timeout | undefined;
+        if (isLoading) {
+            setProgress(0);
+            timer = setInterval(() => {
+                setProgress((prevProgress) => {
+                    if (prevProgress >= 95) {
+                        clearInterval(timer);
+                        return prevProgress;
+                    }
+                    return prevProgress + 5;
+                });
+            }, 400);
+        } else {
+            setProgress(100);
+        }
+
+        return () => {
+            if (timer) {
+                clearInterval(timer);
+            }
+        };
+    }, [isLoading]);
 
     // Effect for event promo pop-up
     useEffect(() => {
@@ -538,8 +563,8 @@ const DashboardContent = () => {
                     {isLoading && (
                         <Card>
                              <CardContent className="flex flex-col items-center justify-center gap-4 text-center p-8 min-h-[400px]">
-                                <LoadingIndicator text="Our AI is analyzing your photo..." />
-                                <Progress value={null} className="w-full h-2 animate-pulse" />
+                                <LoadingIndicator text={`Our AI is analyzing your photo... ${progress}%`} />
+                                <Progress value={progress} className="w-full h-2" />
                                 <p className="text-muted-foreground">This may take a moment. Please don't close this page.</p>
                             </CardContent>
                         </Card>
@@ -556,7 +581,7 @@ const DashboardContent = () => {
         
                     {analysisResult && (
                         <div className="space-y-6 animate-in fade-in-0 duration-500">
-                            <Card className="animate-in fade-in-0 duration-500 bg-accent/50">
+                             <Card className="animate-in fade-in-0 duration-500 bg-accent/50">
                                 <CardHeader>
                                     <CardTitle className="font-headline">Aesthetic Score</CardTitle>
                                     <CardDescription>Overall harmony, balance, and skin clarity.</CardDescription>
@@ -569,39 +594,41 @@ const DashboardContent = () => {
                                     </div>
                                 </CardContent>
                             </Card>
-        
-                            {isGuest ? <LockedContent signIn={signInWithGoogle} /> : (
-                                <div className="space-y-6">
-                                     <Card>
-                                        <CardHeader>
-                                            <CardTitle className="font-headline">Your Rating</CardTitle>
-                                        </CardHeader>
-                                        <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                            <RatingCard title="Overall" score={analysisResult.specificRatings.overall} />
-                                            <RatingCard title="Potential" score={analysisResult.specificRatings.potential} />
-                                            <RatingCard title="Masculinity" score={analysisResult.specificRatings.masculinity} />
-                                            <RatingCard title="Jawline" score={analysisResult.specificRatings.jawline} />
-                                            <RatingCard title="Cheekbones" score={analysisResult.specificRatings.cheekbones} />
-                                            <RatingCard title="Skin Quality" score={analysisResult.specificRatings.skinQuality} />
+
+                            <div className="space-y-6">
+                                <Card>
+                                    <CardHeader>
+                                        <CardTitle className="font-headline">Your Rating</CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                        <RatingCard title="Overall" score={analysisResult.specificRatings.overall} />
+                                        <RatingCard title="Potential" score={analysisResult.specificRatings.potential} />
+                                        <RatingCard title="Masculinity" score={analysisResult.specificRatings.masculinity} />
+                                        <RatingCard title="Jawline" score={analysisResult.specificRatings.jawline} />
+                                        <RatingCard title="Cheekbones" score={analysisResult.specificRatings.cheekbones} />
+                                        <RatingCard title="Skin Quality" score={analysisResult.specificRatings.skinQuality} />
+                                    </CardContent>
+                                </Card>
+
+                                {analysisResult.overallImpression && (
+                                    <Card className="animate-in fade-in-0 duration-500 delay-100">
+                                        <CardHeader><CardTitle className="font-headline">Overall Impression</CardTitle></CardHeader>
+                                        <CardContent className="space-y-4">
+                                            <div className="flex items-center gap-4">
+                                                <p className="text-5xl font-bold text-foreground">{analysisResult.overallImpression.rating}</p>
+                                                <div className="w-full">
+                                                    <Progress value={analysisResult.overallImpression.rating} className="h-3" />
+                                                    <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
+                                                </div>
+                                            </div>
+                                            <p className="text-muted-foreground pt-2">{analysisResult.overallImpression.text}</p>
                                         </CardContent>
                                     </Card>
+                                )}
+                            </div>
 
-                                    {analysisResult.overallImpression && (
-                                        <Card className="animate-in fade-in-0 duration-500 delay-100">
-                                            <CardHeader><CardTitle className="font-headline">Overall Impression</CardTitle></CardHeader>
-                                            <CardContent className="space-y-4">
-                                                <div className="flex items-center gap-4">
-                                                    <p className="text-5xl font-bold text-foreground">{analysisResult.overallImpression.rating}</p>
-                                                    <div className="w-full">
-                                                        <Progress value={analysisResult.overallImpression.rating} className="h-3" />
-                                                        <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
-                                                    </div>
-                                                </div>
-                                                <p className="text-muted-foreground pt-2">{analysisResult.overallImpression.text}</p>
-                                            </CardContent>
-                                        </Card>
-                                    )}
-
+                            {isGuest ? <LockedContent signIn={signInWithGoogle} /> : (
+                                <div className="space-y-6">
                                     <Accordion type="single" collapsible className="w-full animate-in fade-in-0 duration-500 delay-200" defaultValue="item-0">
                                         {analysisResult.featureAnalysis.map((feature, index) => (
                                             <AccordionItem value={`item-${index}`} key={index}>
@@ -691,7 +718,3 @@ export default function HomePage() {
         </div>
     );
 }
-
-    
-
-    
