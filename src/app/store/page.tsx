@@ -31,19 +31,19 @@ const premiumPlanRazorpayForm = `<form><script src="https://checkout.razorpay.co
 
 const plans = [
   {
-    title: "Basic Pack",
-    price: "$4.99",
-    tokens: 15,
-    features: ["15 Tokens", "Standard Analysis", "Email Support"],
+    title: "Free Plan",
+    price: "Free",
+    tokens: 5,
+    features: ["5 Free Tokens", "Standard Analysis", "Get Started"],
     isPopular: false,
     paypalForm: null,
     razorpayForm: null,
   },
   {
     title: "Pro Pack",
-    price: "$9.99",
-    tokens: 50,
-    features: ["50 Tokens", "Detailed Analysis", "Priority Support", "Access to new features"],
+    price: "$0.45",
+    tokens: 200,
+    features: ["200 Tokens", "Detailed Analysis", "Priority Support", "Access to new features"],
     isPopular: true,
     paypalForm: proPlanPaypalForm,
     razorpayForm: proPlanRazorpayForm,
@@ -51,8 +51,8 @@ const plans = [
   {
     title: "Premium Pack",
     price: "$3.48",
-    tokens: 120,
-    features: ["120 Tokens", "All Pro features", "Highest priority support"],
+    tokens: "Unlimited",
+    features: ["Unlimited Tokens", "Sellable Tokens", "Limit 30 tokens per day", "Highest priority support"],
     isPopular: false,
     paypalForm: premiumPlanPaypalForm,
     razorpayForm: premiumPlanRazorpayForm,
@@ -90,11 +90,11 @@ export default function StorePage() {
                             <CardTitle className="text-2xl">{plan.title}</CardTitle>
                             <div className="flex items-baseline gap-1">
                                 <span className="text-4xl font-bold">{plan.price}</span>
-                                <span className="text-muted-foreground">/ one-time</span>
+                                {plan.title !== 'Free Plan' && <span className="text-muted-foreground">/ one-time</span>}
                             </div>
                             <CardDescription className="flex items-center gap-2 pt-2">
                                 <Coins className="h-5 w-5 text-yellow-500" />
-                                <span>+ {plan.tokens} Tokens</span>
+                                <span>{plan.tokens} Tokens</span>
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="flex-grow">
@@ -114,8 +114,8 @@ export default function StorePage() {
                                     <PaymentButton formHtml={plan.razorpayForm} />
                                 </div>
                             ) : (
-                                <Button className="w-full" disabled>
-                                    Purchase (Coming Soon)
+                                <Button className="w-full" asChild>
+                                    <Link href="/login">Get Started</Link>
                                 </Button>
                             )}
                         </CardFooter>
