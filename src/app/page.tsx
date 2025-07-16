@@ -439,7 +439,7 @@ const DashboardContent = () => {
                         <PartyPopper className="h-4 w-4 text-white" />
                         <AlertTitle className="font-bold">Join the Reels Event!</AlertTitle>
                         <AlertDescription className="text-white/90">
-                            Create a Reel about Facelyze and win cash for views. Click here to learn more!
+                            Create a Reel about Facelyze, get 200,000 views, and win cash prizes! Click to learn more and participate.
                         </AlertDescription>
                     </Alert>
                 </Link>
