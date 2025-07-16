@@ -44,22 +44,22 @@ const LockedContent = ({ signIn }: { signIn: () => Promise<void> }) => (
           </Button>
       </div>
       <div className="space-y-6 blur-sm select-none pointer-events-none">
-          <Card>
-              <CardHeader>
-                  <CardTitle className="font-headline">Your Rating</CardTitle>
-              </CardHeader>
-              <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  <RatingCard title="Overall" score={0} />
-                  <RatingCard title="Potential" score={0} />
-                  <RatingCard title="Masculinity" score={0} />
-              </CardContent>
-          </Card>
-          <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="item-1">
-                  <AccordionTrigger className="text-lg font-semibold">Feature Analysis</AccordionTrigger>
-                  <AccordionContent>A detailed breakdown will be shown here.</AccordionContent>
-              </AccordionItem>
-          </Accordion>
+            <Card>
+                <CardHeader>
+                    <CardTitle className="font-headline">Your Rating</CardTitle>
+                </CardHeader>
+                <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <RatingCard title="Overall" score={0} />
+                    <RatingCard title="Potential" score={0} />
+                    <RatingCard title="Masculinity" score={0} />
+                </CardContent>
+            </Card>
+            <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="item-1">
+                    <AccordionTrigger className="text-lg font-semibold">Feature Analysis</AccordionTrigger>
+                    <AccordionContent>A detailed breakdown will be shown here.</AccordionContent>
+                </AccordionItem>
+            </Accordion>
       </div>
     </div>
 );
@@ -340,7 +340,7 @@ const DashboardContent = () => {
                         </div>
                         <AlertDialogTitle className="text-center text-2xl">Make Money With Your Reels!</AlertDialogTitle>
                         <AlertDialogDescription className="text-center pt-2">
-                           Join our Instagram Reels Event and win cash prizes by showcasing Facelyze. It's easy to participate!
+                           Join our Instagram Reels Event and win cash prizes for every 200,000 views on your video! It's easy to participate.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter className="sm:justify-center gap-2">
