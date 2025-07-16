@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useEffect, useRef } from 'react';
@@ -18,17 +19,23 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ formHtml }) => {
       template.innerHTML = formHtml.trim();
       const fragment = template.content;
 
-      // The main script that needs to be handled separately
+      // Find the script node within the fragment
       const scriptNode = fragment.querySelector('script');
+      
+      // Remove the script from the fragment before appending the rest
+      if (scriptNode) {
+        scriptNode.remove();
+      }
 
-      // Append all non-script elements first (like the form and style)
+      // Append the HTML part (form, style, etc.)
       container.appendChild(fragment);
 
-      // If a script tag was found, create a new script element and append it
+      // If a script tag was found, create a new script element and append it to the container
       if (scriptNode) {
         const script = document.createElement('script');
         script.src = scriptNode.src;
-        // Copy data attributes like 'data-payment_button_id'
+        
+        // Copy all attributes from the original script to the new one
         for (const attr of scriptNode.attributes) {
             script.setAttribute(attr.name, attr.value);
         }
@@ -36,13 +43,13 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ formHtml }) => {
             script.async = true;
         }
         
-        // It's important to append the script to the body or head for it to be executed
-        document.body.appendChild(script);
+        // Append the script to the container so it executes in the right context
+        container.appendChild(script);
 
         // Cleanup the script when the component unmounts
         return () => {
-          if (document.body.contains(script)) {
-            document.body.removeChild(script);
+          if (container.contains(script)) {
+            container.removeChild(script);
           }
         };
       }
