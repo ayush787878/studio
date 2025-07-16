@@ -128,6 +128,7 @@ const DashboardContent = () => {
     const [activeTab, setActiveTab] = useState('upload');
     const [showPromo, setShowPromo] = useState(false);
     const [showEventPromo, setShowEventPromo] = useState(false);
+    const [showWelcomeDialog, setShowWelcomeDialog] = useState(false);
     const [showAnalysisConfetti, setShowAnalysisConfetti] = useState(false);
     const { width, height } = useWindowSize();
 
@@ -136,6 +137,12 @@ const DashboardContent = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     
+    useEffect(() => {
+        if (!userProfile) {
+            setShowWelcomeDialog(true);
+        }
+    }, [userProfile]);
+
     // Effect for event promo pop-up
     useEffect(() => {
         if (userProfile) { // Only show to logged-in users
@@ -337,6 +344,26 @@ const DashboardContent = () => {
     return (
         <div className="animate-in fade-in-0 duration-500 space-y-8">
             {showAnalysisConfetti && <Confetti width={width} height={height} recycle={false} numberOfPieces={400} />}
+             <AlertDialog open={showWelcomeDialog} onOpenChange={setShowWelcomeDialog}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <div className="flex justify-center mb-4">
+                            <Logo />
+                        </div>
+                        <AlertDialogTitle className="text-center text-2xl">Welcome to Facelyze!</AlertDialogTitle>
+                        <AlertDialogDescription className="text-center pt-2">
+                           Sign in to unlock your complete analysis, including detailed ratings, history, and personalized plans. Or, try a limited preview now.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter className="sm:justify-center gap-2 flex-col-reverse sm:flex-row">
+                        <AlertDialogCancel>Try It Now</AlertDialogCancel>
+                        <AlertDialogAction onClick={signInWithGoogle}>
+                            Sign In & Unlock
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
             <AlertDialog open={showPromo} onOpenChange={setShowPromo}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
@@ -664,5 +691,7 @@ export default function HomePage() {
         </div>
     );
 }
+
+    
 
     
