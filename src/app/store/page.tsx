@@ -8,6 +8,26 @@ import { Check, Coins, Gem } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
+import { PaymentButton } from "@/components/payment-button";
+
+const proPlanPaypalForm = `<style>.pp-PL2P47JY8VZWU{text-align:center;border:none;border-radius:0.25rem;min-width:11.625rem;padding:0 2rem;height:2.625rem;font-weight:bold;background-color:#FFD140;color:#000000;font-family:"Helvetica Neue",Arial,sans-serif;font-size:1rem;line-height:1.25rem;cursor:pointer;}</style>
+<form action="https://www.paypal.com/ncp/payment/PL2P47JY8VZWU" method="post" target="_blank" style="display:inline-grid;justify-items:center;align-content:start;gap:0.5rem;">
+  <input class="pp-PL2P47JY8VZWU" type="submit" value="Buy Now" />
+  <img src="https://www.paypalobjects.com/images/Debit_Credit_APM.svg" alt="cards" />
+  <section style="font-size: 0.75rem;"> Powered by <img src="https://www.paypalobjects.com/paypal-ui/logos/svg/paypal-wordmark-color.svg" alt="paypal" style="height:0.875rem;vertical-align:middle;"/></section>
+</form>`;
+
+const proPlanRazorpayForm = `<form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_QtjvfnChBo5HqF" async> </script> </form>`;
+
+const premiumPlanPaypalForm = `<style>.pp-GXKBX8R23SWE2{text-align:center;border:none;border-radius:0.25rem;min-width:11.625rem;padding:0 2rem;height:2.625rem;font-weight:bold;background-color:#FFD140;color:#000000;font-family:"Helvetica Neue",Arial,sans-serif;font-size:1rem;line-height:1.25rem;cursor:pointer;}</style>
+<form action="https://www.paypal.com/ncp/payment/GXKBX8R23SWE2" method="post" target="_blank" style="display:inline-grid;justify-items:center;align-content:start;gap:0.5rem;">
+  <input class="pp-GXKBX8R23SWE2" type="submit" value="Buy Now" />
+  <img src="https://www.paypalobjects.com/images/Debit_Credit_APM.svg" alt="cards" />
+  <section style="font-size: 0.75rem;"> Powered by <img src="https://www.paypalobjects.com/paypal-ui/logos/svg/paypal-wordmark-color.svg" alt="paypal" style="height:0.875rem;vertical-align:middle;"/></section>
+</form>`;
+
+const premiumPlanRazorpayForm = `<form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_Qtk2JOkwbu8A2D" async> </script> </form>`;
+
 
 const plans = [
   {
@@ -16,6 +36,8 @@ const plans = [
     tokens: 15,
     features: ["15 Tokens", "Standard Analysis", "Email Support"],
     isPopular: false,
+    paypalForm: null,
+    razorpayForm: null,
   },
   {
     title: "Pro Pack",
@@ -23,13 +45,17 @@ const plans = [
     tokens: 50,
     features: ["50 Tokens", "Detailed Analysis", "Priority Support", "Access to new features"],
     isPopular: true,
+    paypalForm: proPlanPaypalForm,
+    razorpayForm: proPlanRazorpayForm,
   },
   {
     title: "Premium Pack",
-    price: "$19.99",
+    price: "$3.48",
     tokens: 120,
     features: ["120 Tokens", "All Pro features", "Highest priority support"],
     isPopular: false,
+    paypalForm: premiumPlanPaypalForm,
+    razorpayForm: premiumPlanRazorpayForm,
   },
 ];
 
@@ -82,9 +108,16 @@ export default function StorePage() {
                             </ul>
                         </CardContent>
                         <CardFooter>
-                            <Button className="w-full" disabled>
-                                Purchase (Coming Soon)
-                            </Button>
+                            {plan.paypalForm && plan.razorpayForm ? (
+                                <div className="grid grid-cols-2 gap-4 w-full items-center justify-center">
+                                    <PaymentButton formHtml={plan.paypalForm} />
+                                    <PaymentButton formHtml={plan.razorpayForm} />
+                                </div>
+                            ) : (
+                                <Button className="w-full" disabled>
+                                    Purchase (Coming Soon)
+                                </Button>
+                            )}
                         </CardFooter>
                     </Card>
                 ))}
