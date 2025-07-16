@@ -22,6 +22,12 @@ export type AnalyzeFaceInput = z.infer<typeof AnalyzeFaceInputSchema>;
 
 const AnalyzeFaceOutputSchema = z.object({
     aestheticScore: z.number().min(0).max(100).describe("A numerical score from 0 to 100 representing the overall facial aesthetic harmony and balance."),
+    generalTraits: z.object({
+        faceShape: z.string().describe("A concise description of the user's face shape (e.g., Oval, Square, Round)."),
+        eyeColor: z.string().describe("The identified color of the user's eyes (e.g., Brown, Blue, Green)."),
+        hairColor: z.string().describe("The identified color of the user's hair (e.g., Black, Brown, Blonde)."),
+        skinTone: z.string().describe("A concise description of the user's skin tone (e.g., Fair, Medium, Deep)."),
+    }).describe("A summary of general, non-rated facial traits."),
     overallImpression: z.object({
         text: z.string().describe("Provide a comprehensive, positive and encouraging textual summary of the user's facial aesthetics, covering multiple sentences. Mention the harmony, balance and proportionality of facial elements to create a positive and appealing aesthetic."),
         rating: z.number().min(0).max(100).describe("A numerical rating from 0 to 100 for the overall impression. This score is based on the general positive qualities you observe."),
@@ -61,6 +67,7 @@ const prompt = ai.definePrompt({
   prompt: `You are an expert virtual aesthetician. Your goal is to provide a positive, constructive, and helpful analysis of a user's face based on a photograph. Be encouraging and focus on providing useful advice.
 
 Analyze the provided photo. Identify key facial features, and provide personalized skincare recommendations.
+- First, identify the general, non-rated traits and populate the 'generalTraits' object. This includes face shape, eye color, hair color, and skin tone.
 - Provide an 'aestheticScore' from 0 to 100 based on overall facial harmony, balance, and clarity of the skin. Be objective and professional.
 - For the 'overallImpression', provide both a detailed, multi-sentence textual summary in the 'text' field and a separate numerical 'rating' out of 100 that reflects the general positive impression.
 - Provide the six 'specificRatings' (overall, potential, masculinity, jawline, cheekbones, skinQuality) as numerical scores from 0-100.

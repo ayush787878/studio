@@ -14,7 +14,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { updateUserTokens, saveAnalysis, incrementAnalysisCount } from '@/services/userService';
 import { analyzeFace, type AnalyzeFaceOutput } from '@/ai/flows/feature-analysis';
-import { UploadCloud, Sparkles, RefreshCw, Target, Lock, Camera, VideoOff, Gift, PartyPopper } from 'lucide-react';
+import { UploadCloud, Sparkles, RefreshCw, Target, Lock, Camera, VideoOff, Gift, PartyPopper, Palette } from 'lucide-react';
 import { Logo } from '@/components/logo';
 import { Footer } from '@/components/footer';
 import { PublicHeader } from '@/components/public-header';
@@ -79,6 +79,37 @@ const RatingCard = ({ title, score }: { title: string; score: number }) => {
             <CardContent className="p-4 pt-0">
                 <p className="text-4xl font-bold text-foreground">{score}</p>
                 <Progress value={score} className="h-2 mt-2" indicatorClassName={getIndicatorColor(score)} />
+            </CardContent>
+        </Card>
+    );
+};
+
+const TraitItem = ({ label, value }: { label: string; value: string }) => (
+    <div className="flex justify-between items-center py-2 border-b border-border/50">
+        <p className="text-sm font-medium text-muted-foreground">{label}</p>
+        <p className="text-sm font-semibold text-foreground">{value}</p>
+    </div>
+);
+
+const GeneralTraitsCard = ({ traits }: { traits: AnalyzeFaceOutput['generalTraits'] }) => {
+    if (!traits) return null;
+    
+    return (
+        <Card className="animate-in fade-in-0 duration-500 mt-8">
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2 font-headline">
+                    <Palette />
+                    General Traits
+                </CardTitle>
+                <CardDescription>A high-level overview of your features.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <div className="space-y-1">
+                    <TraitItem label="Face Shape" value={traits.faceShape} />
+                    <TraitItem label="Eye Color" value={traits.eyeColor} />
+                    <TraitItem label="Hair Color" value={traits.hairColor} />
+                    <TraitItem label="Skin Tone" value={traits.skinTone} />
+                </div>
             </CardContent>
         </Card>
     );
@@ -469,6 +500,10 @@ const DashboardContent = () => {
                             </div>
                         </CardContent>
                     </Card>
+                    
+                    {analysisResult && !isLoading && (
+                        <GeneralTraitsCard traits={analysisResult.generalTraits} />
+                    )}
                 </div>
         
                 {/* Right Column: Results */}
