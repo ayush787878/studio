@@ -537,7 +537,7 @@ const DashboardContent = () => {
                 <div className="space-y-6">
                     {isLoading && (
                         <Card>
-                            <CardContent className="flex flex-col items-center justify-center gap-4 text-center p-8 min-h-[400px]">
+                             <CardContent className="flex flex-col items-center justify-center gap-4 text-center p-8 min-h-[400px]">
                                 <LoadingIndicator text="Our AI is analyzing your photo..." />
                                 <Progress value={null} className="w-full h-2 animate-pulse" />
                                 <p className="text-muted-foreground">This may take a moment. Please don't close this page.</p>
