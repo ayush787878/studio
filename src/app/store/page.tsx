@@ -4,7 +4,7 @@
 import { AppShell } from "@/components/app-shell";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Check, Coins, Gem } from "lucide-react";
+import { Check, Coins, Gem, Book } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
@@ -55,6 +55,7 @@ const plans = [
     price: "$0.45",
     tokens: 200,
     features: ["200 Tokens", "Detailed Analysis", "Priority Support", "Access to new features"],
+    bonusFeature: "Includes Basic Guide Book",
     isPopular: true,
     paypalForm: proPlanPaypalForm,
     razorpayForm: proPlanRazorpayForm,
@@ -64,6 +65,7 @@ const plans = [
     price: "$3.48",
     tokens: "Unlimited",
     features: ["Unlimited Tokens", "Sellable Tokens", "Limit 30 tokens per day", "Highest priority support"],
+    bonusFeature: "Includes Full Face Advisory Book",
     isPopular: false,
     paypalForm: premiumPlanPaypalForm,
     razorpayForm: premiumPlanRazorpayForm,
@@ -116,6 +118,12 @@ export default function StorePage() {
                                         <span className="text-muted-foreground">{feature}</span>
                                     </li>
                                 ))}
+                                {plan.bonusFeature && (
+                                     <li className="flex items-start gap-3 p-2 bg-primary/10 rounded-md">
+                                        <Book className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                                        <span className="font-semibold text-primary">{plan.bonusFeature}</span>
+                                    </li>
+                                )}
                             </ul>
                         </CardContent>
                         <CardFooter>
