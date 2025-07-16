@@ -7,7 +7,10 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/history/', '/progress/', '/store/'],
+        disallow: [
+          '/history', // User-specific content
+          '/progress', // Not in use
+        ],
       },
     ],
     sitemap: 'https://facelyze.com/sitemap.xml',

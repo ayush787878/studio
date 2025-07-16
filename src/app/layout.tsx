@@ -48,39 +48,21 @@ const structuredData = {
   "@type": "WebSite",
   "name": "Facelyze",
   "url": "https://facelyze.com/",
-  "potentialAction": [
-    {
-      "@type": "SearchAction",
-      "target": {
-        "@type": "EntryPoint",
-        "urlTemplate": "https://facelyze.com/?s={search_term_string}"
-      },
-      "query-input": "required name=search_term_string"
-    }
-  ],
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://facelyze.com/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  },
   "mainEntity": {
-    "@type": "WebPage",
-    "mainEntityOfPage": {
-      "@type": "WebSite",
-      "url": "https://facelyze.com"
-    },
-    "hasPart": [
-      {
-        "@type": "WebPage",
-        "name": "Dashboard",
-        "url": "https://facelyze.com/"
-      },
-      {
-        "@type": "WebPage",
-        "name": "Scan Face",
-        "url": "https://facelyze.com/scan-face"
-      },
-      {
-        "@type": "WebPage",
-        "name": "Advisory",
-        "url": "https://facelyze.com/advisory"
+      "@type": "Organization",
+      "name": "Facelyze",
+      "url": "https://facelyze.com/",
+      "logo": "https://i.ibb.co/PGmC0pBK/Untitled-design-6.png",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "url": "https://facelyze.com/contact"
       }
-    ]
   }
 };
 
