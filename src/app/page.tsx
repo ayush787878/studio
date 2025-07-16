@@ -479,7 +479,7 @@ const DashboardContent = () => {
             <div className="grid lg:grid-cols-2 gap-8">
                 {/* Left Column: Uploader */}
                 <div className="space-y-8">
-                    <Card className="lg:sticky lg:top-24 h-fit">
+                    <Card className="h-fit">
                         <CardHeader>
                             <CardTitle className="text-3xl flex items-center gap-2 font-headline">
                             <Sparkles /> AI Face Analysis
@@ -577,6 +577,27 @@ const DashboardContent = () => {
                             </div>
                         </CardContent>
                     </Card>
+
+                    {analysisResult && (
+                        <div className="space-y-6">
+                            <GeneralTraitsCard traits={analysisResult.generalTraits} />
+                            {analysisResult.overallImpression && (
+                                <Card className="animate-in fade-in-0 duration-500 delay-100 h-full">
+                                    <CardHeader><CardTitle className="font-headline">Overall Impression</CardTitle></CardHeader>
+                                    <CardContent className="space-y-4">
+                                        <div className="flex items-center gap-4">
+                                            <p className="text-5xl font-bold text-foreground">{analysisResult.overallImpression.rating}</p>
+                                            <div className="w-full">
+                                                <Progress value={analysisResult.overallImpression.rating} className="h-3" />
+                                                <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
+                                            </div>
+                                        </div>
+                                        <p className="text-muted-foreground pt-2">{analysisResult.overallImpression.text}</p>
+                                    </CardContent>
+                                </Card>
+                            )}
+                        </div>
+                    )}
                 </div>
         
                 {/* Right Column: Results */}
@@ -649,17 +670,6 @@ const DashboardContent = () => {
                                         </Button>
                                     </div>
                                     <div className="space-y-6 blur-sm select-none pointer-events-none">
-                                        <div className="grid md:grid-cols-2 gap-6">
-                                            <GeneralTraitsCard traits={analysisResult.generalTraits} />
-                                            {analysisResult.overallImpression && (
-                                                <Card className="h-full">
-                                                    <CardHeader><CardTitle className="font-headline">Overall Impression</CardTitle></CardHeader>
-                                                    <CardContent>
-                                                        <p className="text-muted-foreground">{analysisResult.overallImpression.text}</p>
-                                                    </CardContent>
-                                                </Card>
-                                            )}
-                                        </div>
                                         <Accordion type="single" collapsible className="w-full">
                                             <AccordionItem value="item-1">
                                                 <AccordionTrigger className="text-lg font-semibold">Feature Analysis</AccordionTrigger>
@@ -670,24 +680,6 @@ const DashboardContent = () => {
                                 </div>
                             ) : (
                                 <div className="space-y-6">
-                                    <div className="grid md:grid-cols-2 gap-6">
-                                        <GeneralTraitsCard traits={analysisResult.generalTraits} />
-                                        {analysisResult.overallImpression && (
-                                            <Card className="animate-in fade-in-0 duration-500 delay-100 h-full">
-                                                <CardHeader><CardTitle className="font-headline">Overall Impression</CardTitle></CardHeader>
-                                                <CardContent className="space-y-4">
-                                                    <div className="flex items-center gap-4">
-                                                        <p className="text-5xl font-bold text-foreground">{analysisResult.overallImpression.rating}</p>
-                                                        <div className="w-full">
-                                                            <Progress value={analysisResult.overallImpression.rating} className="h-3" />
-                                                            <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
-                                                        </div>
-                                                    </div>
-                                                    <p className="text-muted-foreground pt-2">{analysisResult.overallImpression.text}</p>
-                                                </CardContent>
-                                            </Card>
-                                        )}
-                                    </div>
                                     <Accordion type="single" collapsible className="w-full animate-in fade-in-0 duration-500 delay-200" defaultValue="item-0">
                                         {analysisResult.featureAnalysis.map((feature, index) => (
                                             <AccordionItem value={`item-${index}`} key={index}>
@@ -777,3 +769,5 @@ export default function HomePage() {
         </div>
     );
 }
+
+    
