@@ -110,7 +110,7 @@ const DashboardContent = () => {
         if (userProfile) { // Only show to logged-in users
             const timer = setTimeout(() => {
                 setShowEventPromo(true);
-            }, 5000); // 5 seconds
+            }, 2000); // 2 seconds
             return () => clearTimeout(timer);
         }
     }, [userProfile]);
