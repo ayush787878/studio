@@ -86,7 +86,7 @@ const GeneralTraitsCard = ({ traits }: { traits: AnalyzeFaceOutput['generalTrait
     if (!traits) return null;
     
     return (
-        <Card className="animate-in fade-in-0 duration-500">
+        <Card className="animate-in fade-in-0 duration-500 h-full">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2 font-headline">
                     <Palette />
@@ -660,22 +660,24 @@ const DashboardContent = () => {
                                 </div>
                             ) : (
                                 <div className="space-y-6">
-                                    <GeneralTraitsCard traits={analysisResult.generalTraits} />
-                                    {analysisResult.overallImpression && (
-                                        <Card className="animate-in fade-in-0 duration-500 delay-100">
-                                            <CardHeader><CardTitle className="font-headline">Overall Impression</CardTitle></CardHeader>
-                                            <CardContent className="space-y-4">
-                                                <div className="flex items-center gap-4">
-                                                    <p className="text-5xl font-bold text-foreground">{analysisResult.overallImpression.rating}</p>
-                                                    <div className="w-full">
-                                                        <Progress value={analysisResult.overallImpression.rating} className="h-3" />
-                                                        <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
+                                    <div className="grid md:grid-cols-2 gap-6">
+                                        <GeneralTraitsCard traits={analysisResult.generalTraits} />
+                                        {analysisResult.overallImpression && (
+                                            <Card className="animate-in fade-in-0 duration-500 delay-100 h-full">
+                                                <CardHeader><CardTitle className="font-headline">Overall Impression</CardTitle></CardHeader>
+                                                <CardContent className="space-y-4">
+                                                    <div className="flex items-center gap-4">
+                                                        <p className="text-5xl font-bold text-foreground">{analysisResult.overallImpression.rating}</p>
+                                                        <div className="w-full">
+                                                            <Progress value={analysisResult.overallImpression.rating} className="h-3" />
+                                                            <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <p className="text-muted-foreground pt-2">{analysisResult.overallImpression.text}</p>
-                                            </CardContent>
-                                        </Card>
-                                    )}
+                                                    <p className="text-muted-foreground pt-2">{analysisResult.overallImpression.text}</p>
+                                                </CardContent>
+                                            </Card>
+                                        )}
+                                    </div>
                                     <Accordion type="single" collapsible className="w-full animate-in fade-in-0 duration-500 delay-200" defaultValue="item-0">
                                         {analysisResult.featureAnalysis.map((feature, index) => (
                                             <AccordionItem value={`item-${index}`} key={index}>
