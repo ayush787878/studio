@@ -95,8 +95,8 @@ export default function LearningPlanPage() {
             <CardContent className="flex flex-col md:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
                     <div>
-                        <p className="text-4xl font-bold">$44<span className="text-base font-normal">/year</span></p>
-                        <p className="text-sm text-white/80 line-through">$200</p>
+                        <p className="text-4xl font-bold">$78.76<span className="text-base font-normal">/year</span></p>
+                        <p className="text-sm text-white/80 line-through">$358</p>
                     </div>
                     <Badge variant="destructive" className="text-lg py-1 px-3 animate-pulse">78% OFF</Badge>
                 </div>
