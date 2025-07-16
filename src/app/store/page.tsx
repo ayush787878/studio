@@ -9,6 +9,17 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 import { PaymentButton } from "@/components/payment-button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 const proPlanPaypalForm = `<style>.pp-PL2P47JY8VZWU{text-align:center;border:none;border-radius:0.25rem;min-width:11.625rem;padding:0 2rem;height:2.625rem;font-weight:bold;background-color:#FFD140;color:#000000;font-family:"Helvetica Neue",Arial,sans-serif;font-size:1rem;line-height:1.25rem;cursor:pointer;}</style>
 <form action="https://www.paypal.com/ncp/payment/PL2P47JY8VZWU" method="post" target="_blank" style="display:inline-grid;justify-items:center;align-content:start;gap:0.5rem;">
@@ -109,10 +120,30 @@ export default function StorePage() {
                         </CardContent>
                         <CardFooter>
                             {plan.paypalForm && plan.razorpayForm ? (
-                                <div className="grid grid-cols-2 gap-4 w-full items-center justify-center">
-                                    <PaymentButton formHtml={plan.paypalForm} />
-                                    <PaymentButton formHtml={plan.razorpayForm} />
-                                </div>
+                                <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                        <Button className="w-full">Buy Now</Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>Choose Payment Method</AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                Select your preferred payment provider to complete the purchase.
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 py-4 items-start justify-center">
+                                            <div className="flex justify-center">
+                                                <PaymentButton formHtml={plan.paypalForm} />
+                                            </div>
+                                            <div className="flex justify-center">
+                                                <PaymentButton formHtml={plan.razorpayForm} />
+                                            </div>
+                                        </div>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
                             ) : (
                                 <Button className="w-full" asChild>
                                     <Link href="/login">Get Started</Link>
