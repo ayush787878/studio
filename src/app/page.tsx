@@ -351,8 +351,9 @@ const DashboardContent = () => {
             });
         }
         
-        if (userProfile && analysisResult.personalizedPlan) {
-            textContent += `--- PERSONALIZED PLAN for "${userProfile.aestheticGoal}" ---\n`;
+        if (userProfile && analysisResult.personalizedPlan && userProfile.aestheticGoal) {
+            textContent += `--- PERSONALIZED PLAN ---\n`;
+            textContent += `Your Goal: "${userProfile.aestheticGoal}"\n\n`;
             analysisResult.personalizedPlan.forEach((step, index) => {
                 textContent += `${index + 1}. ${step.step}\n`;
                 textContent += `   Description: ${step.description}\n\n`;
