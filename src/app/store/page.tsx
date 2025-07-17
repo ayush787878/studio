@@ -8,12 +8,13 @@ import { Check, Coins, Gem, Book, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
+import { RazorpayButton } from "@/components/razorpay-button";
 
 const proPlanPaypalUrl = "https://www.paypal.com/ncp/payment/PL2P47JY8VZWU";
-const proPlanRazorpayUrl = "https://rzp.io/l/7fEOTB5";
+const proPlanRazorpayId = "pl_Qdsd28i4z2Bf1p";
 
 const premiumPlanPaypalUrl = "https://www.paypal.com/ncp/payment/GXKBX8R23SWE2";
-const premiumPlanRazorpayUrl = "https://rzp.io/l/pl_Qtk2JOkwbu8A2D";
+const premiumPlanRazorpayId = "pl_Qtk2JOkwbu8A2D";
 
 
 const plans = [
@@ -24,7 +25,7 @@ const plans = [
     features: ["5 Free Tokens", "Standard Analysis", "Get Started"],
     isPopular: false,
     paypalUrl: null,
-    razorpayUrl: null,
+    razorpayId: null,
   },
   {
     title: "Pro Pack",
@@ -34,7 +35,7 @@ const plans = [
     bonusFeature: "Includes Basic Guide Book",
     isPopular: true,
     paypalUrl: proPlanPaypalUrl,
-    razorpayUrl: proPlanRazorpayUrl,
+    razorpayId: proPlanRazorpayId,
   },
   {
     title: "Premium Pack",
@@ -44,7 +45,7 @@ const plans = [
     bonusFeature: "Includes Full Face Advisory Book",
     isPopular: false,
     paypalUrl: premiumPlanPaypalUrl,
-    razorpayUrl: premiumPlanRazorpayUrl,
+    razorpayId: premiumPlanRazorpayId,
   },
 ];
 
@@ -102,19 +103,18 @@ export default function StorePage() {
                                 )}
                             </ul>
                         </CardContent>
-                        <CardFooter className="flex-col gap-2">
-                            {plan.paypalUrl && plan.razorpayUrl ? (
+                        <CardFooter className="flex-col gap-2 pt-6">
+                            {plan.paypalUrl && plan.razorpayId ? (
                                 <>
-                                    <Button asChild className="w-full bg-[#0070ba] hover:bg-[#005ea6] text-white">
-                                        <Link href={plan.paypalUrl} target="_blank" rel="noopener noreferrer">
-                                            Pay with PayPal <ExternalLink className="ml-2 h-4 w-4" />
-                                        </Link>
-                                    </Button>
-                                    <Button asChild className="w-full bg-[#3395ff] hover:bg-[#2083f8] text-white">
-                                        <Link href={plan.razorpayUrl} target="_blank" rel="noopener noreferrer">
-                                            Pay with Razorpay <ExternalLink className="ml-2 h-4 w-4" />
-                                        </Link>
-                                    </Button>
+                                    <a
+                                        href={plan.paypalUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={cn(buttonVariants(), "w-full bg-[#0070ba] hover:bg-[#005ea6] text-white")}
+                                    >
+                                        Pay with PayPal <ExternalLink className="ml-2 h-4 w-4" />
+                                    </a>
+                                    <RazorpayButton paymentButtonId={plan.razorpayId} />
                                 </>
                             ) : (
                                 <Button className="w-full" asChild>
