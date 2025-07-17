@@ -662,7 +662,7 @@ const DashboardContent = () => {
                             {isGuest ? (
                                 <LockedContent signIn={signInWithGoogle} />
                             ) : (
-                                <div className="space-y-6">
+                                <>
                                     <Accordion type="single" collapsible className="w-full animate-in fade-in-0 duration-500 delay-200" defaultValue="item-0">
                                         {analysisResult.featureAnalysis.map((feature, index) => (
                                             <AccordionItem value={`item-${index}`} key={index}>
@@ -697,45 +697,48 @@ const DashboardContent = () => {
                                             </CardContent>
                                         </Card>
                                     )}
-                                </div>
+                                </>
                             )}
-
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                <GeneralTraitsCard traits={analysisResult.generalTraits} />
-                                <Card>
-                                    <CardHeader>
-                                        <CardTitle className="font-headline">Your Rating</CardTitle>
-                                        <CardDescription>A detailed breakdown of key aesthetic attributes.</CardDescription>
-                                    </CardHeader>
-                                    <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                        <RatingCard title="Overall" score={analysisResult.specificRatings.overall} />
-                                        <RatingCard title="Potential" score={analysisResult.specificRatings.potential} />
-                                        <RatingCard title="Masculinity" score={analysisResult.specificRatings.masculinity} />
-                                        <RatingCard title="Jawline" score={analysisResult.specificRatings.jawline} />
-                                        <RatingCard title="Cheekbones" score={analysisResult.specificRatings.cheekbones} />
-                                        <RatingCard title="Skin Quality" score={analysisResult.specificRatings.skinQuality} />
-                                    </CardContent>
-                                </Card>
-                            </div>
-
                         </div>
                     )}
                 </div>
             </div>
 
-            {analysisResult && !isGuest && (
-                <div className="animate-in fade-in-0 duration-500 delay-400">
-                    <Card className="bg-accent/50">
-                        <CardHeader><CardTitle className="font-headline">Skincare Recommendations</CardTitle></CardHeader>
-                        <CardContent className="space-y-4">
-                            {analysisResult.skincareRecommendations.map((rec, index) => (
-                                <div key={index} className="p-4 bg-background rounded-md shadow-sm">
-                                    <h4 className="font-semibold text-primary">{rec.recommendation}</h4>
-                                    <p className="text-sm text-muted-foreground">{rec.reason}</p>
-                                </div>
-                            ))}
-                        </CardContent>
-                    </Card>
+            {analysisResult && (
+                <div className="space-y-6 animate-in fade-in-0 duration-500">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <GeneralTraitsCard traits={analysisResult.generalTraits} />
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="font-headline">Your Rating</CardTitle>
+                                <CardDescription>A detailed breakdown of key aesthetic attributes.</CardDescription>
+                            </CardHeader>
+                            <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                <RatingCard title="Overall" score={analysisResult.specificRatings.overall} />
+                                <RatingCard title="Potential" score={analysisResult.specificRatings.potential} />
+                                <RatingCard title="Masculinity" score={analysisResult.specificRatings.masculinity} />
+                                <RatingCard title="Jawline" score={analysisResult.specificRatings.jawline} />
+                                <RatingCard title="Cheekbones" score={analysisResult.specificRatings.cheekbones} />
+                                <RatingCard title="Skin Quality" score={analysisResult.specificRatings.skinQuality} />
+                            </CardContent>
+                        </Card>
+                    </div>
+
+                    {!isGuest && (
+                        <div className="animate-in fade-in-0 duration-500 delay-400">
+                            <Card className="bg-accent/50">
+                                <CardHeader><CardTitle className="font-headline">Skincare Recommendations</CardTitle></CardHeader>
+                                <CardContent className="space-y-4">
+                                    {analysisResult.skincareRecommendations.map((rec, index) => (
+                                        <div key={index} className="p-4 bg-background rounded-md shadow-sm">
+                                            <h4 className="font-semibold text-primary">{rec.recommendation}</h4>
+                                            <p className="text-sm text-muted-foreground">{rec.reason}</p>
+                                        </div>
+                                    ))}
+                                </CardContent>
+                            </Card>
+                        </div>
+                    )}
                 </div>
             )}
         </div>
