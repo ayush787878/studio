@@ -16,11 +16,12 @@ import {
   SidebarFooter,
   SidebarTrigger,
   SidebarInset,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { LayoutDashboard, LogOut, Coins, Moon, Sun, BookOpen, UserSearch, Lightbulb, Trophy, Gem } from 'lucide-react';
+import { LayoutDashboard, LogOut, Coins, Moon, Sun, BookOpen, UserSearch, Lightbulb, Trophy, Gem, Menu } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/use-auth';
 import { Switch } from '@/components/ui/switch';
@@ -29,24 +30,15 @@ import { Footer } from './footer';
 import Confetti from 'react-confetti';
 import { useWindowSize } from 'react-use';
 import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+function AppShellContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const router = useRouter();
-  const { userProfile, logout, loading, showLoginConfetti, setShowLoginConfetti } = useAuth();
+  const { userProfile, logout, showLoginConfetti, setShowLoginConfetti } = useAuth();
   const { theme, setTheme } = useTheme();
-  const [isMounted, setIsMounted] = React.useState(false);
   const { width, height } = useWindowSize();
-
-  React.useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  React.useEffect(() => {
-    if (!loading && !userProfile) {
-      router.push('/login');
-    }
-  }, [userProfile, loading, router]);
+  const { setOpenMobile } = useSidebar();
+  const isMobile = useIsMobile();
 
   React.useEffect(() => {
     if (showLoginConfetti) {
@@ -54,6 +46,24 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       return () => clearTimeout(timer);
     }
   }, [showLoginConfetti, setShowLoginConfetti]);
+  
+  // Auto-open sidebar on first visit on mobile
+  React.useEffect(() => {
+    if (isMobile && pathname === '/') {
+        const hasAutoOpened = sessionStorage.getItem('mobileSidebarAutoOpened');
+        if (!hasAutoOpened) {
+            setOpenMobile(true);
+            sessionStorage.setItem('mobileSidebarAutoOpened', 'true');
+        }
+    }
+  }, [isMobile, pathname, setOpenMobile]);
+
+
+  const handleMobileNavClick = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
 
   const navItems = [
     { href: "/", label: "Dashboard", icon: <LayoutDashboard /> },
@@ -69,16 +79,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     },
   ];
 
-  if (loading || !userProfile || !isMounted) {
-      return (
-        <div className="flex h-screen w-full items-center justify-center">
-            <p>Loading session...</p>
-        </div>
-      );
-  }
-
   return (
-    <SidebarProvider>
+    <>
       {showLoginConfetti && <Confetti width={width} height={height} recycle={false} numberOfPieces={400} />}
       <Sidebar>
         <SidebarContent className="p-2">
@@ -88,7 +90,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <SidebarMenu>
             {navItems.map((item) => (
               <SidebarMenuItem key={item.href}>
-                <Link href={item.href}>
+                <Link href={item.href} onClick={handleMobileNavClick}>
                   <SidebarMenuButton
                     isActive={pathname === item.href}
                     tooltip={item.label}
@@ -120,12 +122,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <DropdownMenuTrigger asChild>
                 <div className="flex items-center gap-2 p-2 rounded-md hover:bg-accent cursor-pointer">
                     <Avatar className="h-8 w-8">
-                        <AvatarImage src={userProfile.photoURL || 'https://placehold.co/40x40.png'} alt={userProfile.displayName || 'User'} />
-                        <AvatarFallback>{userProfile.displayName?.charAt(0).toUpperCase() || 'U'}</AvatarFallback>
+                        <AvatarImage src={userProfile!.photoURL || 'https://placehold.co/40x40.png'} alt={userProfile!.displayName || 'User'} />
+                        <AvatarFallback>{userProfile!.displayName?.charAt(0).toUpperCase() || 'U'}</AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col text-left group-data-[collapsible=icon]:hidden">
-                        <span className="text-sm font-medium">{userProfile.displayName || 'User'}</span>
-                        <span className="text-xs text-muted-foreground">{userProfile.email || 'user@example.com'}</span>
+                        <span className="text-sm font-medium">{userProfile!.displayName || 'User'}</span>
+                        <span className="text-xs text-muted-foreground">{userProfile!.email || 'user@example.com'}</span>
                     </div>
                 </div>
             </DropdownMenuTrigger>
@@ -168,6 +170,37 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <Footer />
         </div>
       </SidebarInset>
+    </>
+  );
+}
+
+
+export function AppShell({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  const { userProfile, loading } = useAuth();
+  const [isMounted, setIsMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  React.useEffect(() => {
+    if (!loading && !userProfile) {
+      router.push('/login');
+    }
+  }, [userProfile, loading, router]);
+
+  if (loading || !userProfile || !isMounted) {
+      return (
+        <div className="flex h-screen w-full items-center justify-center">
+            <p>Loading session...</p>
+        </div>
+      );
+  }
+
+  return (
+    <SidebarProvider>
+      <AppShellContent>{children}</AppShellContent>
     </SidebarProvider>
   );
 }
