@@ -11,7 +11,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { RazorpayButton } from "@/components/razorpay-button";
 
 const proPlanPaypalUrl = "https://www.paypal.com/ncp/payment/PL2P47JY8VZWU";
-const proPlanRazorpayId = "pl_Qdsd28i4z2Bf1p";
+const proPlanRazorpayId = "pl_QtjvfnChBo5HqF";
 
 const premiumPlanPaypalUrl = "https://www.paypal.com/ncp/payment/GXKBX8R23SWE2";
 const premiumPlanRazorpayId = "pl_Qtk2JOkwbu8A2D";
