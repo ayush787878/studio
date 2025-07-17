@@ -103,7 +103,7 @@ export default function StorePage() {
                                 )}
                             </ul>
                         </CardContent>
-                        <CardFooter className="flex-col gap-2 pt-6">
+                        <CardFooter className="flex-col gap-4 pt-6">
                             {plan.paypalUrl && plan.razorpayId ? (
                                 <>
                                     <a
@@ -114,7 +114,10 @@ export default function StorePage() {
                                     >
                                         Pay with PayPal <ExternalLink className="ml-2 h-4 w-4" />
                                     </a>
-                                    <RazorpayButton paymentButtonId={plan.razorpayId} />
+                                    <div className="w-full text-center">
+                                        <RazorpayButton paymentButtonId={plan.razorpayId} />
+                                        <p className="text-xs text-muted-foreground mt-1">Pay with INR</p>
+                                    </div>
                                 </>
                             ) : (
                                 <Button className="w-full" asChild>
