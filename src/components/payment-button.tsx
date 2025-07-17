@@ -4,32 +4,34 @@
 import React, { useEffect, useRef } from 'react';
 
 interface PaymentButtonProps {
-  formHtml: string;
+  paypalFormHtml?: string;
+  razorpayButtonId?: string;
 }
 
-const PaymentButton: React.FC<PaymentButtonProps> = ({ formHtml }) => {
+const PaymentButton: React.FC<PaymentButtonProps> = ({ paypalFormHtml, razorpayButtonId }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const container = containerRef.current;
-    if (container) {
-      container.innerHTML = formHtml;
-      
-      const script = container.querySelector('script');
-      if (script) {
-        const newScript = document.createElement('script');
-        newScript.src = script.src;
-        for (const attr of script.attributes) {
-          newScript.setAttribute(attr.name, attr.value);
-        }
-        if (script.hasAttribute('async')) {
-            newScript.async = true;
-        }
+    if (!container) return;
+
+    // Clear previous content
+    container.innerHTML = '';
+
+    if (razorpayButtonId) {
+        const form = document.createElement('form');
+        const script = document.createElement('script');
+        script.src = "https://checkout.razorpay.com/v1/payment-button.js";
+        script.setAttribute('data-payment_button_id', razorpayButtonId);
+        script.async = true;
         
-        script.parentNode?.replaceChild(newScript, script);
-      }
+        form.appendChild(script);
+        container.appendChild(form);
+    } else if (paypalFormHtml) {
+        container.innerHTML = paypalFormHtml;
     }
-  }, [formHtml]);
+
+  }, [paypalFormHtml, razorpayButtonId]);
 
   return <div ref={containerRef} />;
 };

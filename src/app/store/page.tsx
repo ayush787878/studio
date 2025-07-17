@@ -28,7 +28,7 @@ const proPlanPaypalForm = `<style>.pp-PL2P47JY8VZWU{text-align:center;border:non
   <section style="font-size: 0.75rem;"> Powered by <img src="https://www.paypalobjects.com/paypal-ui/logos/svg/paypal-wordmark-color.svg" alt="paypal" style="height:0.875rem;vertical-align:middle;"/></section>
 </form>`;
 
-const proPlanRazorpayForm = `<form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_QtjvfnChBo5HqF" async> </script> </form>`;
+const proPlanRazorpayId = "pl_QtjvfnChBo5HqF";
 
 const premiumPlanPaypalForm = `<style>.pp-GXKBX8R23SWE2{text-align:center;border:none;border-radius:0.25rem;min-width:11.625rem;padding:0 2rem;height:2.625rem;font-weight:bold;background-color:#FFD140;color:#000000;font-family:"Helvetica Neue",Arial,sans-serif;font-size:1rem;line-height:1.25rem;cursor:pointer;}</style>
 <form action="https://www.paypal.com/ncp/payment/GXKBX8R23SWE2" method="post" target="_blank" style="display:inline-grid;justify-items:center;align-content:start;gap:0.5rem;">
@@ -37,7 +37,7 @@ const premiumPlanPaypalForm = `<style>.pp-GXKBX8R23SWE2{text-align:center;border
   <section style="font-size: 0.75rem;"> Powered by <img src="https://www.paypalobjects.com/paypal-ui/logos/svg/paypal-wordmark-color.svg" alt="paypal" style="height:0.875rem;vertical-align:middle;"/></section>
 </form>`;
 
-const premiumPlanRazorpayForm = `<form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_Qtk2JOkwbu8A2D" async> </script> </form>`;
+const premiumPlanRazorpayId = "pl_Qtk2JOkwbu8A2D";
 
 
 const plans = [
@@ -48,7 +48,7 @@ const plans = [
     features: ["5 Free Tokens", "Standard Analysis", "Get Started"],
     isPopular: false,
     paypalForm: null,
-    razorpayForm: null,
+    razorpayId: null,
   },
   {
     title: "Pro Pack",
@@ -58,7 +58,7 @@ const plans = [
     bonusFeature: "Includes Basic Guide Book",
     isPopular: true,
     paypalForm: proPlanPaypalForm,
-    razorpayForm: proPlanRazorpayForm,
+    razorpayId: proPlanRazorpayId,
   },
   {
     title: "Premium Pack",
@@ -68,7 +68,7 @@ const plans = [
     bonusFeature: "Includes Full Face Advisory Book",
     isPopular: false,
     paypalForm: premiumPlanPaypalForm,
-    razorpayForm: premiumPlanRazorpayForm,
+    razorpayId: premiumPlanRazorpayId,
   },
 ];
 
@@ -127,7 +127,7 @@ export default function StorePage() {
                             </ul>
                         </CardContent>
                         <CardFooter>
-                            {plan.paypalForm && plan.razorpayForm ? (
+                            {plan.paypalForm || plan.razorpayId ? (
                                 <AlertDialog>
                                     <AlertDialogTrigger asChild>
                                         <Button className="w-full">Buy Now</Button>
@@ -140,12 +140,16 @@ export default function StorePage() {
                                             </AlertDialogDescription>
                                         </AlertDialogHeader>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 py-4 items-start justify-center">
-                                            <div className="flex justify-center">
-                                                <PaymentButton formHtml={plan.paypalForm} />
-                                            </div>
-                                            <div className="flex justify-center">
-                                                <PaymentButton formHtml={plan.razorpayForm} />
-                                            </div>
+                                            {plan.paypalForm && (
+                                                <div className="flex justify-center">
+                                                    <PaymentButton paypalFormHtml={plan.paypalForm} />
+                                                </div>
+                                            )}
+                                            {plan.razorpayId && (
+                                                <div className="flex justify-center">
+                                                    <PaymentButton razorpayButtonId={plan.razorpayId} />
+                                                </div>
+                                            )}
                                         </div>
                                         <AlertDialogFooter>
                                             <AlertDialogCancel>Cancel</AlertDialogCancel>
