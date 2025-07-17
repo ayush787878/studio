@@ -4,41 +4,16 @@
 import { AppShell } from "@/components/app-shell";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Check, Coins, Gem, Book } from "lucide-react";
+import { Check, Coins, Gem, Book, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
-import { PaymentButton } from "@/components/payment-button";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
 
-const proPlanPaypalForm = `<style>.pp-PL2P47JY8VZWU{text-align:center;border:none;border-radius:0.25rem;min-width:11.625rem;padding:0 2rem;height:2.625rem;font-weight:bold;background-color:#FFD140;color:#000000;font-family:"Helvetica Neue",Arial,sans-serif;font-size:1rem;line-height:1.25rem;cursor:pointer;}</style>
-<form action="https://www.paypal.com/ncp/payment/PL2P47JY8VZWU" method="post" target="_blank" style="display:inline-grid;justify-items:center;align-content:start;gap:0.5rem;">
-  <input class="pp-PL2P47JY8VZWU" type="submit" value="Buy Now" />
-  <img src="https://www.paypalobjects.com/images/Debit_Credit_APM.svg" alt="cards" />
-  <section style="font-size: 0.75rem;"> Powered by <img src="https://www.paypalobjects.com/paypal-ui/logos/svg/paypal-wordmark-color.svg" alt="paypal" style="height:0.875rem;vertical-align:middle;"/></section>
-</form>`;
+const proPlanPaypalUrl = "https://www.paypal.com/ncp/payment/PL2P47JY8VZWU";
+const proPlanRazorpayUrl = "https://rzp.io/l/7fEOTB5";
 
-const proPlanRazorpayForm = `<form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_QtjZAL1aQfNoj8" async> </script> </form>`;
-
-
-const premiumPlanPaypalForm = `<style>.pp-GXKBX8R23SWE2{text-align:center;border:none;border-radius:0.25rem;min-width:11.625rem;padding:0 2rem;height:2.625rem;font-weight:bold;background-color:#FFD140;color:#000000;font-family:"Helvetica Neue",Arial,sans-serif;font-size:1rem;line-height:1.25rem;cursor:pointer;}</style>
-<form action="https://www.paypal.com/ncp/payment/GXKBX8R23SWE2" method="post" target="_blank" style="display:inline-grid;justify-items:center;align-content:start;gap:0.5rem;">
-  <input class="pp-GXKBX8R23SWE2" type="submit" value="Buy Now" />
-  <img src="https://www.paypalobjects.com/images/Debit_Credit_APM.svg" alt="cards" />
-  <section style="font-size: 0.75rem;"> Powered by <img src="https://www.paypalobjects.com/paypal-ui/logos/svg/paypal-wordmark-color.svg" alt="paypal" style="height:0.875rem;vertical-align:middle;"/></section>
-</form>`;
-
-const premiumPlanRazorpayForm = `<form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_Qtk2JOkwbu8A2D" async> </script> </form>`;
+const premiumPlanPaypalUrl = "https://www.paypal.com/ncp/payment/GXKBX8R23SWE2";
+const premiumPlanRazorpayUrl = "https://rzp.io/l/pl_Qtk2JOkwbu8A2D";
 
 
 const plans = [
@@ -48,8 +23,8 @@ const plans = [
     tokens: 5,
     features: ["5 Free Tokens", "Standard Analysis", "Get Started"],
     isPopular: false,
-    paypalForm: null,
-    razorpayForm: null,
+    paypalUrl: null,
+    razorpayUrl: null,
   },
   {
     title: "Pro Pack",
@@ -58,8 +33,8 @@ const plans = [
     features: ["200 Tokens", "Detailed Analysis", "Priority Support", "Access to new features"],
     bonusFeature: "Includes Basic Guide Book",
     isPopular: true,
-    paypalForm: proPlanPaypalForm,
-    razorpayForm: proPlanRazorpayForm,
+    paypalUrl: proPlanPaypalUrl,
+    razorpayUrl: proPlanRazorpayUrl,
   },
   {
     title: "Premium Pack",
@@ -68,8 +43,8 @@ const plans = [
     features: ["Unlimited Tokens", "Sellable Tokens", "Limit 30 tokens per day", "Highest priority support"],
     bonusFeature: "Includes Full Face Advisory Book",
     isPopular: false,
-    paypalForm: premiumPlanPaypalForm,
-    razorpayForm: premiumPlanRazorpayForm,
+    paypalUrl: premiumPlanPaypalUrl,
+    razorpayUrl: premiumPlanRazorpayUrl,
   },
 ];
 
@@ -127,36 +102,20 @@ export default function StorePage() {
                                 )}
                             </ul>
                         </CardContent>
-                        <CardFooter>
-                            {plan.paypalForm || plan.razorpayForm ? (
-                                <AlertDialog>
-                                    <AlertDialogTrigger asChild>
-                                        <Button className="w-full">Buy Now</Button>
-                                    </AlertDialogTrigger>
-                                    <AlertDialogContent>
-                                        <AlertDialogHeader>
-                                            <AlertDialogTitle>Choose Payment Method</AlertDialogTitle>
-                                            <AlertDialogDescription>
-                                                Select your preferred payment provider to complete the purchase.
-                                            </AlertDialogDescription>
-                                        </AlertDialogHeader>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 py-4 items-start justify-center">
-                                            {plan.paypalForm && (
-                                                <div className="flex justify-center">
-                                                    <PaymentButton htmlForm={plan.paypalForm} />
-                                                </div>
-                                            )}
-                                            {plan.razorpayForm && (
-                                                <div className="flex justify-center">
-                                                    <PaymentButton htmlForm={plan.razorpayForm} />
-                                                </div>
-                                            )}
-                                        </div>
-                                        <AlertDialogFooter>
-                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                        </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                </AlertDialog>
+                        <CardFooter className="flex-col gap-2">
+                            {plan.paypalUrl && plan.razorpayUrl ? (
+                                <>
+                                    <Button asChild className="w-full bg-[#0070ba] hover:bg-[#005ea6] text-white">
+                                        <Link href={plan.paypalUrl} target="_blank" rel="noopener noreferrer">
+                                            Pay with PayPal <ExternalLink className="ml-2 h-4 w-4" />
+                                        </Link>
+                                    </Button>
+                                    <Button asChild className="w-full bg-[#3395ff] hover:bg-[#2083f8] text-white">
+                                        <Link href={plan.razorpayUrl} target="_blank" rel="noopener noreferrer">
+                                            Pay with Razorpay <ExternalLink className="ml-2 h-4 w-4" />
+                                        </Link>
+                                    </Button>
+                                </>
                             ) : (
                                 <Button className="w-full" asChild>
                                     <Link href="/login">Get Started</Link>
