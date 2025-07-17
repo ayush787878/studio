@@ -1,112 +1,51 @@
 
 "use client";
 
-import React from 'react';
-import { Button } from './ui/button';
-import { useAuth } from '@/hooks/use-auth';
-import { useToast } from '@/hooks/use-toast';
-
-// Define the Razorpay type on the window object
-declare global {
-    interface Window {
-      Razorpay: any;
-    }
-}
+import React, { useEffect, useRef } from 'react';
 
 interface PaymentButtonProps {
-  paypalFormHtml?: string;
-  razorpayPlanId?: string;
+  htmlForm: string;
 }
 
-const PaymentButton: React.FC<PaymentButtonProps> = ({ paypalFormHtml, razorpayPlanId }) => {
-  const { userProfile } = useAuth();
-  const { toast } = useToast();
+const PaymentButton: React.FC<PaymentButtonProps> = ({ htmlForm }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleRazorpayPayment = () => {
-    if (!razorpayPlanId) return;
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
 
-    if (!userProfile) {
-        toast({
-            title: "Please Log In",
-            description: "You must be logged in to make a purchase.",
-            variant: "destructive",
-        });
-        return;
+    // Clear previous content
+    container.innerHTML = '';
+    
+    // Create a temporary div to parse the HTML string
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = htmlForm;
+
+    // Find the script and form elements
+    const scriptElement = tempDiv.querySelector('script');
+    const formElement = tempDiv.querySelector('form');
+
+    if (formElement) {
+        // Append the form to the container
+        container.appendChild(formElement);
+    }
+    
+    if (scriptElement) {
+      // Re-create the script element to ensure it executes
+      const newScript = document.createElement('script');
+      // Copy all attributes from the original script
+      for (let i = 0; i < scriptElement.attributes.length; i++) {
+        const attr = scriptElement.attributes[i];
+        newScript.setAttribute(attr.name, attr.value);
+      }
+      
+      // Append the new script to the container to trigger execution
+      container.appendChild(newScript);
     }
 
-    if (!window.Razorpay) {
-      toast({
-        title: "Payment Gateway Error",
-        description: "Razorpay is not available. Please try again later.",
-        variant: "destructive",
-      });
-      return;
-    }
+  }, [htmlForm]);
 
-    const options = {
-      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Your Razorpay Key ID
-      name: "Facelyze",
-      description: "Token Purchase",
-      image: "https://i.ibb.co/PGmC0pBK/Untitled-design-6.png",
-      handler: function (response: any) {
-        toast({
-          title: "Payment Successful!",
-          description: "Your tokens will be updated shortly.",
-        });
-        console.log(response);
-      },
-      prefill: {
-        name: userProfile.displayName,
-        email: userProfile.email,
-      },
-      notes: {
-        userId: userProfile.uid,
-      },
-      theme: {
-        color: "#3399cc"
-      },
-      checkout: {
-          method: {
-              netbanking: false,
-              card: true,
-              upi: true,
-              wallet: false
-          }
-      },
-      plan_id: razorpayPlanId, // This is the key change for one-time plan purchases
-      "_[checkout]": 1, // Important flag for plan purchases
-    };
-
-    const rzp = new window.Razorpay(options);
-
-    rzp.on('payment.failed', function (response: any){
-      toast({
-        title: "Payment Failed",
-        description: response.error.description,
-        variant: "destructive",
-      });
-      console.error(response.error);
-    });
-
-    rzp.open();
-  };
-
-  if (razorpayPlanId) {
-    return (
-        <div className='flex flex-col items-center gap-2'>
-            <Button onClick={handleRazorpayPayment} className="w-full">
-                Pay with Razorpay
-            </Button>
-            <img src="https://www.paypalobjects.com/images/Debit_Credit_APM.svg" alt="cards" className="h-6" />
-        </div>
-    );
-  }
-
-  if (paypalFormHtml) {
-    return <div dangerouslySetInnerHTML={{ __html: paypalFormHtml }} />;
-  }
-
-  return null;
+  return <div ref={containerRef} />;
 };
 
 export { PaymentButton };
