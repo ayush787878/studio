@@ -45,13 +45,10 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ paypalFormHtml, razorpayP
 
     const options = {
       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Your Razorpay Key ID
-      subscription_id: razorpayPlanId,
       name: "Facelyze",
       description: "Token Purchase",
       image: "https://i.ibb.co/PGmC0pBK/Untitled-design-6.png",
       handler: function (response: any) {
-        // You can handle the successful payment here
-        // e.g., verify payment on your server, update user tokens
         toast({
           title: "Payment Successful!",
           description: "Your tokens will be updated shortly.",
@@ -67,10 +64,30 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({ paypalFormHtml, razorpayP
       },
       theme: {
         color: "#3399cc"
-      }
+      },
+      checkout: {
+          method: {
+              netbanking: false,
+              card: true,
+              upi: true,
+              wallet: false
+          }
+      },
+      plan_id: razorpayPlanId, // This is the key change for one-time plan purchases
+      "_[checkout]": 1, // Important flag for plan purchases
     };
 
     const rzp = new window.Razorpay(options);
+
+    rzp.on('payment.failed', function (response: any){
+      toast({
+        title: "Payment Failed",
+        description: response.error.description,
+        variant: "destructive",
+      });
+      console.error(response.error);
+    });
+
     rzp.open();
   };
 

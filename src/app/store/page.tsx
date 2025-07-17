@@ -28,7 +28,7 @@ const proPlanPaypalForm = `<style>.pp-PL2P47JY8VZWU{text-align:center;border:non
   <section style="font-size: 0.75rem;"> Powered by <img src="https://www.paypalobjects.com/paypal-ui/logos/svg/paypal-wordmark-color.svg" alt="paypal" style="height:0.875rem;vertical-align:middle;"/></section>
 </form>`;
 
-const proPlanRazorpayId = "sub_Qtk6Qf5d9tXk3A";
+const proPlanRazorpayId = "plan_Qtn0G0YnFf5kM4";
 
 const premiumPlanPaypalForm = `<style>.pp-GXKBX8R23SWE2{text-align:center;border:none;border-radius:0.25rem;min-width:11.625rem;padding:0 2rem;height:2.625rem;font-weight:bold;background-color:#FFD140;color:#000000;font-family:"Helvetica Neue",Arial,sans-serif;font-size:1rem;line-height:1.25rem;cursor:pointer;}</style>
 <form action="https://www.paypal.com/ncp/payment/GXKBX8R23SWE2" method="post" target="_blank" style="display:inline-grid;justify-items:center;align-content:start;gap:0.5rem;">
@@ -37,7 +37,7 @@ const premiumPlanPaypalForm = `<style>.pp-GXKBX8R23SWE2{text-align:center;border
   <section style="font-size: 0.75rem;"> Powered by <img src="https://www.paypalobjects.com/paypal-ui/logos/svg/paypal-wordmark-color.svg" alt="paypal" style="height:0.875rem;vertical-align:middle;"/></section>
 </form>`;
 
-const premiumPlanRazorpayId = "sub_Qtk2JOkwbu8A2D";
+const premiumPlanRazorpayId = "plan_Qtn4TjY2Nl9L7a";
 
 
 const plans = [
