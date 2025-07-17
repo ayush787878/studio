@@ -659,24 +659,6 @@ const DashboardContent = () => {
                                 </Card>
                             )}
 
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                <GeneralTraitsCard traits={analysisResult.generalTraits} />
-                                <Card>
-                                    <CardHeader>
-                                        <CardTitle className="font-headline">Your Rating</CardTitle>
-                                        <CardDescription>A detailed breakdown of key aesthetic attributes.</CardDescription>
-                                    </CardHeader>
-                                    <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                        <RatingCard title="Overall" score={analysisResult.specificRatings.overall} />
-                                        <RatingCard title="Potential" score={analysisResult.specificRatings.potential} />
-                                        <RatingCard title="Masculinity" score={analysisResult.specificRatings.masculinity} />
-                                        <RatingCard title="Jawline" score={analysisResult.specificRatings.jawline} />
-                                        <RatingCard title="Cheekbones" score={analysisResult.specificRatings.cheekbones} />
-                                        <RatingCard title="Skin Quality" score={analysisResult.specificRatings.skinQuality} />
-                                    </CardContent>
-                                </Card>
-                            </div>
-
                             {isGuest ? (
                                 <LockedContent signIn={signInWithGoogle} />
                             ) : (
@@ -717,6 +699,25 @@ const DashboardContent = () => {
                                     )}
                                 </div>
                             )}
+
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <GeneralTraitsCard traits={analysisResult.generalTraits} />
+                                <Card>
+                                    <CardHeader>
+                                        <CardTitle className="font-headline">Your Rating</CardTitle>
+                                        <CardDescription>A detailed breakdown of key aesthetic attributes.</CardDescription>
+                                    </CardHeader>
+                                    <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                        <RatingCard title="Overall" score={analysisResult.specificRatings.overall} />
+                                        <RatingCard title="Potential" score={analysisResult.specificRatings.potential} />
+                                        <RatingCard title="Masculinity" score={analysisResult.specificRatings.masculinity} />
+                                        <RatingCard title="Jawline" score={analysisResult.specificRatings.jawline} />
+                                        <RatingCard title="Cheekbones" score={analysisResult.specificRatings.cheekbones} />
+                                        <RatingCard title="Skin Quality" score={analysisResult.specificRatings.skinQuality} />
+                                    </CardContent>
+                                </Card>
+                            </div>
+
                         </div>
                     )}
                 </div>
