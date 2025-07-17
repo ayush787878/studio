@@ -642,6 +642,22 @@ const DashboardContent = () => {
                                     </div>
                                 </CardContent>
                             </Card>
+                             
+                            {analysisResult.overallImpression && (
+                                <Card className="animate-in fade-in-0 duration-500 delay-100 h-full">
+                                    <CardHeader><CardTitle className="font-headline">Overall Impression</CardTitle></CardHeader>
+                                    <CardContent className="space-y-4">
+                                        <div className="flex items-center gap-4">
+                                            <p className="text-5xl font-bold text-foreground">{analysisResult.overallImpression.rating}</p>
+                                            <div className="w-full">
+                                                <Progress value={analysisResult.overallImpression.rating} className="h-3" />
+                                                <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
+                                            </div>
+                                        </div>
+                                        <p className="text-muted-foreground pt-2">{analysisResult.overallImpression.text}</p>
+                                    </CardContent>
+                                </Card>
+                            )}
 
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                 <GeneralTraitsCard traits={analysisResult.generalTraits} />
@@ -660,22 +676,6 @@ const DashboardContent = () => {
                                     </CardContent>
                                 </Card>
                             </div>
-                             
-                            {analysisResult.overallImpression && (
-                                <Card className="animate-in fade-in-0 duration-500 delay-100 h-full">
-                                    <CardHeader><CardTitle className="font-headline">Overall Impression</CardTitle></CardHeader>
-                                    <CardContent className="space-y-4">
-                                        <div className="flex items-center gap-4">
-                                            <p className="text-5xl font-bold text-foreground">{analysisResult.overallImpression.rating}</p>
-                                            <div className="w-full">
-                                                <Progress value={analysisResult.overallImpression.rating} className="h-3" />
-                                                <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
-                                            </div>
-                                        </div>
-                                        <p className="text-muted-foreground pt-2">{analysisResult.overallImpression.text}</p>
-                                    </CardContent>
-                                </Card>
-                            )}
 
                             {isGuest ? (
                                 <LockedContent signIn={signInWithGoogle} />
