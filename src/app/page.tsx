@@ -29,27 +29,33 @@ import { useWindowSize } from 'react-use';
 
 const LockedContent = ({ signIn }: { signIn: () => Promise<void> }) => (
     <div className="relative mt-6">
-      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center rounded-lg bg-background/80 p-4 text-center">
+      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center rounded-lg bg-background/90 backdrop-blur-sm p-4 text-center">
           <Lock className="h-12 w-12 text-primary mb-4" />
-          <h3 className="text-xl font-bold mb-2">Unlock Full Analysis</h3>
-           <p className="text-muted-foreground mb-4 max-w-sm">Sign in to see:</p>
-           <ul className="text-left text-muted-foreground list-disc pl-6 mb-6 space-y-1">
-                <li>Your detailed feature ratings</li>
-                <li>A personalized improvement plan</li>
-           </ul>
+          <h3 className="text-xl font-bold mb-2">Unlock Your Full Analysis</h3>
+           <p className="text-muted-foreground mb-4 max-w-sm">Sign in to see your detailed feature ratings, personalized skincare advice, and improvement plan.</p>
           <Button onClick={signIn} size="lg" className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:opacity-90 transition-opacity shadow-lg">
               <Sparkles className="mr-2 h-5 w-5" />
               Sign In to Unlock
           </Button>
       </div>
-      <div className="space-y-6 blur-sm select-none pointer-events-none">
-            <GeneralTraitsCard traits={{ faceShape: 'Oval', eyeColor: 'Brown', hairColor: 'Black', skinTone: 'Fair' }} />
-            <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value="item-1">
-                    <AccordionTrigger className="text-lg font-semibold">Feature Analysis</AccordionTrigger>
-                    <AccordionContent>A detailed breakdown will be shown here.</AccordionContent>
-                </AccordionItem>
-            </Accordion>
+      <div className="space-y-6 blur-md select-none pointer-events-none">
+            <Card>
+                <CardHeader><CardTitle>Overall Impression</CardTitle></CardHeader>
+                <CardContent><p>Sign in to view details.</p></CardContent>
+            </Card>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <GeneralTraitsCard traits={{ faceShape: '...', eyeColor: '...', hairColor: '...', skinTone: '...' }} />
+                <Card>
+                    <CardHeader><CardTitle>Your Rating</CardTitle></CardHeader>
+                    <CardContent>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                           <RatingCard title="Overall" score={0} />
+                           <RatingCard title="Potential" score={0} />
+                           <RatingCard title="Masculinity" score={0} />
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
       </div>
     </div>
 );
@@ -643,26 +649,26 @@ const DashboardContent = () => {
                                 </CardContent>
                             </Card>
                              
-                            {analysisResult.overallImpression && (
-                                <Card className="animate-in fade-in-0 duration-500 delay-100 h-full">
-                                    <CardHeader><CardTitle className="font-headline">Overall Impression</CardTitle></CardHeader>
-                                    <CardContent className="space-y-4">
-                                        <div className="flex items-center gap-4">
-                                            <p className="text-5xl font-bold text-foreground">{analysisResult.overallImpression.rating}</p>
-                                            <div className="w-full">
-                                                <Progress value={analysisResult.overallImpression.rating} className="h-3" />
-                                                <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
-                                            </div>
-                                        </div>
-                                        <p className="text-muted-foreground pt-2">{analysisResult.overallImpression.text}</p>
-                                    </CardContent>
-                                </Card>
-                            )}
-
                             {isGuest ? (
                                 <LockedContent signIn={signInWithGoogle} />
                             ) : (
                                 <>
+                                    {analysisResult.overallImpression && (
+                                        <Card className="animate-in fade-in-0 duration-500 delay-100 h-full">
+                                            <CardHeader><CardTitle className="font-headline">Overall Impression</CardTitle></CardHeader>
+                                            <CardContent className="space-y-4">
+                                                <div className="flex items-center gap-4">
+                                                    <p className="text-5xl font-bold text-foreground">{analysisResult.overallImpression.rating}</p>
+                                                    <div className="w-full">
+                                                        <Progress value={analysisResult.overallImpression.rating} className="h-3" />
+                                                        <p className="text-sm text-right text-muted-foreground mt-1">/ 100</p>
+                                                    </div>
+                                                </div>
+                                                <p className="text-muted-foreground pt-2">{analysisResult.overallImpression.text}</p>
+                                            </CardContent>
+                                        </Card>
+                                    )}
+
                                     <Accordion type="single" collapsible className="w-full animate-in fade-in-0 duration-500 delay-200" defaultValue="item-0">
                                         {analysisResult.featureAnalysis.map((feature, index) => (
                                             <AccordionItem value={`item-${index}`} key={index}>
@@ -704,7 +710,7 @@ const DashboardContent = () => {
                 </div>
             </div>
 
-            {analysisResult && (
+            {analysisResult && !isGuest && (
                 <div className="space-y-6 animate-in fade-in-0 duration-500">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <GeneralTraitsCard traits={analysisResult.generalTraits} />
@@ -724,21 +730,19 @@ const DashboardContent = () => {
                         </Card>
                     </div>
 
-                    {!isGuest && (
-                        <div className="animate-in fade-in-0 duration-500 delay-400">
-                            <Card className="bg-accent/50">
-                                <CardHeader><CardTitle className="font-headline">Skincare Recommendations</CardTitle></CardHeader>
-                                <CardContent className="space-y-4">
-                                    {analysisResult.skincareRecommendations.map((rec, index) => (
-                                        <div key={index} className="p-4 bg-background rounded-md shadow-sm">
-                                            <h4 className="font-semibold text-primary">{rec.recommendation}</h4>
-                                            <p className="text-sm text-muted-foreground">{rec.reason}</p>
-                                        </div>
-                                    ))}
-                                </CardContent>
-                            </Card>
-                        </div>
-                    )}
+                    <div className="animate-in fade-in-0 duration-500 delay-400">
+                        <Card className="bg-accent/50">
+                            <CardHeader><CardTitle className="font-headline">Skincare Recommendations</CardTitle></CardHeader>
+                            <CardContent className="space-y-4">
+                                {analysisResult.skincareRecommendations.map((rec, index) => (
+                                    <div key={index} className="p-4 bg-background rounded-md shadow-sm">
+                                        <h4 className="font-semibold text-primary">{rec.recommendation}</h4>
+                                        <p className="text-sm text-muted-foreground">{rec.reason}</p>
+                                    </div>
+                                ))}
+                            </CardContent>
+                        </Card>
+                    </div>
                 </div>
             )}
         </div>
