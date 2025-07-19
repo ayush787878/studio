@@ -44,13 +44,13 @@ export default function BookDetailPage() {
         <div className="grid md:grid-cols-3 gap-8">
           <div className="md:col-span-1 space-y-6">
             <Card className="overflow-hidden sticky top-24">
-                <div className="aspect-[3/4] w-full">
+                <div className="aspect-[9/16] w-full">
                     <Image
-                        src={`https://placehold.co/400x533.png`}
+                        src={`https://placehold.co/360x640.png`}
                         alt={`${book.title} book cover`}
                         data-ai-hint={book.coverImageHint}
-                        width={400}
-                        height={533}
+                        width={360}
+                        height={640}
                         className="object-cover w-full h-full"
                     />
                 </div>

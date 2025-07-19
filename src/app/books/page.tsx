@@ -26,13 +26,13 @@ export default function BooksPage() {
             <Link key={book.slug} href={`/books/${book.slug}`} className="block group">
                 <Card className="flex flex-col h-full overflow-hidden transition-all group-hover:shadow-xl group-hover:-translate-y-1">
                     <CardHeader className="p-0">
-                        <div className="aspect-[3/4] overflow-hidden">
+                        <div className="aspect-[9/16] overflow-hidden">
                             <Image
-                                src={`https://placehold.co/400x533.png`}
+                                src={`https://placehold.co/360x640.png`}
                                 alt={`${book.title} book cover`}
                                 data-ai-hint={book.coverImageHint}
-                                width={400}
-                                height={533}
+                                width={360}
+                                height={640}
                                 className="object-cover w-full h-full transition-transform group-hover:scale-105"
                             />
                         </div>
