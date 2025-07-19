@@ -25,6 +25,7 @@ import { Badge } from '@/components/ui/badge';
 import { LoadingIndicator } from '@/components/loading-indicator';
 import Confetti from 'react-confetti';
 import { useWindowSize } from 'react-use';
+import { SuccessAnimation } from '@/components/success-animation';
 
 
 const LockedContent = ({ signIn }: { signIn: () => Promise<void> }) => (
@@ -41,6 +42,10 @@ const LockedContent = ({ signIn }: { signIn: () => Promise<void> }) => (
       <div className="space-y-6 blur-md select-none pointer-events-none">
             <Card>
                 <CardHeader><CardTitle>Overall Impression</CardTitle></CardHeader>
+                <CardContent><p>Sign in to view details.</p></CardContent>
+            </Card>
+             <Card>
+                <CardHeader><CardTitle>Feature Analysis</CardTitle></CardHeader>
                 <CardContent><p>Sign in to view details.</p></CardContent>
             </Card>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -126,6 +131,7 @@ const DashboardContent = () => {
     const [showEventPromo, setShowEventPromo] = useState(false);
     const [showWelcomeDialog, setShowWelcomeDialog] = useState(false);
     const [showAnalysisConfetti, setShowAnalysisConfetti] = useState(false);
+    const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
     const { width, height } = useWindowSize();
 
 
@@ -261,8 +267,14 @@ const DashboardContent = () => {
                 userName: userProfile?.displayName?.split(' ')[0] || 'there',
                 aestheticGoal
             });
-            setAnalysisResult(result);
-            setShowAnalysisConfetti(true);
+
+            setIsLoading(false); 
+            setShowSuccessAnimation(true);
+
+            setTimeout(() => {
+              setAnalysisResult(result);
+              setShowAnalysisConfetti(true);
+            }, 500);
     
             if (userProfile) { // Logged-in user flow
                 const newTokens = userProfile.tokens - 3;
@@ -275,7 +287,6 @@ const DashboardContent = () => {
         } catch (error) {
             console.error("Analysis failed:", error);
             toast({ variant: "destructive", title: "Analysis Failed", description: "Something went wrong. Please try again." });
-        } finally {
             setIsLoading(false);
         }
     };
@@ -391,6 +402,8 @@ const DashboardContent = () => {
     return (
         <div className="animate-in fade-in-0 duration-500 space-y-8">
             {showAnalysisConfetti && <Confetti width={width} height={height} recycle={false} numberOfPieces={400} />}
+            {showSuccessAnimation && <SuccessAnimation onFinished={() => setShowSuccessAnimation(false)} />}
+
              <AlertDialog open={showWelcomeDialog} onOpenChange={setShowWelcomeDialog}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
@@ -711,25 +724,26 @@ const DashboardContent = () => {
             </div>
 
             {analysisResult && !isGuest && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 space-y-0 animate-in fade-in-0 duration-500">
+                  <GeneralTraitsCard traits={analysisResult.generalTraits} />
+                  <Card>
+                      <CardHeader>
+                          <CardTitle className="font-headline">Your Rating</CardTitle>
+                          <CardDescription>A detailed breakdown of key aesthetic attributes.</CardDescription>
+                      </CardHeader>
+                      <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                          <RatingCard title="Overall" score={analysisResult.specificRatings.overall} />
+                          <RatingCard title="Potential" score={analysisResult.specificRatings.potential} />
+                          <RatingCard title="Masculinity" score={analysisResult.specificRatings.masculinity} />
+                          <RatingCard title="Jawline" score={analysisResult.specificRatings.jawline} />
+                          <RatingCard title="Cheekbones" score={analysisResult.specificRatings.cheekbones} />
+                          <RatingCard title="Skin Quality" score={analysisResult.specificRatings.skinQuality} />
+                      </CardContent>
+                  </Card>
+              </div>
+            )}
+             {analysisResult && !isGuest && (
                 <div className="space-y-6 animate-in fade-in-0 duration-500">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <GeneralTraitsCard traits={analysisResult.generalTraits} />
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="font-headline">Your Rating</CardTitle>
-                                <CardDescription>A detailed breakdown of key aesthetic attributes.</CardDescription>
-                            </CardHeader>
-                            <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                <RatingCard title="Overall" score={analysisResult.specificRatings.overall} />
-                                <RatingCard title="Potential" score={analysisResult.specificRatings.potential} />
-                                <RatingCard title="Masculinity" score={analysisResult.specificRatings.masculinity} />
-                                <RatingCard title="Jawline" score={analysisResult.specificRatings.jawline} />
-                                <RatingCard title="Cheekbones" score={analysisResult.specificRatings.cheekbones} />
-                                <RatingCard title="Skin Quality" score={analysisResult.specificRatings.skinQuality} />
-                            </CardContent>
-                        </Card>
-                    </div>
-
                     <div className="animate-in fade-in-0 duration-500 delay-400">
                         <Card className="bg-accent/50">
                             <CardHeader><CardTitle className="font-headline">Skincare Recommendations</CardTitle></CardHeader>
