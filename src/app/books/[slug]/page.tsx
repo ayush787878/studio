@@ -9,25 +9,16 @@ import { AppShell } from '@/components/app-shell';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Check, Download, ArrowLeft } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { Check, ArrowLeft } from 'lucide-react';
+import { RazorpayButton } from '@/components/razorpay-button';
 
 export default function BookDetailPage() {
-  const { toast } = useToast();
   const params = useParams();
   const book = books.find((b) => b.slug === params.slug);
 
   if (!book) {
     notFound();
   }
-
-  const handleDownload = () => {
-    toast({
-      title: "Starting Download",
-      description: "Your book will be downloaded shortly.",
-    });
-    // The link will handle the actual download
-  };
 
   return (
     <AppShell>
@@ -55,11 +46,9 @@ export default function BookDetailPage() {
                     />
                 </div>
             </Card>
-             <Button asChild size="lg" className="w-full" onClick={handleDownload}>
-                <a href={book.downloadUrl} target="_blank" rel="noopener noreferrer">
-                    <Download className="mr-2 h-5 w-5" /> Download Guide
-                </a>
-            </Button>
+             <div className="w-full">
+                <RazorpayButton paymentButtonId={book.razorpayPaymentId} />
+             </div>
           </div>
 
           <div className="md:col-span-2">

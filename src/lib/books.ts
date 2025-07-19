@@ -9,6 +9,7 @@ export interface Book {
   downloads: string;
   downloadUrl: string;
   highlights: string[];
+  razorpayPaymentId: string;
 }
 
 export const books: Book[] = [
@@ -25,6 +26,7 @@ export const books: Book[] = [
       'Grooming hacks for a polished appearance.',
       'Building confidence from the inside out.',
     ],
+    razorpayPaymentId: 'pl_Qv76yGaH0NuNo8',
   },
   {
     slug: 'face-care-fundamentals',
@@ -39,6 +41,7 @@ export const books: Book[] = [
       'A step-by-step guide to a perfect morning and night routine.',
       'Sunscreen essentials: protecting your skin from aging.',
     ],
+    razorpayPaymentId: 'pl_Qv7A0Ys6QKyFtI',
   },
   {
     slug: 'how-to-glow-up',
@@ -53,6 +56,7 @@ export const books: Book[] = [
       'Finding a personal style that expresses your best self.',
       'Mindfulness techniques for inner confidence.',
     ],
+    razorpayPaymentId: 'pl_Qv7AvlXundTwAr',
   },
   {
     slug: 'how-to-remove-face-pimple',
@@ -67,5 +71,6 @@ export const books: Book[] = [
       'Lifestyle changes to prevent future acne.',
       'Safe and effective ways to handle a breakout.',
     ],
+    razorpayPaymentId: 'pl_Qv7BbxqSxje0xR',
   },
 ];
