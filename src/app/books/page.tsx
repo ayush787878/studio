@@ -21,7 +21,7 @@ export default function BooksPage() {
             </div>
         </div>
         
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-2 gap-6 lg:grid-cols-3 xl:grid-cols-4">
           {books.map((book) => (
             <Link key={book.slug} href={`/books/${book.slug}`} className="block group">
                 <Card className="flex flex-col h-full overflow-hidden transition-all group-hover:shadow-xl group-hover:-translate-y-1">
