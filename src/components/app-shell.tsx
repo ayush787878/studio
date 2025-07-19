@@ -21,7 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/logo";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { LayoutDashboard, LogOut, Coins, Moon, Sun, BookOpen, UserSearch, Lightbulb, Trophy, Gem, Menu } from 'lucide-react';
+import { LayoutDashboard, LogOut, Coins, Moon, Sun, BookOpen, UserSearch, Lightbulb, Trophy, Gem, Menu, BookHeart } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/use-auth';
 import { Switch } from '@/components/ui/switch';
@@ -70,6 +70,7 @@ function AppShellContent({ children }: { children: React.ReactNode }) {
     { href: "/scan-face", label: "Scan Face", icon: <UserSearch /> },
     { href: "/learning-plan", label: "Learning Plan", icon: <Lightbulb /> },
     { href: "/advisory", label: "Advisory", icon: <BookOpen /> },
+    { href: "/books", label: "Books", icon: <BookHeart /> },
     { href: "/store", label: "Get Tokens", icon: <Gem /> },
     { 
       href: "/event", 
@@ -92,7 +93,7 @@ function AppShellContent({ children }: { children: React.ReactNode }) {
               <SidebarMenuItem key={item.href}>
                 <Link href={item.href} onClick={handleMobileNavClick}>
                   <SidebarMenuButton
-                    isActive={pathname === item.href}
+                    isActive={pathname.startsWith(item.href) && (item.href !== '/' || pathname === '/')}
                     tooltip={item.label}
                     className={cn(
                         item.isSpecial && "bg-gradient-to-r from-pink-500 via-red-500 to-orange-500 text-white hover:opacity-90 hover:text-white"
