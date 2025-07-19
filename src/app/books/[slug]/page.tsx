@@ -1,7 +1,7 @@
 
 "use client";
 
-import { notFound } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { books } from '@/lib/books';
@@ -12,8 +12,9 @@ import { Badge } from '@/components/ui/badge';
 import { Check, Download, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
-export default function BookDetailPage({ params }: { params: { slug: string } }) {
+export default function BookDetailPage() {
   const { toast } = useToast();
+  const params = useParams();
   const book = books.find((b) => b.slug === params.slug);
 
   if (!book) {
