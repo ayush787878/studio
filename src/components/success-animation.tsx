@@ -37,8 +37,8 @@ export function SuccessAnimation({ onFinished }: { onFinished: () => void }) {
             <Logo />
         </div>
         <div className="text-center">
-            <h1 className="text-5xl font-bold font-headline text-foreground">Analysis Complete</h1>
-            <p className="text-2xl text-muted-foreground mt-2 font-semibold">facelyze.com</p>
+            <h1 className="text-3xl font-bold font-headline text-muted-foreground">Analysis Complete</h1>
+            <p className="text-5xl text-foreground mt-2 font-bold font-headline">facelyze.com</p>
         </div>
       </div>
     </div>
