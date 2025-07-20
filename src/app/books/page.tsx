@@ -28,7 +28,7 @@ export default function BooksPage() {
                     <CardHeader className="p-0">
                         <div className="aspect-[9/16] overflow-hidden">
                             <Image
-                                src={`https://placehold.co/360x640.png`}
+                                src={book.coverImageUrl || `https://placehold.co/360x640.png`}
                                 alt={`${book.title} book cover`}
                                 data-ai-hint={book.coverImageHint}
                                 width={360}
