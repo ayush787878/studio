@@ -34,7 +34,7 @@ export const books: Book[] = [
     title: 'Face Care Fundamentals',
     summary: 'Learn the essentials of skincare, from identifying your skin type to building a routine that delivers results.',
     coverImageHint: 'skincare products',
-    coverImageUrl: 'https://i.ibb.co/7d6htLT/White-and-Black-Clean-and-Simple-Photo-Skincare-Routine-Instagram-Story.png',
+    coverImageUrl: 'https://i.ibb.co/7d6htLT2/White-and-Black-Clean-and-Simple-Photo-Skincare-Routine-Instagram-Story.png',
     downloads: '8200+',
     downloadUrl: 'https://example.com/download',
     highlights: [
