@@ -498,7 +498,12 @@ const DashboardContent = () => {
                             </div>
                         </div>
                     </Link>
-                    <p className="text-lg font-bold text-green-600 mt-4 text-center animate-pulse">3908+ people have already purchased!</p>
+                    <div className="flex justify-center items-center gap-4 mt-4">
+                        <p className="text-lg font-bold text-green-600 animate-pulse">3908+ people have already purchased!</p>
+                        <Button asChild variant="outline" size="sm">
+                            <Link href="/store">Get More Tokens</Link>
+                        </Button>
+                    </div>
                      {tokens < 3 && (
                         <Alert variant="destructive">
                             <AlertCircle className="h-4 w-4" />
