@@ -501,7 +501,7 @@ const DashboardContent = () => {
                     <div className="flex justify-center items-center gap-4 mt-4">
                         <p className="text-lg font-bold text-green-600 animate-pulse">3908+ people have already purchased!</p>
                         <Button asChild variant="outline" size="sm">
-                            <Link href="/store">Get More Tokens</Link>
+                            <Link href="/store">Buy more tokens</Link>
                         </Button>
                     </div>
                      {tokens < 3 && (
@@ -797,5 +797,7 @@ export default function HomePage() {
         </div>
     );
 }
+
+    
 
     
