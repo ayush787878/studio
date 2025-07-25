@@ -6,7 +6,7 @@ export async function GET() {
   
   return new NextResponse(adsTxtContent, {
     headers: {
-      'Content-Type': 'text/plain; charset=UTF-axr',
+      'Content-Type': 'text/plain; charset=UTF-8',
     },
   });
 }
