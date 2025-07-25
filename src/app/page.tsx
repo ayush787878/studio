@@ -498,7 +498,7 @@ const DashboardContent = () => {
                             </div>
                         </div>
                     </Link>
-
+                    <p className="text-lg font-bold text-green-600 mt-4 text-center animate-pulse">3908+ people have already purchased!</p>
                      {tokens < 3 && (
                         <Alert variant="destructive">
                             <AlertCircle className="h-4 w-4" />
@@ -792,3 +792,5 @@ export default function HomePage() {
         </div>
     );
 }
+
+    

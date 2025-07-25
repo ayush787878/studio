@@ -63,7 +63,7 @@ export default function StorePage() {
                 <p className="text-muted-foreground mt-2 max-w-xl mx-auto">
                     Choose a package that suits your needs. More tokens unlock more insights into your aesthetic journey.
                 </p>
-                <p className="text-sm font-semibold text-primary mt-4">3908+ people have already purchased!</p>
+                <p className="text-lg font-bold text-green-600 mt-4 animate-pulse">3908+ people have already purchased!</p>
                  <div className="mt-4">
                     <p className="text-lg font-semibold">Your Current Balance: <span className="text-primary">{userProfile?.tokens ?? 0}</span> Tokens</p>
                 </div>
@@ -144,3 +144,5 @@ export default function StorePage() {
       </AppShell>
     );
 }
+
+    
