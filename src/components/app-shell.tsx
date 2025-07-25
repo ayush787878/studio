@@ -70,7 +70,7 @@ function AppShellContent({ children }: { children: React.ReactNode }) {
     { href: "/scan-face", label: "Scan Face", icon: <UserSearch /> },
     { href: "/learning-plan", label: "Learning Plan", icon: <Lightbulb /> },
     { href: "/advisory", label: "Advisory", icon: <BookOpen /> },
-    { href: "/books", label: "Books", icon: <BookHeart /> },
+    // { href: "/books", label: "Books", icon: <BookHeart /> },
     { href: "/store", label: "Get Tokens", icon: <Gem /> },
     { 
       href: "/event", 
