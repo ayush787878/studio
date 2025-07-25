@@ -84,17 +84,7 @@ export default function AdvisoryPage() {
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                   {content.bookRecommendations.map((book, index) => (
                     <Card key={index} className="flex flex-col">
-                      <CardHeader className="items-center">
-                          <Image
-                              src="https://placehold.co/300x400.png"
-                              alt={`${book.title} book cover`}
-                              data-ai-hint="book cover"
-                              width={200}
-                              height={267}
-                              className="rounded-md shadow-lg"
-                          />
-                      </CardHeader>
-                      <CardContent className="flex-grow flex flex-col">
+                      <CardContent className="flex-grow flex flex-col p-6">
                         <CardTitle className="text-lg">{book.title}</CardTitle>
                         <CardDescription className="text-sm mt-1">by {book.author}</CardDescription>
                         <p className="text-muted-foreground text-sm mt-4 flex-grow">{book.summary}</p>
