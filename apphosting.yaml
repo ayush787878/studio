@@ -5,3 +5,6 @@ runConfig:
   # Increase this value if you'd like to automatically spin up
   # more instances in response to increased traffic.
   maxInstances: 1
+  # Set the maximum time a server-side function can run (in seconds).
+  # This helps prevent timeouts for long-running AI operations.
+  maxDuration: 120
